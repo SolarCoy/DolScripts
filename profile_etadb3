@@ -1,0 +1,8 @@
+ORACLE_BASE=/oraprod07/u01/app/oracle; export ORACLE_BASE
+ORACLE_HOME=$ORACLE_BASE/product/9.2; export ORACLE_HOME
+ORACLE_SID=etadb3; export ORACLE_SID
+NLS_LANG=AMERICAN_AMERICA.WE8ISO8859P1; export NLS_LANG
+ORA_NLS33=$ORACLE_HOME/ocommon/nls/admin/data; export ORA_NLS33
+OPENWINHOME=/usr/openwin; export OPENWINHOME
+PATH=$ORACLE_HOME/bin:/bin:/usr/bin:/usr/sbin:/usr/lbin:/usr/ccs/bin:/usr/ucb:/etc:/usr/openwin/bin:/usr/local/bin:/sbin:; export PATH
+umask 022

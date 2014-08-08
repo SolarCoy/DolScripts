@@ -1,0 +1,20 @@
+
+
+                    STANDBY DATABASE WARNING 
+**************************************************************************
+
+     Server     : prodora07
+
+     Command    : /export/home/oracle/common/bin/ck_standby.ksh 
+
+     Report Time: Wed May 11 05:55:00 EDT 2011
+
+     Warning Msg: Standby Database Warnings  
+
+Standby database of etadb4 shows following warnings:
+
+Achived sequence# (max) on primary site: 141002.
+Achived sequence# (max) on standby site: 0.
+There seems a 141002 archive logs delay, please find the detail.
+
+etadb3 - in skip list -- Action Skipped.

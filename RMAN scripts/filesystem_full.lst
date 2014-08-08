@@ -1,0 +1,17 @@
+
+EXCLUSE_LIST=
+
+                    FILE SYSTEM FULL WARNING
+**************************************************************************
+
+     Server     : prodora08
+
+     Command    : /export/home/oracle/common/bin/ck_filesys.ksh 
+
+     Report Time: Wed May  4 06:00:01 EDT 2011
+
+     Warning Msg: File system is 85% full
+
+
+  File systems that are more than 85% full:
+  File system /nastdb is 88% full.

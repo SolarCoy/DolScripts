@@ -1,0 +1,40 @@
+
+
+                    DATABASE TABLESPACE SIZE WARNING 
+**************************************************************************
+
+     Server     : prodora08
+
+     Command    : ck_tablesps.ksh 
+
+     Report Time: Wed Sep  5 09:22:10 EDT 2007
+
+     Warning Msg: Tablespaces more than 85% full
+
+
+Tablespaces in database (dev) that more than 85% full.
+
+TABLESPACE			  K_AVAIL     K_USED   PCT_USED     K_FREE
+------------------------------ ---------- ---------- ---------- ----------
+AIMS_DATA			  4700160    4591936	     98     108160
+CWMLITE 			    20480      18112	     88       2304
+EXAMPLE 			   152320     152192	    100 	64
+GTS_DATA			   153600     137536	     90      16000
+H1B_DATA			  1228800    1060864	     86     167872
+H2A_DATA			  1228800    1047488	     85     181248
+INFOSTORE_DATA			  2560000    2416576	     94     143360
+LETTER_DATA			 25600000   21954560	     86    3645312
+OEM_REPOSITORY			    35848      32896	     92       2880
+OWV_DATA			    53248      52224	     98        960
+PERMPDX_DATA			  7168000    6151360	     86    1016576
+PERMPDX_INDEX			  1843200    1660544	     90     182592
+RAIS5_DATA			  2058240    1965184	     95      92992
+RMAN_CAT			   107520     106176	     99       1280
+SCSEP_DATA			    51200      45248	     88       5888
+UNDOTBS1			  8192000    8191648	    100        320
+UNDOTBS2			  7680000    7093192	     92     586560
+USERS				  2169600    2167168	    100       2368
+WIARPT_DATA			  9584640    9579392	    100       5184
+WORKFLOW			   423936     422272	    100       1600
+WTW_DATA			    15360      13184	     86       2112
+

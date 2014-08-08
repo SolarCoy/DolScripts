@@ -1,0 +1,14 @@
+
+
+                    Database Instance Down Alert
+**************************************************************************
+
+     Server     : prodora07
+
+     Command    : /export/home/oracle/common/bin/ck_db_server.ksh 
+
+     Report Time: Wed May 11 11:20:00 EDT 2011
+
+     Warning Msg: Database Instance Down 
+
+

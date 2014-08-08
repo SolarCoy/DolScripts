@@ -1,0 +1,68 @@
+(etadb5)prodora05:/usr/oracle/common/bin> cat rman_env.ksh
+#!/bin/ksh
+export TIMESTAMP=`date +%b%d%y`
+export LOG_TIMESTAMP=`date +%b%d%H%M%S`
+export STAT_OK=0
+export ST_FAIL=1
+
+export TRUE=1
+export FALSE=0
+
+export ARCHIVE_MODE=4
+
+export DEFLT_RMAN_CNFG=$TRUE
+export DEL_OBSOLT=$FALSE
+
+export ALL_DBS=$FALSE
+
+export REMOTE=$FALSE
+export PROC_NAME=$(basename $0)
+export OSNAME=$(/usr/ucb/whoami)
+export COMMLOG="/usr/oracle/common/log"
+export LOGFILE=${COMMLOG:=/tmp}/${PROC_NAME}.${LOG_TIMESTAMP}.log
+export PIDFILE=${COMMLOG}/${PROC_NAME}.$$.pid
+export HOST_NAME=$(hostname)
+export CNFG_FILE=${PROC_DIR}/${PROC_NAME}.cfg
+
+#*********************************************************************
+# ONLY THIS PART BELLOW MAY BE MODIFIED, IN CASE
+#*********************************************************************
+export BACKUP_SKIP_LIST="dev1"
+export RMAN_TMP_LOG="/tmp/rman.log"
+#export LOCAL_BKDIR2="/u02"
+export BKUP_DIR="/ora_backup_0405"
+export DAYS_KEEP_LOGS=5    #(plus 1) days that log files kept on local host
+                           # common/log and admin/sid/log
+export DAYS_KEEP_BACKUPS=2 # days that backup sets kept on remote
+                           #host (prodora08) under backup/monthdayyear
+export DAYS_KEEP_ARCHS=3   #(plus 1) days that arch logs kept on local host
+                           # under log_arch_dest_1 directory
+export ZIP="compress"
+export GZIP=$(type gzip|awk '{print $NF}')
+
+export REMOTE_ACCT="orabk@prodora08"
+export REMOTE_ACT="ssh ${REMOTE_ACCT}"
+
+#export REMOTE_MPT="/orabk01"
+#export REMOTE_DIR="${REMOTE_MPT}/${HOST_NAME}"
+export REMOTE_MPT="/orabk02"
+export REMOTE_DIR="${REMOTE_MPT}/${HOST_NAME}"
+
+export SEND_MAIL=$TRUE
+#export SEND_MAIL=$FALSE
+export MAIL_SUBJ_BKUP="DB Backup Report - ${HOST_NAME}"
+export MAIL_SUBJ_RMAN="DB RMAN Backup Report - ${HOST_NAME}"
+#export MAIL_LIST="dong.faying@doleta.gov"
+export MAIL_LIST="dong.faying@dol.gov black.michael@dol.gov Amerman.Shane@tmo.blackberry.net anderson.robert@dol.gov smith.bradford@dol.gov"
+REPORT_HEAD="
+                    DATABASE BACKUP REPORT
+**************************************************************************
+
+     Server     : ${HOST_NAME}
+
+     Command    : $0 $*
+
+     Start Time : `date`
+
+"
+(etadb5)prodora05:/usr/oracle/common/bin>

@@ -1,0 +1,1981 @@
+
+################################################################################
+#  Utility : oratun
+#
+#  Usage :   oratun  Intuitive Mode
+#
+#  Author :  Faying Dong 
+#  Date  :   May 2004
+#
+#
+################################################################################
+
+#resize
+#rowl=$LINES
+#rowl=`expr ${rowl} - 2 `
+row1=31; export row1
+locid=''
+#SYSTEM_USER=`cat /usr/local/bin/SYSTEM_USER`
+#export SYSTEM_USER=`cat /export/home/dongf/bin/SYSTEM_USER`
+export SYSTEM_USER="conn /as sysdba"
+export STAT_OK=0
+export OS_FAIL=1
+export DB_FAIL=2
+
+#
+#  function
+#
+function expl {
+clear
+echo '**************************************************************************'
+echo ' Explain sql'
+echo ' '
+echo '      enter sql to be explained:'
+echo '      sql will be placed in the plan_table under extun'
+echo '      enter up to 10 lines with a ; at the end.          '
+echo ' '
+echo '      or'
+echo '     '
+echo '      to pull in a sql script, enter @filename'
+echo ' '
+echo '      a null line ends the input and no null line should appare in the script'
+echo '  if not exist  @?/rdbms/admin/utlxplan.sql -- create table 'PLAN_TABLE''
+echo '**************************************************************************'
+idone=false
+licnt=1
+licnte=10
+li1=' '
+li2=' '
+li3=' '
+li4=' '
+li5=' '
+li6=' '
+li7=' '
+li8=' '
+li9=' '
+li10=' '
+while [[ $idone = false ]]
+do
+  read li${licnt}
+  if [[ -z $li1 ]]
+  then
+    idone=true
+    li1=' '
+  fi
+  if [[ -z $li2 ]]
+  then
+    idone=true
+    li2=' '
+  fi
+  if [[ -z $li3 ]]
+  then
+    idone=true
+    li3=' '
+  fi
+  if [[ -z $li4 ]]
+  then
+    idone=true
+    li4=' '
+  fi
+  if [[ -z $li5 ]]
+  then
+    idone=true
+    li5=' '
+  fi
+  if [[ -z $li6 ]]
+  then
+    idone=true
+    li6=' '
+  fi
+  if [[ -z $li7 ]]
+  then
+    idone=true
+    li7=' '
+  fi
+  if [[ -z $li8 ]]
+  then
+    idone=true
+    li8=' '
+  fi
+  if [[ -z $li9 ]]
+  then
+    idone=true
+    li9=' '
+  fi
+  if [[ -z $li10 ]]
+  then
+    idone=true
+    li10=' '
+  fi
+  if [[ $licnt = $licnte ]]
+  then
+   idone=true
+  fi
+  let licnt="licnt + 1"
+done
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+set termout off;
+set verify off;
+set pagesize 32 
+break on report;
+delete from plan_table where statement_id = 'extun';
+explain plan set statement_id = 'extun' into plan_table for
+$li1
+$li2
+$li3
+$li4
+$li5
+$li6
+$li7
+$li8
+$li9
+$li10
+!clear
+select LPAD(' ', 4*(level-2))||
+        operation||' '||
+        options||' '||
+        object_name "Execution Plan"
+FROM plan_table
+connect by prior id = parent_id
+and statement_id = 'extun'
+START WITH id=0;
+
+column object_name format a18
+ column operation format a17
+ set pagesize 55
+  column position format 99
+column QP format a15
+ set line 130;
+ column options format a10;
+ column parent_id format  99
+select operation, options, object_name, id, parent_id, position
+ , decode(id,0,'Cost ='||position) QP
+   from plan_table where
+     statement_id = 'extun' order by parent_id desc;
+!EOF
+return
+}
+#
+#
+#===============================================================================
+#  function --  Check Sessions Logged On
+#
+function r1 {
+clear
+echo '*************************************************************************'
+echo 'Sessions Logged On'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo '  Enter username to search on, default all'
+read insur
+insur=${insur:="%%"}
+echo '   Enter unix process to search on, default all'
+read inproc
+inproc=${inproc:="%%"}
+echo '   Enter type (Inactive, Sniped, Active, Killed) to search on, default all'
+read intyp
+clear
+intyp=${intyp:="%"}
+insur=${aqt}${insur}${aqt}
+inproc=${aqt}${inproc}${aqt}
+intyp=${aqt}${intyp}${apt}${aqt}
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ ttitle 'SESSIONS LOGGED ON'
+ set linesize 110
+ column SID format 999
+ column SERIAL format 999999
+ column OraName format a15
+ column OsName format a12
+ column STA format a3
+ column TYP format a3
+ column UnixPID format a7
+ column process format a7
+ column PROG format a16
+ column LCK format a3
+ column CTIM format 999999
+ column PROCESS format a9
+ column LOGON_TIME format a20
+ column MACHINE format a30
+ set pagesize 31;
+select
+        substr(a.username,1,15) OraName,
+        a.sid SID,
+        a.serial#  SERIAL,
+        decode(a.server,'DEDICATED','DED','MTS') TYP,
+        decode(a.status,'SNIPED','SNP','ACTIVE','ACT','INACTIVE','INA','KILLED','KIL') STA,
+        substr(b.spid,1,6) UnixPID,
+        substr(a.osuser,1,12) OsName,
+        substr(a.program,1,16) PROG,
+        decode(a.lockwait,NULL,'NO','YES') LCK, a.machine,
+         --       (d.hsecs- c.value)/(60*100) CTIM, a.machine,
+        to_char(a.logon_time,'mm/dd/yy hh24:mi:ss') LOGON_TIME
+       --  a.process
+        from v\$session a, v\$process b, v\$sesstat c, v\$timer d
+                where a.type = 'USER' and a.paddr = b.addr
+        and a.sid = c.sid and c.statistic# = 13
+        and a.username like upper($insur)
+        and a.status like upper($intyp)
+        and nvl(b.spid,'~') like nvl($inproc,'~')
+        order by a.status, a.username, a.sid;
+!EOF
+return
+}
+
+#
+#===================================================================================
+#  function --  Check Current Waits
+#
+function r2 {
+clear
+echo '*************************************************************************'
+echo 'Current Waits - excludes waits for "SQL*Net message from client"'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo '  Enter user to collect on, default all'
+read usrst9
+usrst9=${usrst9:="%%"}
+echo '   Enter unix process to search on, default all'
+read inproc9
+inproc9=${inproc9:="%%"}
+clear
+usrst9=${aqt}${usrst9}${aqt}
+inproc9=${aqt}${inproc9}${aqt}
+clear
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ ttitle 'CURRENT WAITS - excludes waits for "SQL*Net message from client"'
+  column SID format 999
+  column SERIAL format 999999
+  column OraName format a15
+  column OsName format a12
+  column STA format a3
+  column TYP format a3
+  column UnixPID format a7
+  column PROG format a16
+  column LCK format a3
+  column CTIM format 9999
+  column p1text format a10 
+  column p1 format 999999999999 
+  column p2text format a10 
+  column p2 format 9999999999 
+  column p3text format a10 
+  column p3 format 99999 
+  column event format a33
+  set pagesize 32;
+  select
+   substr(a.username,1,15) OraName,
+   a.sid SID,
+   decode(a.server,'DEDICATED','DED','MTS') TYP,
+   decode(a.status,'SNIPED','SNP','ACTIVE','ACT','INACTIVE','INA','KILLED','KIL') STA,
+   substr(b.spid,1,6) UnixPID,
+   substr(a.osuser,1,12) OsName,
+   substr(a.program,1,16) PROG,
+   decode(a.lockwait,NULL,'NO','YES') LCK,
+--   (d.hsecs- c.value)/(60*100) CTIM,
+   e.event,
+    decode(e.wait_time,-1,'less than 10ms',0, 'current waiting',e.wait_time) WAIT,
+    e.SECONDS_IN_WAIT,
+    e.state,
+    e.p1Text, e.p1, e.p2Text, e.p2, e.P3Text , e.p3
+   from v\$session a, v\$process b, v\$sesstat c, v\$timer d, v\$session_wait e
+   where a.type = 'USER' and a.paddr = b.addr
+  and a.sid = c.sid and c.statistic# = 13
+   and a.username like upper($usrst9)
+--   and a.status like '%%'
+   and a.sid=e.sid
+   and b.spid like $inproc9
+   and e.event not like '%SQL*Net message from client%';
+!EOF
+   
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+   prompt
+   prompt ======  Query Locks from V\$SESSION  ========
+ select s.username, s.lockwait, f.file_name, o.object_name, s.row_wait_row#
+   from v\$session s, dba_objects o, dba_data_files f
+   where f.file_id=s.row_wait_file#
+    and o.object_id=s.row_wait_obj#
+   and s.lockwait is not null
+   order by 1;
+
+--   prompt   
+--   prompt  
+--   prompt   ========   RUN AND DISPLAY ULTLOCKT.sql  ========
+--   @?/rdbms/admin/utllockt.sql;
+--   prompt user with lock_type "none" locks the other users with lock_type of other value. Lock_id1 refers to the object id for the table involved
+!EOF
+
+return
+}
+
+#
+#===============================================================================
+#  function -- SQL of Active Sessions 
+#
+#
+#=============================================================================
+#  function -- Check Session Stats
+#
+function r3 {
+clear 
+echo '*************************************************************************'
+echo 'Session Stats'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo ' Enter user to collect stats on, default all'
+read usrst
+usrst=${usrst:="%%"}
+echo '  Enter process to search on, default all'
+read inproc1
+inproc1=${inproc1:="%%"}
+echo '   Enter statistic number to search on, default all'
+read instat
+instat=${instat:="%%"}
+clear
+usrst=${aqt}${usrst}${aqt}
+inproc1=${aqt}${inproc1}${aqt}
+instat=${aqt}${instat}${aqt}
+  sqlplus -s /nolog <<!EOF | pg
+  $SYSTEM_USER
+   ttitle 'SESSION STATS'
+   column name format a35
+   column username format a15
+   column statistic#  format 99 
+   set linesize 120;
+   set pagesize 31;
+    select a.sid, substr(c.username,1,15) username, a.statistic#,b.name, a.value 
+    from v\$sesstat a, v\$statname b, v\$session c, v\$process p
+     where a.statistic# = b.statistic# and a.sid=c.sid and p.addr=c.paddr
+          and a.value > 0
+          and c.username like upper($usrst)
+          and p.spid like $inproc1 and a.statistic# like $instat
+          order by a.value desc;
+!EOF
+return
+}
+#
+#===============================================================================
+#  function -- Current SQL 
+#
+function r4 {
+clear
+echo '*************************************************************************'
+echo 'Current SQL and STATS'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo ' Enter user to collect sql on, default all'
+read usrst2
+usrst2=${usrst2:="%%"}
+echo '  Enter unix process to search on, default all'
+read inproc2
+inproc2=${inproc2:="%%"}
+clear
+echo '*************************************************************************'
+echo 'Current SQL and STATS'
+echo ' '
+usrst2=${aqt}${usrst2}${aqt}
+inproc2=${aqt}${inproc2}${aqt}
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ ttitle 'CURRENT SQL'
+ column username format a25;
+ column sta format a5
+ column elapsed_s format 9999999.9
+ set linesize 100
+ set pagesize 31;
+ prompt This page displays cache hit ratio for SQL/plsqls in current sessions
+ prompt
+ select distinct s.username, s.sid, s.serial#, spid, 
+decode(s.status,'SNIPED','SNP','ACTIVE','ACT','INACTIVE','INA','KILLED','KIL') STA,
+  a.hash_value, disk_reads,buffer_gets,executions,elapsed_time/1000000 elapsed_s
+   from v\$session s, v\$sqlarea a , v\$process p
+   where p.addr=s.paddr
+       and s.sql_address = a.address
+       and s.username like upper($usrst2)
+       and spid like $inproc2
+  order by STA, a.hash_value desc;
+!EOF
+return
+}
+
+#
+#==============================================================================
+#  function -- Check High Buffer SQL 
+#
+function r5 {
+clear
+echo '*************************************************************************'
+echo 'High Buffer Gets SQL'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo ' Enter buffer gets, default is 100000 (search will be for > then this number)'
+read bufin
+bufin=${bufin:=100000}
+bufin=${aqt}${bufin}${aqt}
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ ttitle 'HIGH BUFFER GETS'
+ column sql_text format a30;
+ column rows_proc format 9999999999
+ col cpu_time_s format 9999999.99
+ col elapsed_s format 9999999.99
+ prompt Page dispays disk reads, buffer gets, rows processed, executions
+ prompt for all SQLs in SQL AREA that has >$bufin buffer gets 
+ prompt ordered by buffer_gets 
+ set pagesize 31; 
+ select disk_reads, buffer_gets, rows_processed rows_proc, executions, cpu_time/1000000 cpu_time_s , elapsed_time/1000000 elapsed_s, hash_value, sql_text from v\$sql
+ where buffer_gets > $bufin
+ order by buffer_gets desc;
+!EOF
+return
+}
+#
+#==============================================================================
+#  function --  Check Low Hit Ratio SQL
+#
+function r6 {
+clear
+echo '*************************************************************************'
+echo 'High Disk Reads SQL'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo ' Enter disk reads, default is > 10000 ( search will be for > than this number)'
+echo ' '
+read diskr
+echo '  Enter hit ratio percentage, default is 50'
+read inpct
+diskr=${diskr:=10000}
+inpct=${inpct:=50}
+clear
+diskr=${aqt}${diskr}${aqt}
+inpct=${aqt}${inpct}${aqt}
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ set pagesize 31;
+prompt 
+prompt "Bad SQL statistics"
+
+SELECT persistent_mem "Sql mem usage", sum(disk_reads) "Disk reads" from v\$sql
+group by persistent_mem
+having sum(disk_reads)>100000
+order by sum(disk_reads);
+prompt 
+prompt "Grouped by SQL memory usage (usualy the same sql), subtotal of disk reads more than 10000"
+
+ ttitle 'LOW HIT RATIO'
+ column rows_proc format 99999999;
+ col cpu_time_s format 9999999.99
+ col elapsed_s format 9999999.99
+ column sql_text format a50
+ prompt Displays all SQLs in SQL AREA that has > $diskr disk reads 
+ prompt and less than $inpct% buffer gets
+ select disk_reads, buffer_gets, rows_processed rows_proc, executions,cpu_time/1000 cpu_time_s, elapsed_time/1000 elapsed_s, hash_value
+ ,sql_text from v\$sql
+ where (((buffer_gets - disk_reads) / (buffer_gets + 1)) * 100 ) < $inpct
+ and disk_reads > $diskr;
+
+!EOF
+return
+}
+#
+#===================================================================================
+#  function --  Check High Execution Count
+#
+function r7 {
+clear
+echo '*************************************************************************'
+echo 'High Executions SQL'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo ' Enter execution count, default is 10000 ( search will be for > than this number)'
+read excin
+excin=${excin:=10000}
+clear
+excin=${aqt}${excin}${aqt}
+ sqlplus -s /nolog <<!EOF | pg
+ $SYSTEM_USER
+ ttitle 'HIGH EXECUTION'
+ column sql_text format a90;
+ column rows_p format 9999999999;
+ column executions format 999999999
+ col cpu_time_s format 9999999.99
+ col elapsed_s format 9999999.99
+ set pagesize 31;
+ select disk_reads, buffer_gets, rows_processed rows_p, executions, cpu_time/1000000 cpu_time_s , elapsed_time/1000000 elapsed_s,hash_value,
+ sql_text from v\$sqlarea
+ where executions > $excin
+ order by executions desc;
+ prompt Displays all SQLs in SQL AREA that has > $excin executions 
+!EOF
+return
+}
+
+#===============================================================================
+#  function -- SQL parse to execute ratio 
+#
+function r8 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'SQL parse to execute ratio'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+select 100 *(1 - a.hard_parses/b.executions) no_parse_ration
+from 
+(select value hard_parses from v\$sysstat
+	where name='parse count (hard)') a,
+(select value executions
+from v\$sysstat
+where name ='execute count') b;
+
+prompt 'Higher than 90 percent, indicating that the majority of the SQL in the library cache can be reused'
+!EOF
+
+echo ' '
+echo 'SQLs that may need improving to be reusable '
+echo ' '
+echo ' Enter the length of first portion of your SQL  '
+read size 
+
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+select s.sql_text
+from v\$sql s,
+(select substr(sql_text,1,$size) sqltext,
+count(*) from v\$sql
+group by substr(sql_text,1,$size)
+having count(*) >100 ) d
+where substr(s.sql_text,1,$size)=d.sqltext;
+
+!EOF
+ruturn 
+}
+#===============================================================================
+#  function --  Get sql script 
+#
+function r9 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Get SQL Script'
+echo ' '
+echo ' Enter hash value for that SQL in sql area'
+read hash_val
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Get SQL Script'
+--set pagesize 31;
+set pagesize 1000;
+set head off
+set feedback off
+set termout off
+spool sql_text;
+select sql_text from V\$SQLTEXT_WITH_NEWLINES 
+where hash_value=$hash_val order by piece;
+spool off;
+!EOF
+sed  -e '/^$/d' sql_text.lst > sql_text.sql
+return
+}
+
+#
+#============================================================================
+#  function -- Job Running
+#
+function r10 {
+clear
+echo '************************************************************************'
+echo ' '
+echo ' Report 99 : Jobs Running'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Jobs Running Now'
+set linesize 110
+column username format a15
+set pagesize 31;
+
+select job, s.username, s.sid ,s.serial#, p.spid, failures
+from dba_jobs_running r, v\$session s, v\$process p
+where r.sid=s.sid and p.addr=s.paddr
+order by 1,2;
+!EOF
+return
+}
+
+#===============================================================================
+#  function -- Locks with DML 
+#
+function r12 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo ' Locks with DML'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col oracle_username heading USERNAME for a8
+col "User Name" for a8
+col owner format a8
+col object_name format a15
+col object_type heading OBJ_TYPE format a12
+col session_id heading SESSION for 99999
+col PROCESS for a8 
+col locked_mode heading LMODE for 999
+break on oracle_username skip 1 on session_id
+ttitle "Who's Locking What?"
+set pagesize 31;
+select l.oracle_username, o.owner, o.object_name, o.object_type, l.session_id, 
+p.spid, l.locked_mode
+from v\$locked_object l, dba_objects o,v\$session s,v\$process p where
+l.object_id = o.object_id
+and s.sid=l.session_id and p.addr=s.paddr
+order by l.oracle_username,l.session_id;
+exit
+!EOF
+
+clear
+echo '************************************************************************'
+echo ' '
+echo "Who's Locking Whom?"
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col "User Name" for a12
+col owner format a8
+col object_name format a15
+col object_type heading OBJ_TYPE format a12
+ttitle "Who's Locking Whom?"
+set pagesize 31;
+select LPAD(' ', DECODE(l.xidusn,0,3,0))||l.oracle_username "User Name",
+       o.owner, o.object_name, o.object_type
+from v\$locked_object l, dba_objects o
+where l.object_id=o.object_id
+order by o.object_id, 1 desc;
+exit
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo "Lock Level"
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col username for a15
+col object_name format a15
+col object_type heading OBJ_TYPE format a12
+ttitle "Lock Level"
+set pagesize 31;
+select s.username, decode(l.type, 'TM', 'TABLE_LOCK',
+'TX', 'ROW LOCK', NULL) "LOCK LEVEL"
+, o.owner, o.object_name, o.object_type 
+from v\$session s, v\$lock l, dba_objects o
+where s.sid=l.sid
+and o.object_id=l.id1
+and s.username is not null
+;
+exit
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo "Lock with DML"
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col username for a15
+col object_name format a15
+col object_type heading OBJ_TYPE format a12
+ttitle "Lock with DML"
+set pagesize 31;
+select substr(username, 1,12) "User",
+substr(owner, 1,8) "Owner",
+substr(name, 1,15) "Name",
+substr(mode_held,1,11) "Mode held"
+from sys.dba_dml_locks a,
+  v\$session b
+where (a.session_id=b.sid);
+exit
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo "Lock with DDL"
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col username for a15
+col object_name format a15
+col object_type heading OBJ_TYPE format a12
+ttitle "Lock with DDL"
+set pagesize 31;
+select substr(username, 1,12) "User",
+substr(owner, 1,8) "Owner",
+substr(name, 1,15) "Name",
+substr(a.type, 1,20) "Type",
+substr(mode_held,1,11) "Mode held"
+from sys.dba_ddl_locks a,
+  v\$session b
+where (a.session_id=b.sid)
+and mode_held not like '%Null%';
+
+prompt  TYPE    lock type
+prompt        TM - DML enqueue
+prompt        TX - Transaction enqueue
+prompt        UL - User supplied
+prompt        ID1 - Lock identifieer number 1
+prompt        ID2 - Lock identifieer number 2
+prompt LMODE   Mode in which the session holds the lock:
+prompt     0 - none
+prompt     1 - null (NULL)
+prompt     2 - row -S(SS)
+prompt     3 - row -X(SX)
+prompt     4 - share (S)
+prompt     5 - S/Row- X(SSX)
+prompt     6 - exclusive (X)
+
+prompt REQUEST   Mode in which the process requests the lock
+prompt CTIME     Elapsed time for current lock mode
+prompt BLOCK     Blocking another lock
+
+exit
+!EOF
+
+#run catblock.sql script to create various different lock views that will help to monitoring.
+#user utllockt.sql to output the current locks being held in tree format. 
+return
+}
+#==============================================================================
+#  function -- Check User Hit Ratio
+#
+function r13 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo ' User Data Cache Hit Ratio'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo '  Enter username to search on, default all'
+read insur
+insur=${insur:="%%"}
+echo '   Enter unix process to search on, default all'
+read inproc
+inproc=${inproc:="%%"}
+echo ' '
+clear
+insur=${aqt}${insur}${aqt}
+inproc=${aqt}${inproc}${aqt}
+
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+column username format a20;
+column osuser format a15;
+column client_identifier format a20;
+column hitratio format 999.999
+set pagesize 31; 
+
+select s.username, s.sid,s.serial#,spid process, osuser,client_identifier,
+  consistent_gets cons_gets,
+  block_gets,
+  physical_reads phy_reads,
+  100*(consistent_gets+block_gets-physical_reads) /
+  (consistent_gets+block_gets) hitratio
+from v\$session s, v\$sess_io i, v\$process p
+where s.sid=i.sid
+  and s.paddr=p.addr
+  and (consistent_gets+block_gets) > 0
+  and s.username is not null
+  and s.username like upper($insur)
+  and nvl(p.spid,'~') like nvl($inproc,'~')
+order by s.username, hitratio;
+!EOF
+return
+}
+
+#==============================================================================
+#  function -- Check Sort Statistics
+#
+function r14 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo  'Sort Stats and Usage'
+echo ' ' 
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Sort Memory Hit Ratio'
+set pagesize 31 
+select mem.value/(disk.value + mem.value) "in-memory sort ratio"
+from v\$sysstat mem, v\$sysstat disk
+where mem.name='sorts (memory)'
+and disk.name='sorts (disk)';
+prompt
+prompt Oracle Recommanded 95% or better
+prompt Avoid using sort in your application, the folowings list some 
+prompt of methods: 
+prompt Using UNION ALL in place of UNION
+prompt Ensuring that columns used in table joins are properly indexed
+prompt Building indexes on columns used in ORDER BY and GROUP BY clauses
+prompt Creating indexes using the NOSORT option where appropriate
+prompt Using the COMPUTE option when analyzing table and indexes
+
+!EOF
+
+clear
+echo '***********************************************************************'
+echo ' '
+echo 'Sort Memory Usage (by users)'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Sort Memory Usage'
+set pagesize 31 
+select sess.username, sess.sid, sql.sql_text, sort.blocks from v\$session sess,
+    v\$sqltext sql, v\$sort_usage sort
+    where sess.serial#=sort.session_num
+    and sort.sqladdr=sql.address
+    and sort.sqlhash=sql.hash_value
+   --  and sort.blocks>1;
+prompt To see which individual users are causing large sortes to disks
+!EOF
+
+clear
+echo '***********************************************************************'
+echo ' '
+echo 'Sort Segment Usage (by SQL)'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Sort Segment Usage (by SQL)'
+set pagesize 31 
+col username for a20
+select sess.username, sort.blocks, sql.sql_text
+from v\$session sess,
+v\$sqltext sql,
+v\$sort_usage sort
+where sess.serial#=sort.session_num
+and sort.sqladdr=sql.address
+and sort.sqlhash=sql.hash_value
+and sort.blocks >10
+prompt
+prompt Identifier the SQL being issured by users with high sort activities.
+
+!EOF
+clear
+echo '***********************************************************************'
+echo ' '
+echo 'Sort Segment'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Sort Segment'
+set pagesize 31 
+col tbl heading Tablespace|Name for a6
+select tablespace_name tbl, current_users,  total_extents, 
+used_extents, free_extents,max_sort_blocks 
+from v\$sort_segment;
+prompt
+prompt Max_sort_blocks may be usefull to determine SROT_AREA_SIZE
+prompt =MAX_SORT_BLOCKS * DB_BLOCK_SIZE (only before 9i)
+!EOF
+return
+}
+#          
+#===============================================================================
+#  function -- PGA Usage 
+#
+function r15 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'PGA Stats and Usage '
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col name format a40
+ttitle 'PGA Stats and Usage'
+set pagesize 31;
+select name, value from v\$pgastat;
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'PGA Stats and Used '
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo '  Enter username to search on, default all'
+read insur
+insur=${insur:="%%"}
+insur=${aqt}${insur}${aqt}
+
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col program format a30
+col username format a20
+ttitle 'PGA Used'
+set linesize 150;
+set pagesize 31;
+select s.program,s.username, s.sid, spid UnixPC, pga_used_mem,
+pga_alloc_mem, pga_max_mem from v\$process p, v\$session s
+where s.paddr=p.addr
+and s.username like upper($insur)
+order by pga_used_mem desc; 
+!EOF
+return
+}
+#===============================================================================
+#  function -- Check Segments currently cached 
+#
+function r16 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Enter overrides as needed, hit enter to take defaults:'
+echo ' '
+echo '  Enter owner to search on, default all'
+read insur
+insur=${insur:="%%"}
+insur=${aqt}${insur}${aqt}
+echo 'Segments in Buffer Cache'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Segments in Cache'
+set pagesize 31;
+column owner format a20;
+column object_name format a28;
+column object_type format a15;
+
+select obj.owner, obj.object_name, obj.object_type,
+count(distinct bh.block#) "Num. Buffers"
+from dba_objects obj, v\$bh bh
+where obj.object_id=bh.objd
+and owner not in ('SYS' , 'SYSTEM','XDB')
+and owner like upper($insur)
+group by obj.owner, obj.object_name, obj.object_type
+ having count(distinct bh.block#)>5
+order by 4 desc;
+prompt
+prompt Displays number of blocks that each segment uses in data cache
+!EOF
+return
+}
+#===============================================================================
+#  function -- Used space in a table  
+#
+function r17 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Space usage in a Table' 
+echo ' '
+
+echo ' Enter schema name you want to look at'
+read schema_nm
+
+echo ' Enter table name you want to look at'
+read table_nm
+
+SQL="DECLARE
+      var1 number;
+      var2 number;
+      var3 number;
+      var4 number;
+      var5 number;
+      var6 number;
+      var7 number;
+     table_name varchar2(30):='$table_nm';
+     schema_name varchar2(20):='$schema_nm';
+     tablename varchar2(30);
+     schemaname varchar2(20);
+    begin
+     tablename :=upper(table_name);
+     schemaname :=upper(schema_name);
+  --   dbms_space.unused_space(schema_name,table_name,'TABLE',
+     dbms_space.unused_space(schemaname,tablename,'TABLE',
+                              var1, var2, var3, var4, var5,
+                              var6, var7);
+     dbms_output.put_line('OBJECT_NAME   = '||tablename);
+     dbms_output.put_line('-------------------------------');
+     dbms_output.put_line('TOTAL_BLOCKS    = '||var1);
+     dbms_output.put_line('TOTAL_BYTES     = '||var2);
+     dbms_output.put_line('UNUSED_BLOCKS   = '||var3);
+     dbms_output.put_line('UNUSED_BYTES   = '||var4);
+     dbms_output.put_line('LAST_USED_EXTENT_FILE_ID  = '||var5);
+     dbms_output.put_line('LAST_USED_EXTENT_BLOCK_ID  = '||var6);
+     dbms_output.put_line('LAST_USED_BLOCK = '||var7);
+  end;
+/
+
+"
+dba_handle "$SQL"
+if (( $? != ${STAT_OK} ))
+then
+    print "dba_handle returned error."
+    return ${DB_FAIL}
+fi
+echo ' '
+echo 'This report may help you to decide if the segment is fragmented '
+echo 'Hit enter to continue ==>'
+read junk
+
+return
+}
+#==============================================================================
+#  function ROW CHAIN/MIGRATION - Block I/O
+#
+function r18 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'ROW CHAIN/MIGRATION - Block I/O'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+
+ttitle 'ROW CHAIN/MIGRATION COUNTS'
+SELECT table_name, chain_cnt, owner from dba_tables
+where chain_cnt<>0;
+prompt Non-zero values indicate number of row chain/migration 
+prompt
+!EOF
+
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'ROW CHAIN/MIGRATION INDICATION'
+select name, value from v\$sysstat
+where name='table fetch continued row';
+
+prompt
+!EOF
+return
+}
+#===============================================================================
+#  function -- Check for New Objects or Changes
+#
+function r19 {
+clear
+echo '***********************************************************************'
+echo ' New Schema Objects or Changes in Objects'
+echo ' '
+sqlplus -s  /nolog<<!EOF | pg
+$SYSTEM_USER
+ttitle 'NEW/CHANGED SCHEMA OBJECTS'
+column owner for a8
+column object_name for a31
+column "TYPE" for a20
+column created for a14
+column "LAST DDL" for a14
+set linesize 120;
+set pagesize 31;
+
+select owner, object_name, object_type "TYPE",
+        to_char(created, 'mm-dd-yy hh24:mi') "CREATED",
+        to_char(last_ddl_time, 'mm-dd-yy hh24:mi') "LAST DDL"
+        from dba_objects
+where owner not in ('SYS', 'SYSTEM', 'PATROL', 'DBSTAT','XDB')
+        and (months_between(sysdate, last_ddl_time) < 0.05)
+        or ((months_between(sysdate, created) < 0.05) and last_ddl_time is null)
+order by 5,1,2;
+!EOF
+return
+}
+#===============================================================================
+#  function --  System Global Area (SGA) 
+#
+function r20 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'System Global Area (SGA)'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'System Global Area (SGA)'
+set pagesize 31;
+show sga;
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'System Global Area (SGA)'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+set pagesize 31
+ttitle 'SGA Details'
+select name, bytes, pool from v\$sgastat;
+!EOF
+
+return
+}
+
+#
+#===============================================================================
+#  function -- DB CACHE ADVICE
+#
+function r21 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Data Cache Advice'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Data Cache Advice'
+set pagesize 31;
+COLUMN size_for_estimate          FORMAT 999,999,999,999 heading 'Cache Size (MB)'
+COLUMN buffers_for_estimate       FORMAT 999,999,999 heading 'Buffers'
+COLUMN estd_physical_read_factor  FORMAT 999.90 heading 'Estd Phys|Read Factor'
+COLUMN estd_physical_reads        FORMAT 999,999,999 heading 'Estd Phys| Reads'
+
+SELECT size_for_estimate, buffers_for_estimate, estd_physical_read_factor, estd_physical_reads
+   FROM V\$DB_CACHE_ADVICE
+   WHERE name          = 'DEFAULT'
+     AND block_size    = (SELECT value FROM V\$PARAMETER WHERE name = 'db_block_size')
+     AND advice_status = 'ON';
+
+prompt You have to set DB_CACH_ADVICE=ON for this simulation to work
+prompt This I/O prediction is only for default db buffer cache
+!EOF
+return
+}
+
+#===================================================================================
+#  function -- Data Buffer Cache Stats 
+#
+function r22 {
+clear
+echo '*************************************************************************'
+echo 'Cache Statistics'
+echo ' '
+clear
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'DATA BUFFER CACHE HIT RATIO'
+column logical_reads format 9999999999
+column physical_reads  format 9999999999
+column hit_ratio format 999.99
+set pagesize $row1;
+
+select a.value + b.value logical_reads , c.value physical_reads ,
+     round(100* (a.value + b.value - c.value)
+      / (a.value + b.value) , 2) hit_ratio
+    from   v\$sysstat a, v\$sysstat b, v\$sysstat c
+    where  a.name = 'db block gets'
+    and    b.name = 'consistent gets'
+    and    c.name = 'physical reads';
+prompt
+prompt According to ORACLE a well-tuned OLTP system should have 90% OR higher 
+!EOF
+
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Data Buffer Waits'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'DATA BUFFER WAITS'
+col name for a25
+select name, value from v\$sysstat
+where name in ('free buffer inspected',
+                   'free buffer waits',
+                   'buffer busy waits');
+prompt
+prompt 'free buffer inspaected': number of buffer inspaceted before finding a free one
+prompt free buffer waits: number of waits during free buffer inspacted activity.
+prompt buffer busy waits: number of waits for a free buffer become available.
+!EOF
+
+return
+}
+
+#          
+#==============================================================================
+#  function -- Library Cache Hit Ratio 
+#
+function r23 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Cache Statistics'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'LIBRARY CACHE HIT RATIO'
+column "Total Executed"  format 9999999999
+column "Total Reused"  format 9999999999
+column library_hit_ratio format 999.99
+set pagesize $row1; 
+     select sum(gets) "Parses requested", sum(gethits) "Total parsed",
+     sum(pins) "Exces requested", sum(pinhits) "Total excecuted",
+     round(100*sum(gethits)/sum(gets),2)||'%' "Pars-hit-ratio",
+     round(100*sum(pinhits)/sum(pins),2)||'%' "Exces-hit-ratio"
+     from   v\$librarycache
+     where namespace in ('SQL AREA', 'TABLE/PROCERUE', 'BODY', 'TIGGER');
+prompt Acording to Oracle, well-tuned OLTP systems can expect to have 
+prompt GETHITRATIONs of 95% or higher, PINHITRATIONs of 90% or higher
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Library Cache Hit Ratio (by namespaces)'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'LIBRARY CACHE HIT RATIO (BY NAMESPACEs)'
+column "Total Executed"  format 9999999999
+column "Total Reused"  format 9999999999
+column library_hit_ratio format 999.99
+set pagesize $row1; 
+select namespace, gethitratio, pinhitratio, reloads, invalidations
+from v\$librarycache 
+where namespace in ('SQL AREA', 'TABLE/PROCERUE', 'BODY', 'TIGGER');
+prompt 
+prompt gethitratio means memory hit ration for SQL parsing
+prompt pintitratio means memory hit ratio for SQL execution 
+prompt
+
+!EOF
+
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'SQL Reload Ratio'
+select sum(reloads)/sum(pins) "Reload Ratio"
+from v\$librarycache 
+where namespace in ('SQL AREA', 'TABLE/PROCERUE', 'BODY', 'TIGGER');
+prompt
+prompt Shows times of reparses (because sql being aged out) or invalids 
+
+!EOF
+
+return
+}
+#==============================================================================
+#  function -- Dictionary Cache  
+#
+function r24 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Cache Statistics'
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'DICTIONARY CACHE STAT'
+column parameter format a25
+    column gets format 999999999
+    column getmisses format 9999999
+    column hr format 999
+    column count format 99999
+    column usage format 99999
+    column cr format 999
+set pagesize $row1;
+
+select 1-(sum(getmisses)/sum(gets)) "Date Dictionary Hit Ratio"
+from v\$rowcache;
+prompt 
+prompt If the hit ratio lower than 85%, tune shared pool
+
+
+  select parameter, gets, getmisses,
+     decode(gets,0,100,round(100*(1-getmisses/gets))) hr, count, usage,
+     decode(usage,0,100,round(100*usage/count)) cr
+     from   v\$rowcache
+     order by 4 desc, 1;
+
+prompt
+prompt ordered by gets hit ratio
+!EOF
+return
+}
+#==============================================================================
+#  function -- Redo Log Buffer Retry Ratio 
+#
+function r25 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Redo Log Buffer Retry Ratio'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Redo Log Buffer Retry Ratio'
+set pagesize 31;
+select retries.value/entries.value "Redo Log Buffer Retry Ratio"
+from v\$sysstat retries, v\$sysstat entries
+where retries.name='redo buffer allocation retries'
+and entries.name ='redo entries';
+
+prompt
+prompt The ratio of number of times user Server Processes had to wait and then
+prompt retry to place their entries to the online redo log 
+prompt over the total redo entries Oracle recom. It is expected to be less than 1%
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Redo Log Space Requests'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Redo Log Space Requests'
+select name, value from v\$sysstat  
+where name='redo log space requests';
+prompt
+prompt Measures how often LGWR is waiting for log switch.
+prompt High or increasing value indicates that redo logs may be too small 
+prompt This can also indicate I/O contenctions
+!EOF
+
+echo '*************************************************************************'
+echo ' '
+echo 'Redo Log Buffer Space related Waits'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'User Log Buff Space Waits'
+select username, event, v\$session.sid, wait_time, seconds_in_wait from
+v\$session_wait, v\$session
+where v\$session_wait.sid=v\$session.sid and
+event like 'log%';
+prompt Displays how long each user session has to wait to place an entry in the Redo Log Buffer because LGWR had not yet finished writing; 
+
+ttitle 'Sys Redo Log related Wait '
+select substr(event,1,40) event, time_waited/100, average_wait/100 from v\$system_event
+where event like 'log%'
+order by 2;
+prompt 
+prompt Reports number of waits that have occurred for a variety of events
+prompt like checkpoiont incomplete, archiving needed;
+
+col name for a20
+ttitle 'Redo Log Latch'
+select name,
+       sum(gets) "Gets",
+       sum( misses) "Misses",
+        sum(immediate_gets) "IMGETS",
+        sum(immediate_misses)  "IMMISSEDS"
+from v\$latch
+where name like '%redo%'
+group by name;
+
+
+!EOF
+return
+}
+#===============================================================================
+#  function -- Packages Cached in Memory 
+#
+function r26 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Packages Cached in Memory'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col owner format a12
+col name format a15
+ttitle 'Packages Cached in Memory'
+set pagesize 31;
+select owner, name, sharable_mem from 
+v\$db_object_cache
+   where type in ('PACKAGE', 'PACKAGE BODY')
+and owner != 'SYS'
+and kept ='YES'
+order by sharable_mem desc;
+!EOF
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Shared Pool Reserved Area'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+col owner format a12
+col name format a15
+ttitle 'Shared Pool Reserved Area'
+set pagesize 31;
+select free_space, used_space, request_misses from V\$SHARED_POOL_RESERVED
+;
+prompt 
+prompt free_space should be more than 50% of the reserved size
+prompt request_misses should be constantly zero or static. 
+!EOF
+
+return
+}
+
+#===============================================================================
+#  function -- Check Memory Pool Free Space 
+#
+function r27 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Free Space in Memory pools'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Free Space in Memory pools'
+set pagesize 31;
+select pool, name, bytes/1024/1024 "Size in MB"
+from v\$sgastat where name='free memory';
+!EOF
+return
+}
+#          
+#  function --  DataFile I/O 
+#
+function r28 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Data File I/O Distribution'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Data File I/O'
+set pagesize 31;
+select name, phyrds, phywrts, avgiotim, miniotim,
+maxiowtm, maxiortm
+from v\$filestat, v\$datafile
+where v\$filestat.file#=v\$datafile.file#;
+prompt
+ttitle 'Disk Latency'
+select event, total_waits,time_waited, average_wait*10 Wait_in_MS
+from v\$system_event
+where event like 'db file seq%';
+
+prompt Sequence read is the way that oracle refer to single block read. Average time is for the single block reads. Usually disc latency is 2ms to 10 ms
+
+!EOF
+return
+}
+#===============================================================================
+#  function -- Check DBWO efficiency 
+#
+function r29 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Check DBWO I/O'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+
+ttitle 'BUFFER CACHE WAITS' 
+col event for  a30
+select event, total_waits, average_wait 
+from v\$system_event where event in
+('buffer busy wait', 'db file parallel write', 'write complete waits')
+;
+prompt "buffer busy wait " may be due to inefficient writing of dirty buffers by DBW0 
+prompt "db file parallel write" indicates DBW0 may be experiencing waits when writing many blocks in parallel
+prompt "write complete waits" indicates user have been experiencing waits from DBW0 
+!EOF
+
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Redo log space requests '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+select name, value from v\$sysstat
+where name ='redo log space requests';
+prompt
+prompt May indicate DBW0 is not writing the contents of db buffer fast enough
+!EOF
+
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Avg. Buffer Scanned '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'AVG. BUFFERS SCANNED' 
+col event for  a30 
+select scanned.value/scans.value "Avg. Num. Bufffers Scanned"
+from v\$sysstat scanned, v\$sysstat scans
+where scanned.name='DBWR buffers scanned'
+and scans.value<>0
+and scans.name='DBWR lru scans';
+
+prompt
+prompt DBW0 performs DBWR lru scann, high value indicate DBW0 is not perform its write activities efficiently.
+
+!EOF
+return
+}
+#          
+#          
+#===============================================================================
+#  function -- Latch Contention 
+#
+function r30 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Latch Contention' 
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Latch Contention'
+set pagesize 31;
+select substr(l.name,1,30) name,
+ (misses/(gets+0.001))*100 "MISS_RATIO",
+ (IMMEDIATE_MISSES/(immediate_gets+.001))*100 "IMMEDIATE_MISS_RATIO"
+from v\$latch l, v\$latchname ln
+where (l.latch#=ln.latch#)
+AND (((misses/(gets+0.001))*100>0.2) or
+((immediate_misses/(immediate_gets+0.001))*100>0.2))
+order by l.name
+;
+!EOF
+
+echo '*************************************************************************'
+echo 'No-wait Latch Contention'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'No-wait Latch Contention'
+prompt ***
+prompt ***Checking for no-wait latch requests...
+prompt If there are latches failing on no-wait requests,
+prompt consider investigating why there is contention.
+select parent_name, nwfail_count from v\$latch_misses
+where nwfail_count > 0;
+!EOF
+
+return
+}
+#          
+#===============================================================================
+#  function -- Check Busy Dispatchers 
+#
+function r36 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Check Busy Dispatchers' 
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+set pagesize 31; 
+prompt ***
+prompt ***Checking busy rate for dispatchers (if using)...
+prompt If any dispatcher busy rate is greater than .5 (50 percent),
+prompt consider adding more dispatchers.
+select network "Protocol",
+100*(sum(busy)/(sum(busy)+sum(idle))) "Total busy rate"
+from v\$dispatcher
+group by network;
+!EOF
+return
+}
+#===============================================================================
+#  function --  LOB Segment 
+#
+function r37 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'LOB Segment'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'LOB Segment'
+set pagesize 31;
+select segment_name, tablespace_name tablespace, bytes, extents, initial_extent, next_extent, min_extents, max_extents, pct_increase from user_segments where segment_type = 'LOBSEGMENT' and segment_name like 'SYS_LOB%';
+
+!EOF
+return
+}
+#===============================================================================
+#  function --  Session Response Time 
+#
+function r38 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'Session Reponse time'
+echo ' '
+echo '  Enter sid to search on'
+read insur
+insur=${insur:="%%"}
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+ttitle 'Session Reponse time'
+set pagesize 31;
+column event format a40
+select event, time_waited/100 as time_spent_s 
+from v\$session_event
+where sid like ($insur)
+and event not in (
+'Null event', 'client message',
+'KXFX: Execution Message Dequeue - Slave',
+'PX Deq: Execution Meg',
+'KXFQ: kxfqdeq - normal deqeue',
+'PX Deq: Table Q Normal',
+'Wai for credit - send blocked',
+'PX Deq Credit: send blkd',
+'Wait for credit - need buffer to send',
+'PX Deg Credit: need buffer',
+'Wait for credit - free buffer',
+'PX Deg Credit: free buffer',
+'PX Deque wait',
+'parallel query dequeue wait',
+'Parallel Query Idle Wait - Slaves',
+'PX Idle Wait',
+'slave wait',
+'dispatcher timer',
+'virtual circuit status',
+'pipe get',
+'rdbms ipc message',
+'rdbms ipc reply',
+'pmon timer',
+'smon timer',
+'PL/SQL lock timer',
+'SQL*NET message from client',
+'WMON goes to sleep')
+union all
+select b.name, a.value 
+from v\$sesstat a, v\$statname b
+where a.statistic#=b.statistic#
+and b.name='CPU used when call started'
+and a.sid like ($insur);  
+!EOF
+return
+}
+
+#
+
+function dba_handle {
+typeset -r SQL_CMD=$@
+sqlplus -s /nolog <<EOF
+conn /as sysdba
+set head off
+set feedback off
+set termout off
+set serveroutput on size 100000;
+${SQL_CMD}
+exit
+EOF
+if (( $? != ${STAT_OK} ))
+then
+    print "  dba_handle returned an error."
+    return ${OS_FAIL}
+fi
+typeset -i rev=$(print ${RET_VAL} |grep -ic ORA-)
+if [[ $rev -ne 0 ]]
+then
+    echo "---  Error returned from DATABASE: ----"
+    echo "<== $RET_VAL ==>"
+    return ${DB_FAIL}
+fi
+return ${STAT_OK}
+}
+
+#===============================================================================
+#  function -- LRU chain Latch Contention 
+#
+function r366 {
+clear
+echo '*************************************************************************'
+echo ' '
+echo 'LRU Latch Hit Ratio'
+echo ' '
+sqlplus -s /nolog <<!EOF | pg
+$SYSTEM_USER
+select 1 - (sleeps/gets) "LRU Latch Hit Ratio"
+FROM V\$LATCH
+where name = 'cache buffers lru chain'
+prompt 
+prompt Lower than 99% indicate that contention is occurring for
+prompt the LRU list in DATABASE BUFFER CACHE
+prompt DB_BLOCK_LRU_LATCHS is recommendate to 
+prompt 6 X the number of CPUs in you server 
+prompt or DB_BLOCK_BUFFER /50
+
+!EOF
+ruturn 
+}
+
+#
+#  MAIN ROUTINE
+#
+until [[ $rept = 'q' ]]
+do
+clear
+echo "                O R A C L E   T U N I N G   R E P O R T S (${ORACLE_SID})" 
+echo '*************************************************************************'
+echo '=>   1: Sessions Logged On              20: View SGA'
+echo '=>   2: Sessions Waits                  21: Data Buffer Advice'  
+echo '=>   3: Sessions Stats                  22: Data Buffer Cache Stats' 
+echo '=>   4: Current SQL and Stats           23: Library Cache Stats'
+echo '=>   5: High Buffer Gets SQL            24: Dictionary Cache Stats'
+echo '=>   6: Low Hit Ratio SQL               25: Redo Log Cache Stats'
+echo '=>   7: Execution Count SQL             26: Packages Pinned in Memory'
+echo '=>   8: Parse to Execute Ratio          27: Free Space in Memory Pools' 
+echo '=>   9: Get SQL Statement               28: Data File I/O Distribution'
+echo '=>  10: Running Jobs                    29: Check DBWO I/O'
+echo '=>  11: Execution Plan of SQL           30: Latch Contention' 
+echo '=>  12: Locks with DML              ' 
+echo '=>  13: User Data Buffer Hit Ratio  '
+echo '=>  14: Sort Stats and Usage (Disk)     '            
+echo '=>  15: PGA Stats and Usage  (Memory)    '            
+echo '=>  16: Segment in Data Buffer      '            
+echo '=>  17: Space Usage in a Table      '            
+echo '=>  18: Row Chain/Migration - Block I/O '            
+echo '=>  19: New Schema Objects or Changes in Objects '            
+echo '************************************************************************ '
+echo 'Enter number of the report desired (q to quit):'
+
+read rept
+aqt="'"
+apt="%"
+if [[ $rept = '1' ]]
+then
+clear
+r1
+fi
+if [[ $rept = '2' ]]
+then
+clear
+r2
+fi
+if [[ $rept = '3' ]]
+then
+clear
+r3
+fi
+if [[ $rept = '4' ]]
+then
+clear
+r4
+fi
+if [[ $rept = '5' ]]
+then
+clear
+r5
+fi
+if [[ $rept = '6' ]]
+then
+clear
+r6
+fi
+if [[ $rept = '7' ]]
+then
+clear
+r7
+fi
+if [[ $rept = '8' ]]
+then
+clear
+r8
+fi
+if [[ $rept = '9' ]]
+then
+clear
+r9
+fi
+if [[ $rept = '10' ]]
+then
+clear
+r10
+fi
+if [[ $rept = '11' ]]
+then
+clear
+expl
+fi
+if [[ $rept = '12' ]]
+then
+clear
+r12
+fi
+if [[ $rept = '13' ]]
+then
+clear
+r13
+fi
+if [[ $rept = '14' ]]
+then
+clear
+r14
+fi
+if [[ $rept = '15' ]]
+then
+clear
+r15
+fi
+if [[ $rept = '16' ]]
+then
+clear
+r16
+fi
+if [[ $rept = '17' ]]
+then
+clear
+r17
+fi
+if [[ $rept = '18' ]]
+then
+clear
+r18
+fi
+if [[ $rept = '19' ]]
+then
+clear
+r19
+fi
+if [[ $rept = '20' ]]
+then
+clear
+r20
+fi
+if [[ $rept = '21' ]]
+then
+clear
+r21
+fi
+if [[ $rept = '22' ]]
+then
+clear
+r22
+fi
+if [[ $rept = '23' ]]
+then
+clear
+r23
+fi
+if [[ $rept = '24' ]]
+then
+clear
+r24
+fi
+if [[ $rept = '25' ]]
+then
+clear
+r25
+fi
+if [[ $rept = '26' ]]
+then
+clear
+r26
+fi
+if [[ $rept = '27' ]]
+then
+clear
+r27
+fi
+if [[ $rept = '28' ]]
+then
+clear
+r28
+fi
+if [[ $rept = '29' ]]
+then
+clear
+r29
+fi
+if [[ $rept = '30' ]]
+then
+clear
+r30
+fi
+if [[ $rept = '31' ]]
+then
+clear
+r31
+fi
+if [[ $rept = '32' ]]
+then
+clear
+r32
+fi
+if [[ $rept = '33' ]]
+then
+clear
+r33
+fi
+if [[ $rept = '34' ]]
+then
+clear
+r34
+fi
+if [[ $rept = '35' ]]
+then
+clear
+r35
+fi
+if [[ $rept = '36' ]]
+then
+clear
+r36
+fi
+if [[ $rept = '37' ]]
+then
+clear
+r37
+fi
+if [[ $rept = '38' ]]
+then
+clear
+r38
+fi
+if [[ $rept = '39' ]]
+then
+clear
+r39
+fi
+done
+exit
+ 
+select sid, seq# , event, p1, p2,p3,wait_time from v$session_wait_history
+where sid=sid
+
+
+select b.sid,
+   nvl(substr(a.object_name,1,30),
+  'P1='||b.p1||' P2='||b.p2||' P3='||b.p3) object_name,
+  a.subobject_name,
+ a.object_type
+from dba_objects a, v$session_wait b,  x$bh c
+where c.obj=a.object_id(+)
+and b.p1=c.file#(+)
+and b.p2=c.dbablk(+)
+and b.event ='db file sequential read'
+union
+select b.sid,
+   nvl(substr(a.object_name,1,30),
+  'P1='||b.p1||' P2='||b.p2||' P3='||b.p3) object_name,
+  a.subobject_name,
+ a.object_type
+from dba_objects a, v$session_wait b,  x$bh c
+where c.obj=a.data_object_id(+)
+and b.p1=c.file#(+)
+and b.p2=c.dbablk(+)
+and b.event ='db file sequential read'
+
+ col name format a4
+select sid, 
+chr(bitand(p1, -16777216)/16777215)||
+chr(bitand(p1, -16711680)/65535) "Name",
+(bitand(p1,65535)) "Mode"
+from v$session_wait
+where event='enqueue'
+ 

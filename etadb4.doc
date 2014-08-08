@@ -1,0 +1,5 @@
+select owner, object_type, object_name from dba_objects
+where object_name in (
+'CHAINED_ROWS',
+'QUEST_SL_TEMP_EXPLAIN1',
+'REMOVE_CONSTANTS')

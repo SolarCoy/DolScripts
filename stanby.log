@@ -1,0 +1,358 @@
+
+Recovery Manager: Release 9.2.0.7.0 - 64bit Production
+
+Copyright (c) 1995, 2002, Oracle Corporation.  All rights reserved.
+
+connected to target database: ETADB4 (DBID=424732408)
+connected to recovery catalog database
+connected to auxiliary database: etadb4 (not mounted)
+
+RMAN> 2> 3> 4> 5> 6> 7> 8> 9> 10> 
+allocated channel: ch1
+channel ch1: sid=50 devtype=DISK
+
+allocated channel: ch2
+channel ch2: sid=13 devtype=DISK
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+Starting Duplicate Db at 03-AUG-10
+
+printing stored script: Memory Script
+{
+   restore clone standby controlfile to clone_cf;
+   replicate clone controlfile from clone_cf;
+   sql clone 'alter database mount standby database';
+}
+executing script: Memory Script
+
+Starting restore at 03-AUG-10
+
+channel ch2: starting datafile backupset restore
+channel ch2: restoring controlfile
+output filename=/orastb/log/stbdb4/control01.ctl
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3llkdv96_1_1 tag=TAG20100803T145014 params=NULL
+channel ch2: restore complete
+Finished restore at 03-AUG-10
+
+replicating controlfile
+input filename=/orastb/log/stbdb4/control01.ctl
+
+sql statement: alter database mount standby database
+
+printing stored script: Memory Script
+{
+   set until scn  1991487472;
+   set newname for datafile  1 to 
+ "/orastb/data/stbdb4/u02/system01.dbf";
+   set newname for datafile  2 to 
+ "/orastb/data/stbdb4/u04/undotbs01.dbf";
+   set newname for datafile  3 to 
+ "/orastb/data/stbdb4/u02/cwmlite01.dbf";
+   set newname for datafile  4 to 
+ "/orastb/data/stbdb4/u02/drsys01.dbf";
+   set newname for datafile  5 to 
+ "/orastb/data/stbdb4/u02/odm01.dbf";
+   set newname for datafile  6 to 
+ "/orastb/data/stbdb4/u02/xdb01.dbf";
+   set newname for datafile  7 to 
+ "/orastb/data/stbdb4/u02/TOOLS01.dbf";
+   set newname for datafile  8 to 
+ "/orastb/data/stbdb4/u02/permpdx_data.dbf";
+   set newname for datafile  9 to 
+ "/orastb/data/stbdb4/u02/usinfo_data.dbf";
+   set newname for datafile  10 to 
+ "/orastb/data/stbdb4/u03/permpdx_index.dbf";
+   set newname for datafile  11 to 
+ "/orastb/data/stbdb4/u03/usinfo_index.dbf";
+   set newname for datafile  12 to 
+ "/orastb/data2/stbdb4/u02/LETTER_DATA.dbf";
+   set newname for datafile  13 to 
+ "/orastb/data2/stbdb4/u02/LETTER_DATA02.dbf";
+   set newname for datafile  14 to 
+ "/orastb/data/stbdb4/u02/ETADBA_DATA1.dbf";
+   set newname for datafile  15 to 
+ "/orastb/data/stbdb4/u02/aud_data.dbf";
+   set newname for datafile  16 to 
+ "/orastb/data/stbdb4/u03/aud_index.dbf";
+   set newname for datafile  17 to 
+ "/orastb/data2/stbdb4/u02/LETTER_DATA03.dbf";
+   set newname for datafile  18 to 
+ "/orastb/data2/stbdb4/u02/letter_data04.dbf";
+   set newname for datafile  19 to 
+ "/orastb/data/stbdb4/u02/JFAS_DATA.dbf";
+   set newname for datafile  20 to 
+ "/orastb/data/stbdb4/u02/perfstat_data.dbf";
+   restore
+   check readonly
+   clone database
+   ;
+}
+executing script: Memory Script
+
+executing command: SET until clause
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+Starting restore at 03-AUG-10
+
+channel ch2: starting datafile backupset restore
+channel ch2: specifying datafile(s) to restore from backup set
+restoring datafile 00001 to /orastb/data/stbdb4/u02/system01.dbf
+restoring datafile 00002 to /orastb/data/stbdb4/u04/undotbs01.dbf
+restoring datafile 00003 to /orastb/data/stbdb4/u02/cwmlite01.dbf
+restoring datafile 00004 to /orastb/data/stbdb4/u02/drsys01.dbf
+restoring datafile 00005 to /orastb/data/stbdb4/u02/odm01.dbf
+restoring datafile 00006 to /orastb/data/stbdb4/u02/xdb01.dbf
+restoring datafile 00007 to /orastb/data/stbdb4/u02/TOOLS01.dbf
+restoring datafile 00008 to /orastb/data/stbdb4/u02/permpdx_data.dbf
+restoring datafile 00009 to /orastb/data/stbdb4/u02/usinfo_data.dbf
+restoring datafile 00010 to /orastb/data/stbdb4/u03/permpdx_index.dbf
+restoring datafile 00011 to /orastb/data/stbdb4/u03/usinfo_index.dbf
+restoring datafile 00012 to /orastb/data2/stbdb4/u02/LETTER_DATA.dbf
+restoring datafile 00013 to /orastb/data2/stbdb4/u02/LETTER_DATA02.dbf
+restoring datafile 00014 to /orastb/data/stbdb4/u02/ETADBA_DATA1.dbf
+restoring datafile 00015 to /orastb/data/stbdb4/u02/aud_data.dbf
+restoring datafile 00016 to /orastb/data/stbdb4/u03/aud_index.dbf
+restoring datafile 00017 to /orastb/data2/stbdb4/u02/LETTER_DATA03.dbf
+restoring datafile 00018 to /orastb/data2/stbdb4/u02/letter_data04.dbf
+restoring datafile 00019 to /orastb/data/stbdb4/u02/JFAS_DATA.dbf
+restoring datafile 00020 to /orastb/data/stbdb4/u02/perfstat_data.dbf
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/admin/etadb4/rman/ETADB4_dbf_t725847011_s6234 tag=TAG20100801T001010 params=NULL
+channel ch2: restore complete
+Finished restore at 03-AUG-10
+
+printing stored script: Memory Script
+{
+   switch clone datafile all;
+}
+executing script: Memory Script
+
+datafile 12 switched to datafile copy
+input datafilecopy recid=2109 stamp=726098615 filename=/orastb/data2/stbdb4/u02/LETTER_DATA.dbf
+datafile 13 switched to datafile copy
+input datafilecopy recid=2110 stamp=726098616 filename=/orastb/data2/stbdb4/u02/LETTER_DATA02.dbf
+datafile 17 switched to datafile copy
+input datafilecopy recid=2111 stamp=726098616 filename=/orastb/data2/stbdb4/u02/LETTER_DATA03.dbf
+datafile 18 switched to datafile copy
+input datafilecopy recid=2112 stamp=726098616 filename=/orastb/data2/stbdb4/u02/letter_data04.dbf
+datafile 2 switched to datafile copy
+input datafilecopy recid=2113 stamp=726098616 filename=/orastb/data/stbdb4/u04/undotbs01.dbf
+datafile 3 switched to datafile copy
+input datafilecopy recid=2114 stamp=726098616 filename=/orastb/data/stbdb4/u02/cwmlite01.dbf
+datafile 4 switched to datafile copy
+input datafilecopy recid=2115 stamp=726098616 filename=/orastb/data/stbdb4/u02/drsys01.dbf
+datafile 5 switched to datafile copy
+input datafilecopy recid=2116 stamp=726098616 filename=/orastb/data/stbdb4/u02/odm01.dbf
+datafile 6 switched to datafile copy
+input datafilecopy recid=2117 stamp=726098616 filename=/orastb/data/stbdb4/u02/xdb01.dbf
+datafile 7 switched to datafile copy
+input datafilecopy recid=2118 stamp=726098616 filename=/orastb/data/stbdb4/u02/TOOLS01.dbf
+datafile 8 switched to datafile copy
+input datafilecopy recid=2119 stamp=726098616 filename=/orastb/data/stbdb4/u02/permpdx_data.dbf
+datafile 9 switched to datafile copy
+input datafilecopy recid=2120 stamp=726098616 filename=/orastb/data/stbdb4/u02/usinfo_data.dbf
+datafile 10 switched to datafile copy
+input datafilecopy recid=2121 stamp=726098616 filename=/orastb/data/stbdb4/u03/permpdx_index.dbf
+datafile 11 switched to datafile copy
+input datafilecopy recid=2122 stamp=726098617 filename=/orastb/data/stbdb4/u03/usinfo_index.dbf
+datafile 14 switched to datafile copy
+input datafilecopy recid=2123 stamp=726098617 filename=/orastb/data/stbdb4/u02/ETADBA_DATA1.dbf
+datafile 15 switched to datafile copy
+input datafilecopy recid=2124 stamp=726098617 filename=/orastb/data/stbdb4/u02/aud_data.dbf
+datafile 16 switched to datafile copy
+input datafilecopy recid=2125 stamp=726098617 filename=/orastb/data/stbdb4/u03/aud_index.dbf
+datafile 19 switched to datafile copy
+input datafilecopy recid=2126 stamp=726098617 filename=/orastb/data/stbdb4/u02/JFAS_DATA.dbf
+datafile 20 switched to datafile copy
+input datafilecopy recid=2127 stamp=726098617 filename=/orastb/data/stbdb4/u02/perfstat_data.dbf
+
+printing stored script: Memory Script
+{
+   set until scn  1991487472;
+   recover
+   standby
+   clone database
+    delete archivelog
+   ;
+}
+executing script: Memory Script
+
+executing command: SET until clause
+
+Starting recover at 03-AUG-10
+channel ch2: starting incremental datafile backupset restore
+channel ch2: specifying datafile(s) to restore from backup set
+destination for restore of datafile 00001: /orastb/data/stbdb4/u02/system01.dbf
+destination for restore of datafile 00002: /orastb/data/stbdb4/u04/undotbs01.dbf
+destination for restore of datafile 00003: /orastb/data/stbdb4/u02/cwmlite01.dbf
+destination for restore of datafile 00004: /orastb/data/stbdb4/u02/drsys01.dbf
+destination for restore of datafile 00005: /orastb/data/stbdb4/u02/odm01.dbf
+destination for restore of datafile 00006: /orastb/data/stbdb4/u02/xdb01.dbf
+destination for restore of datafile 00007: /orastb/data/stbdb4/u02/TOOLS01.dbf
+destination for restore of datafile 00008: /orastb/data/stbdb4/u02/permpdx_data.dbf
+destination for restore of datafile 00009: /orastb/data/stbdb4/u02/usinfo_data.dbf
+destination for restore of datafile 00010: /orastb/data/stbdb4/u03/permpdx_index.dbf
+destination for restore of datafile 00011: /orastb/data/stbdb4/u03/usinfo_index.dbf
+destination for restore of datafile 00012: /orastb/data2/stbdb4/u02/LETTER_DATA.dbf
+destination for restore of datafile 00013: /orastb/data2/stbdb4/u02/LETTER_DATA02.dbf
+destination for restore of datafile 00014: /orastb/data/stbdb4/u02/ETADBA_DATA1.dbf
+destination for restore of datafile 00015: /orastb/data/stbdb4/u02/aud_data.dbf
+destination for restore of datafile 00016: /orastb/data/stbdb4/u03/aud_index.dbf
+destination for restore of datafile 00017: /orastb/data2/stbdb4/u02/LETTER_DATA03.dbf
+destination for restore of datafile 00018: /orastb/data2/stbdb4/u02/letter_data04.dbf
+destination for restore of datafile 00019: /orastb/data/stbdb4/u02/JFAS_DATA.dbf
+destination for restore of datafile 00020: /orastb/data/stbdb4/u02/perfstat_data.dbf
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/admin/etadb4/rman/ETADB4_dbf_t725933410_s6239 tag=TAG20100802T001007 params=NULL
+channel ch2: restore complete
+channel ch2: starting incremental datafile backupset restore
+channel ch2: specifying datafile(s) to restore from backup set
+destination for restore of datafile 00001: /orastb/data/stbdb4/u02/system01.dbf
+destination for restore of datafile 00002: /orastb/data/stbdb4/u04/undotbs01.dbf
+destination for restore of datafile 00003: /orastb/data/stbdb4/u02/cwmlite01.dbf
+destination for restore of datafile 00004: /orastb/data/stbdb4/u02/drsys01.dbf
+destination for restore of datafile 00005: /orastb/data/stbdb4/u02/odm01.dbf
+destination for restore of datafile 00006: /orastb/data/stbdb4/u02/xdb01.dbf
+destination for restore of datafile 00007: /orastb/data/stbdb4/u02/TOOLS01.dbf
+destination for restore of datafile 00008: /orastb/data/stbdb4/u02/permpdx_data.dbf
+destination for restore of datafile 00009: /orastb/data/stbdb4/u02/usinfo_data.dbf
+destination for restore of datafile 00010: /orastb/data/stbdb4/u03/permpdx_index.dbf
+destination for restore of datafile 00011: /orastb/data/stbdb4/u03/usinfo_index.dbf
+destination for restore of datafile 00012: /orastb/data2/stbdb4/u02/LETTER_DATA.dbf
+destination for restore of datafile 00013: /orastb/data2/stbdb4/u02/LETTER_DATA02.dbf
+destination for restore of datafile 00014: /orastb/data/stbdb4/u02/ETADBA_DATA1.dbf
+destination for restore of datafile 00015: /orastb/data/stbdb4/u02/aud_data.dbf
+destination for restore of datafile 00016: /orastb/data/stbdb4/u03/aud_index.dbf
+destination for restore of datafile 00017: /orastb/data2/stbdb4/u02/LETTER_DATA03.dbf
+destination for restore of datafile 00018: /orastb/data2/stbdb4/u02/letter_data04.dbf
+destination for restore of datafile 00019: /orastb/data/stbdb4/u02/JFAS_DATA.dbf
+destination for restore of datafile 00020: /orastb/data/stbdb4/u02/perfstat_data.dbf
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/admin/etadb4/rman/ETADB4_dbf_t726019810_s6250 tag=TAG20100803T001008 params=NULL
+channel ch2: restore complete
+
+starting media recovery
+
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139229
+channel ch2: restoring archive log
+archive log thread=1 sequence=139230
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/admin/etadb4/rman/ETADB4_log_t726025507_s6252 tag=TAG20100803T014501 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139229.arc thread=1 sequence=139229
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139229.arc recid=5 stamp=726098646
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139230.arc thread=1 sequence=139230
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139230.arc recid=6 stamp=726098647
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139231
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3glkdv2h_1_1 tag=TAG20100803T144640 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139231.arc thread=1 sequence=139231
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139231.arc recid=7 stamp=726098655
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139232
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3hlkdv2h_1_1 tag=TAG20100803T144640 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139232.arc thread=1 sequence=139232
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139232.arc recid=8 stamp=726098668
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139233
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3ilkdv2h_1_1 tag=TAG20100803T144640 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139233.arc thread=1 sequence=139233
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139233.arc recid=9 stamp=726098674
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139234
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3jlkdv2h_1_1 tag=TAG20100803T144640 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139234.arc thread=1 sequence=139234
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139234.arc recid=10 stamp=726098678
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139235
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3nlkdv9h_1_1 tag=TAG20100803T145024 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139235.arc thread=1 sequence=139235
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139235.arc recid=11 stamp=726098681
+channel ch2: starting archive log restore to default destination
+channel ch2: restoring archive log
+archive log thread=1 sequence=139236
+channel ch2: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/3olkdv9h_1_1 tag=TAG20100803T145024 params=NULL
+channel ch2: restore complete
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139236.arc thread=1 sequence=139236
+channel clone_default: deleting archive log(s)
+archive log filename=/orastb/log/stbdb4/arch/arch_1_139236.arc recid=12 stamp=726098686
+media recovery complete
+Finished recover at 03-AUG-10
+Finished Duplicate Db at 03-AUG-10
+released channel: ch1
+released channel: ch2
+
+RMAN> 
+RMAN> 

@@ -1,0 +1,6 @@
+SQL> --        select count(*) from user_objects;
+SQL>         execute statspack.snap;
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off;

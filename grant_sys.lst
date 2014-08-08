@@ -1,0 +1,10 @@
+
+PRIVILEGE                                GRANTEE                                
+---------------------------------------- ------------------------------         
+UNLIMITED TABLESPACE                     DRVS                                   
+UNLIMITED TABLESPACE                     ETADBA                                 
+UNLIMITED TABLESPACE                     INTRANET                               
+UNLIMITED TABLESPACE                     NEG3                                   
+UNLIMITED TABLESPACE                     NEG5                                   
+UNLIMITED TABLESPACE                     ODEP                                   
+UNLIMITED TABLESPACE                     PAO                                    

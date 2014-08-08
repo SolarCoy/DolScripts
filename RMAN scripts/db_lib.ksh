@@ -1,0 +1,798 @@
+(etadb5)prodora05:/usr/oracle/common/bin> cat db_lib.ksh
+#!/bin/ksh
+
+#***********************************************************************
+# Function dba_handle: connect as sysdba and process a sql commans
+# and returns status of database and system
+# example: dba_handle "$SQL"
+#***********************************************************************
+function dba_handle {
+typeset -r SQL_CMD=$@
+RET_VAL=$(sqlplus -s /nolog <<EOF
+conn /as sysdba
+set serveroutput on size 100000
+set head off
+set feedback off
+set termout off
+${SQL_CMD}
+exit
+EOF)
+if (( $? != ${STAT_OK} ))
+then
+    print "  dba_handle returned an error."
+    return ${ST_FAIL}
+fi
+typeset -i rev=$(print ${RET_VAL} |grep -ic ORA-)
+if [[ $rev -ne 0 ]]
+then
+    echo "---  Error returned from DATABASE: ----"
+    echo "<== $RET_VAL ==>"
+    return ${ST_FAIL}
+fi
+return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function check_arch_mode: retruns database log mode,
+# archivelog or no archive log
+#***********************************************************************
+function check_arch_mode {
+   LOG=$1
+   echo "Check if database ${ORACLE_SID} is in ARCHIVE LOG MODE." |tee -a $LOG
+   SQL="select log_mode from v\$database;"
+   RET_VAL=""
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'check_arch_mode' returned an error." |tee -a $LOG
+   fi
+
+   LOGMODE=$(print ${RET_VAL}|grep ARCHIVE|awk '{print $NF}')
+   if [[ $LOGMODE = "NOARCHIVELOG" ]]
+   then
+      return ${NO_ARCH_MODE}
+   else
+      return ${ARCHIVE_MODE}
+   fi
+return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function get_dump_dest: retruns database (user, archive) destination
+# directory. example: get_dest_dir "user_dump"
+#***********************************************************************
+function get_dest_dir {
+   typeset NAME=$1
+#   echo "  Get ${NAME}_dest directory. "
+   typeset SQL="select value from v\$parameter where name='${NAME}_dest';"
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'get ${NAME}_dest' returned an error."
+       return ${ST_FAIL}
+   fi
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function get_arch_dest_n: retruns database local archive destination
+# directory
+# example: get_arch_dest "1"
+#***********************************************************************
+function get_arch_dest {
+   typeset NUM=$1
+   typeset SQL="select value from v\$parameter where name='log_archive_dest_${NUM}';"
+   RET_VAL=""
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'get log_archive_dest_${NUM}' returned an error."
+       return ${ST_FAIL}
+   fi
+   RET_VAL1=$RET_VAL
+DB_NAME=""
+get_db_name
+typeset -l db_name=$DB_NAME
+   STR_ARCH_DIR=$(print ${RET_VAL1}|grep ${db_name}|awk -F= '{print $2}')
+   RVAL=$(print ${STR_ARCH_DIR}|awk '{print $1}')
+   return ${STAT_OK}
+
+}
+
+#***********************************************************************
+# Function check_disk_pct_full: check if disk is MAXFULL% full
+# exp: check_disk_pct_ful BKMNT 80
+# return $TRUE if it u10 is 80% full otherwize $FALSE
+#***********************************************************************
+function check_disk_pct_full {
+    typeset BKMNT=$1 MAXFULL=$2
+    typeset -i PCT_FULL=$(df -k ${BKMNT}|grep ${BKMNT} \
+         |awk '{print $5}'  |awk -F% '{print $1}')
+    if [ ${PCT_FULL} -gt $MAXFULL ]
+    then
+        print "  ${BKMNT} is Too Full, ${PCT_FULL}% greater than $MAXFULL%."
+        return ${TRUE}
+   fi
+   return ${FALSE}
+}
+
+#***********************************************************************
+# Function check_disk_MB_full: check if disk (bytes) is full
+# exp: check_disk_MB_full BKMNT1
+#***********************************************************************
+function check_disk_MB_full {
+    typeset BKMNT=$1
+    DB_SIZE=""
+    get_db_size
+    if [[ $? != ${STAT_OK} ]]
+    then
+       print "  get_db_size returned error."
+       return ${ST_FAIL}
+    fi
+    typeset -i KB_AVL=$(df -k ${BKMNT}|grep ${BKMNT} \
+         |awk '{print $4}' )
+    let MB_AVL=$(( KB_AVL/1024 - 30 ))
+    print "Database size: ${DB_SIZE} Mb."
+    print "Available OS size: ${MB_AVL} Mb."
+    if [ ${MB_AVL} -lt ${DB_SIZE} ]
+    then
+        print "  ${BKMNT} is too small, ${MB_AVL} less than db size ${DB_SIZE}."
+        return ${ST_FAIL}
+   fi
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function mail_msg: If SAEND_MAIL="TRUE" message sent out via email
+# usage: mail_msg "$subject" "$message"
+#***********************************************************************
+function mail_msg {
+  if [[ $SEND_MAIL = $TRUE ]]
+  then
+     typeset SBJCT=$1
+     typeset MSG=$2
+
+     set -A MAIL_ARRAY ${MAIL_LIST}
+     print "$MSG " | \
+        mailx -s "$SBJCT" ${MAIL_ARRAY[*]}
+     if (( $? != ${STAT_OK} ))
+     then
+           print "Warning: Mailing a message failed."
+     fi
+  fi
+  return $STAT_OK
+}
+
+#***********************************************************************
+# Function mail_file: If SAEND_MAIL="TRUE" a file sent out via email
+# usage: mail_file $subject $file_name
+#***********************************************************************
+function mail_file {
+  if [[ $SEND_MAIL = $TRUE ]]
+  then
+     typeset SBJCT=$1
+     typeset FNAME=$2
+
+     set -A MAIL_ARRAY ${MAIL_LIST}
+     mailx -s "$SBJCT" ${MAIL_ARRAY[*]} <$FNAME
+     if (( $? != ${STAT_OK} ))
+     then
+           print "Warning: Mailing file failed."
+     fi
+  fi
+  return $STAT_OK
+}
+
+#***********************************************************************
+# Function log_switch: switch log file
+#***********************************************************************
+function log_switch {
+   typeset SQL="alter system switch logfile ;"
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'log_switch' returned an error."
+       return ${ST_FAIL}
+   fi
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function arch_current: archive current log files
+#***********************************************************************
+function arch_current {
+   typeset SQL="alter system archive log current;"
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'arch_current' returned an error."
+       return ${ST_FAIL}
+   fi
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function get_db_size: Get database size in Mb
+#***********************************************************************
+function get_db_size {
+   typeset SQL="select sum(bytes)/1024/1024 from dba_data_files;"
+   RET_VAL=""
+   dba_handle $SQL
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  dba_handle 'get_db_size' returned an error."
+       return ${ST_FAIL}
+   fi
+   DB_SIZE=$(print ${RET_VAL}|grep [0-9]|awk '{print $NF}')
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function rm_old_files: remove n days old files in a directory
+# exp:   rm_old_files 4 /u02/oradata/arch "*.sql" $REMOTE
+#***********************************************************************
+function rm_old_files {
+  typeset -i DAYS=$1
+  typeset -r DIR=$2
+  typeset FILES_IN=$3
+  typeset RMT_ACT=""
+
+  if [[ $4 = ${REMOTE} ]]
+  then
+      RMT_ACT=${REMOTE_ACT}
+  fi
+
+  typeset FILES=$(${RMT_ACT} find ${DIR}/* -name "${FILES_IN}" -mtime +${DAYS} 2>/dev/null)
+  for F in $FILES
+  do
+     ${RMT_ACT} rm -f $F
+     if (( $? != ${STAT_OK} ))
+     then
+       print "  Remove old file $F returned an error."
+       return ${ST_FAIL}
+     fi
+     print "  $F has been removed."
+   done
+   return ${STAT_OK}
+}
+
+#*******************************************************************************
+# Function move_compressed_files: move backups n days older from BKDIR1 to BKDIR2
+# example1:  move_compressed_files DAYS BKDIR1 BKDIR2
+#    will move all the compressed backups thant n days older from BKDIR1 to BKDIR2
+#*******************************************************************************
+function move_compressed_files {
+   typeset DAYS=$1
+   typeset SRC_DIR=$2
+   typeset DEST_DIR=$3
+
+   OLDFILES=$(find ${SRC_DIR}/* -mtime +${DAYS} 2>/dev/null|egrep '.(Z|gz|zip)$')
+   for FILE in $OLDFILES
+   do
+   typeset -i INUSE=$(fuser $FILE 2>/dev/null|grep -c [0-9])
+   if [[ $INUSE -eq $FALSE ]]
+   then
+      ANAME=$(basename $FILE)
+      print "   Moving $FILE from ${SRC_DIR} to ${DEST_DIR}."
+      mv $FILE ${DEST_DIR}/${ANAME}
+   else
+        print "  $FILE in user. "
+   fi
+   done
+return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function clean_bkmnt: clean backups from bkmnt
+# example:  clean_mnt BKMNT2 BKDIR2 80
+# will remove all the compressed backups from BKDIR untill it's BKMNT
+# is less than 80% full
+#***********************************************************************
+function clean_mnt {
+   typeset -r MNT=$1
+   typeset -r BDIR=$2
+   typeset -i MAXFULL=$3
+
+   check_disk_pct_full $MNT $MAXFULL
+   typeset -i PCTFULL=$?
+   typeset -i CNT=0
+   while [ $PCTFULL = $TRUE ]
+   do
+     OLDESTFILE=$(ls -tr ${BDIR}/*/*/*|egrep '.(Z|gz|zip)$'|head -1)
+     if [[ -z $OLDESTFILE ]] then
+         print "  No more backup files to remove."
+         return ${STAT_OK}
+     else
+       rm -f ${OLDESTFILE}
+       echo "  ${OLDESTFILE} removed. "
+     fi
+     check_disk_pct_full $MNT $MAXFULL
+     PCTFULL=$?
+     let CNT=$CNT+1
+   done
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function compress_arch_logs: Compress all archive logs for
+# all uncompressed redo logs upto the most recently archived sequence#
+# sequence number in database
+# example: compress_arch_logs $ORACLE_SID $LOGFILE
+#***********************************************************************
+function compress_arch_logs {
+   typeset SID=$1
+   typeset LOG=$2
+   typeset -i FSEQ=0
+   typeset -i  OLDEST=0
+
+   # Get achive log format
+   typeset SQL1="select value from v\$parameter where name='log_archive_format';"
+   RET_VAL=""
+   dba_handle "$SQL1"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get log_archive_format returns error."
+       return ${ST_FAIL}
+   fi
+
+   PRE0=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $1}')
+   PRE1=$(print ${PRE0}|nawk -F"%t" '{print $1}')
+   PRE2=$(print ${PRE0}|nawk -F"%t" '{print $2}')
+   EXT=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $2}')
+
+   typeset SQL="select thread#||':'||sequence#||':'||archived||':'||status \
+        from v\$log order by 1 desc;"
+    # Get log sequence number
+   RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+         print "  Get log sequences number failed."
+         return ${ST_FAIL}
+   fi
+
+   typeset -i SEQ=0
+   typeset -i CNT=0
+
+   print "  Compress most recent archive logs appearing in v\$logs"
+   print "${RET_VAL}"|while read ALL
+   do
+         print "$ALL" |awk -F: '{print $1, $2,$3, $4}' |read THR SEQ YN STAT
+         PRE=${PRE1}${THR}${PRE2}
+   if [[ ${SEQ} -ne 0 ]]
+   then
+     if [[ $YN = "YES" ]]
+     then
+       if [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} ]]
+       then
+           print "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} -  compressed" \
+                |tee -a $LOG
+           ${GZIP} ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} 2>/dev/null
+
+           elif [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.gz ]]
+           then
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - Already Compressed" \
+                |tee -a  ${LOG}
+           elif [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.Z ]]
+           then
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - Already Compressed" \
+                |tee -a  ${LOG}
+           else
+              print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - not found!" \
+                |tee -a  ${LOG}
+           fi
+        CNT=$CNT+1
+        fi
+    let OLDEST=${SEQ}
+    fi
+    done
+
+    print "  Compress all other uncompressed archive logs."
+    export END_SEQ=$((${OLDEST}+$CNT-1))
+    let CNT=0
+    typeset -r AFILES="${PRE}*${EXT}"
+    ls  ${SRC_ARCH_DIR}/${AFILES}|while read FILE
+    do
+        FNAME=$(basename $FILE)
+
+        let FSEQ=$(print $FNAME|awk -F_ '{print $3}'|awk -F. '{print $1}')
+        if [[ $FSEQ -lt $OLDEST ]]
+        then
+                if [[ $CNT -eq 0 ]]
+                then
+                        export START_SEQ=$FSEQ
+                fi
+                ${GZIP} ${SRC_ARCH_DIR}/${FNAME} 2>/dev/null
+                let CNT=$CNT+1
+        fi
+    done
+    print "Start archive seq#: $START_SEQ"
+    print "End archive seq#:  $END_SEQ"
+    return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function compress_copy_arch_logs:
+#   Compress and remote copy all archive logs for
+# all uncompressed redo logs upto the most recently archived sequence#
+# sequence number in database
+# example: compress_copy_arch_logs $ORACLE_SID
+# global varibal  ${REMOTE_ACCT}, ${SID_RMT_TOP_DIR} needed
+# 03/05/2005: added function for RAC for different threads
+#***********************************************************************
+function compress_copy_arch_logs {
+   typeset SID=$1
+
+   # Get achive log format
+   typeset SQL1="select value from v\$parameter where name='log_archive_format';"
+   RET_VAL=""
+   dba_handle "$SQL1"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get log_archive_format returns error."
+       return ${ST_FAIL}
+   fi
+
+   typeset PRE0=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $1}')
+   PRE1=$(print ${PRE0}|nawk -F"%t" '{print $1}')
+   PRE2=$(print ${PRE0}|nawk -F"%t" '{print $2}')
+   EXT=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $2}')
+
+   typeset SQL="select distinct thread#||':' \
+        from v\$log ;"
+   # Get log sequence number
+   RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get thread number failed."
+       return ${ST_FAIL}
+   fi
+   typeset -r RET_VAL1=${RET_VAL}
+
+  print "  Log current."
+  arch_current
+  if (( $? != ${STAT_OK} ))
+   then
+        print "  Archive current logfile failed."
+        return ${ST_FAIL}
+   fi
+
+   print "  Compress most recent archive logs appearing in v\$logs"
+   print "${RET_VAL1}"|grep -v Connect|grep -v ^$ |awk -F: '{print $1}'|while read THRD
+   do
+        print "  Process thread $THRD..."
+        proc_one_thread_archs "$THRD"
+        if (( $? != ${STAT_OK} ))
+        then
+                print "  Process archive logs for thread $THRD failed."
+                return ${ST_FAIL}
+        fi
+   print "  *******************************************************"
+   print "  Thread $THRD: Start seq# $START_SEQ; End seq# $END_SEQ"
+   print "  *******************************************************"
+
+   done
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function copy_min_arch_logs:
+#   Compress and minimum amount of archive logs for database recovery
+# example: copy_min_arch_logs $ORACLE_SID
+# global varibal  ${REMOTE_ACCT}, ${SID_RMT_TOP_DIR} needed
+# 03/05/2005: added function for RAC for different threads
+#***********************************************************************
+function copy_min_arch_logs {
+   typeset SID=$1
+
+   # Get achive log format
+   typeset SQL1="select value from v\$parameter where name='log_archive_format';"
+   RET_VAL=""
+   dba_handle "$SQL1"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get log_archive_format returns error."
+       return ${ST_FAIL}
+   fi
+
+   typeset PRE0=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $1}')
+   PRE1=$(print ${PRE0}|nawk -F"%t" '{print $1}')
+   PRE2=$(print ${PRE0}|nawk -F"%t" '{print $2}')
+   EXT=$(print  ${RET_VAL}|awk '{print $NF}'|nawk -F"%s" '{print $2}')
+
+   typeset SQL="select distinct thread#||':' \
+        from v\$log ;"
+   # Get log sequence number
+   RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get thread number failed."
+       return ${ST_FAIL}
+   fi
+   typeset -r RET_VAL1=${RET_VAL}
+
+  print "  Log current."
+  arch_current
+  if (( $? != ${STAT_OK} ))
+   then
+        print "  Archive current logfile failed."
+        return ${ST_FAIL}
+   fi
+
+   print "  Copy most recent archive logs appearing in v\$logs"
+   print "${RET_VAL1}"|grep -v Connect|grep -v ^$ |awk -F: '{print $1}'|while read THRD
+   do
+        print "  Process thread $THRD..."
+        proc_one_thread_min_archs "$THRD"
+        if (( $? != ${STAT_OK} ))
+        then
+                print "  Process archive logs for thread $THRD failed."
+                return ${ST_FAIL}
+        fi
+   print "  *******************************************************"
+   print "  Thread $THRD: Start seq# $START_SEQ; End seq# $END_SEQ"
+   print "  *******************************************************"
+
+   done
+   return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function proc_one_thread_archs:
+#   Compress and remote copy all archive logs for
+# all uncompressed redo logs upto the most recently archived sequence#
+# sequence number in database
+# example: compress_copy_arch_logs $ORACLE_SID
+# global varibal  ${REMOTE_ACCT}, ${SID_RMT_TOP_DIR} needed
+#***********************************************************************
+function proc_one_thread_archs {
+   typeset  THR=$1
+   typeset -i FSEQ=0
+   typeset -i OLDEST=0
+   typeset -i SEQ=0
+   typeset -i CNT=0
+    START_SEQ=""
+   typeset SQL="select sequence#||':'||archived||':'||status \
+        from v\$log where thread#=$THR order by 1 desc;"
+   # Get log sequence number
+   RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get log sequences number failed."
+       return ${ST_FAIL}
+   fi
+   typeset -r RET_VAL1=${RET_VAL}
+   print "${RET_VAL1}"|while read ALL
+   do
+   print "$ALL" |grep -v Connect|awk -F: '{print $1, $2,$3}' |read SEQ YN STAT
+   typeset   PRE=${PRE1}${THR}${PRE2}
+   if [[ ${SEQ} -ne 0 ]]
+   then
+     if [[ $YN = "YES" ]]
+     then
+       if [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} ]]
+       then
+          print "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} -  compressed"
+          ${GZIP} ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} 2>/dev/null
+          if [[ $REMOTE = $TRUE ]] then
+              scp -p ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.gz \
+              ${REMOTE_ACCT}:${SID_RMT_TOP_DIR}/arch
+          else
+              cp -p ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.gz \
+              ${SID_LOC_TOP_DIR}/arch
+          fi
+
+          if (( $? != ${STAT_OK} ))
+          then
+              print "  Copy ${PRE}${SEQ}${EXT} failed."
+              return ${ST_FAIL}
+          fi
+
+       elif [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.gz ]]
+       then
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - Already Compressed"
+       elif [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}.Z ]]
+       then
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - Already Compressed"
+       else
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - not found!"
+       fi
+     fi
+     CNT=$CNT+1
+     let OLDEST=${SEQ} # oldest redo log file
+   fi
+   done
+
+   print "  Compress all other uncompressed archive logs."
+   export END_SEQ=$((${OLDEST}+$CNT-1)) #the newest sequence number
+   let CNT=0
+   typeset -r AFILES="${PRE}*${EXT}"
+   ls  ${SRC_ARCH_DIR}/${AFILES}|while read FILE
+   do
+      FNAME=$(basename $FILE)
+
+      let FSEQ=$(print $FNAME|awk -F_ '{print $3}'|awk -F. '{print $1}')
+      if [[ $FSEQ -lt $OLDEST ]] #older than oldest redo log
+      then
+        if [[ $CNT -eq 0 ]]
+        then
+                export START_SEQ=$FSEQ
+        fi
+        ${GZIP} ${SRC_ARCH_DIR}/${FNAME} 2>/dev/null
+        if [[ $REMOTE = $TRUE ]] then
+            scp -p ${SRC_ARCH_DIR}/${PRE}${FSEQ}${EXT}.gz \
+            ${REMOTE_ACCT}:${SID_RMT_TOP_DIR}/arch
+        else
+            cp -p ${SRC_ARCH_DIR}/${PRE}${FSEQ}${EXT}.gz \
+            ${SID_LOC_TOP_DIR}/arch
+        fi
+        if (( $? != ${STAT_OK} ))
+        then
+              print "  Copy ${PRE}${FSEQ}${EXT} failed."
+             return ${ST_FAIL}
+        fi
+                let CNT=$CNT+1
+      fi
+    done
+   return ${STAT_OK}
+}
+#***********************************************************************
+# Function proc_one_thread_min_archs:
+# copy minimum number of archive logs for the database backup to recoverable
+# sequence number in database
+# example: proc_one_thread_min_archs $ORACLE_SID
+# global varibal  ${REMOTE_ACCT}, ${SID_RMT_TOP_DIR} needed
+#***********************************************************************
+function proc_one_thread_min_archs {
+   typeset  THR=$1
+   typeset -i FSEQ=0
+   typeset -i OLDEST=0
+   typeset -i SEQ=0
+   typeset -i CNT=0
+   SART_SEQ=""
+   typeset SQL="select sequence#||':'||archived||':'||status \
+        from v\$log where thread#=$THR order by 1 desc;"
+   # Get log sequence number
+   RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get log sequences number failed."
+       return ${ST_FAIL}
+   fi
+   typeset -r RET_VAL1=${RET_VAL}
+   print "${RET_VAL1}"|while read ALL
+   do
+   print "$ALL" |grep -v Connect|awk -F: '{print $1, $2,$3}' |read SEQ YN STAT
+   typeset   PRE=${PRE1}${THR}${PRE2}
+   if [[ ${SEQ} -ne 0 ]]
+   then
+     if [[ $YN = "YES" ]]
+     then
+       if [[ -f ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} ]]
+       then
+          if [[ $REMOTE = $TRUE ]] then
+              scp -p ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} \
+              ${REMOTE_ACCT}:${SID_RMT_TOP_DIR}/arch
+          else
+              cp -p ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} \
+              ${SID_LOC_TOP_DIR}/arch
+          fi
+          if (( $? != ${STAT_OK} ))
+          then
+              print "  Copy ${PRE}${SEQ}${EXT} failed."
+              return ${ST_FAIL}
+          fi
+          if [[ -f ${SID_LOC_TOP_DIR}/arch/${PRE}${SEQ}${EXT} ]]
+          then
+              $ZIP ${SID_LOC_TOP_DIR}/arch/${PRE}${SEQ}${EXT}
+              print "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT} backed up."
+          fi
+       else
+           print  "  ${SRC_ARCH_DIR}/${PRE}${SEQ}${EXT}  - not found!"
+       fi
+     fi
+     CNT=$CNT+1
+     let OLDEST=${SEQ} # means oldest redo log file
+   fi
+   done
+
+   print "  Copy and Compress a couple archive logs older than $OLDEST."
+   export END_SEQ=$((${OLDEST}+$CNT-2)) #the newest sequence number
+   let CNT=0
+   typeset -r AFILES="${PRE}*${EXT}"
+   ls  ${SRC_ARCH_DIR}/${AFILES}|while read FILE
+   do
+      FNAME=$(basename $FILE)
+
+      let FSEQ=$(print $FNAME|awk -F_ '{print $3}'|awk -F. '{print $1}')
+      if [[ $FSEQ -lt $OLDEST ]] #older than oldest redo log
+      then
+        if [[ $CNT -eq 0 ]]
+        then
+                export START_SEQ=$FSEQ
+        fi
+        if [[ $REMOTE = $TRUE ]] then
+            scp -p ${SRC_ARCH_DIR}/${PRE}${FSEQ}${EXT} \
+            ${REMOTE_ACCT}:${SID_RMT_TOP_DIR}/arch
+        else
+            cp -p ${SRC_ARCH_DIR}/${PRE}${FSEQ}${EXT} \
+            ${SID_LOC_TOP_DIR}/arch
+        fi
+        if (( $? != ${STAT_OK} ))
+        then
+              print "  Copy ${PRE}${FSEQ}${EXT} failed."
+             return ${ST_FAIL}
+        fi
+        sleep 10
+        if [[ -f ${SID_LOC_TOP_DIR}/arch/${PRE}${FSEQ}${EXT} ]] then
+            $ZIP ${SID_LOC_TOP_DIR}/arch/${PRE}${FSEQ}${EXT}
+            print "  ${PRE}${FSEQ}${EXT} backed up."
+        fi
+        if [[ $CNT -gt 5 ]] then
+             break
+        fi
+        let CNT=$CNT+1
+      fi
+    done
+   return ${STAT_OK}
+}
+#***********************************************************************
+# Function ck_tablespaces_backup_stat:
+# usage:  ck_tablespaces_backup_stat logfile
+# example: check if any tablespace in backup mode, if any haning backup
+# tablespace existing then end it's backup
+#***********************************************************************
+function ck_tablespaces_backup_stat {
+   typeset LOG=$1
+
+SQL="DECLARE
+    CURSOR bkup_cur
+    IS
+    select tablespace_name from v\$backup b, dba_data_files d
+    where b.status='ACTIVE'
+    and b.file#=d.file_id;
+    lv_end_backup VARCHAR2(100)
+       :='ALTER TABLESPACE BKUP_REC.TABLESPACE_NAME END BACKUP';
+
+BEGIN
+   for bkup_rec in bkup_cur loop
+      lv_end_backup:='ALTER TABLESPACE '||bkup_rec.tablespace_name||' END BACKUP';
+      EXECUTE IMMEDIATE lv_end_backup;
+      dbms_output.put_line('End backup for tablespace '||bkup_rec.tablespace_name);
+   end loop;
+   dbms_output.put_line('  All tablespaces are fine now.');
+
+EXCEPTION
+WHEN OTHERS THEN
+   dbms_output.put_line('ERROR: '||sqlerrm);
+END;
+/
+"
+RET_VAL=""
+dba_handle "$SQL"
+if (( $? != ${STAT_OK} ))
+then
+    print "  dba_handle returned error."
+    return ${ST_FAIL}
+fi
+print "${RET_VAL}"|grep -v \Connected |grep -v \connected >>$LOG
+
+return ${STAT_OK}
+}
+function get_db_name {
+SQL="select name from v\$database;"
+ RET_VAL=""
+   dba_handle "$SQL"
+   if (( $? != ${STAT_OK} ))
+   then
+       print "  Get database name query failed."
+       return ${ST_FAIL}
+   fi
+   DB_NAME=$(print "$RET_VAL"|grep  -v Connect|grep [A-Z]|awk '{print $NF}')
+return $DB_NAME
+}
+(etadb5)prodora05:/usr/oracle/common/bin> ^[[

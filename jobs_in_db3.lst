@@ -1,0 +1,300 @@
+SQL> /
+
+       JOB SUBSTR(SCH LAST DATE            NEXT DATE            BROKE   FAILURES
+---------- ---------- -------------------- -------------------- ----- ----------
+SUBSTR(WHAT,1,50)                                  TOTAL_TIME                   
+-------------------------------------------------- ----------                   
+        39 ISTOREWEB  05-28-10 11:45:01    01-01-00 00:00:00    Y             16
+infostore.pkg_maintenance.p_chk_error_log(2,'ISTOR      99321                   
+                                                                                
+        46 WIARPT     08-31-06 03:00:03    01-01-00 00:00:00    Y              0
+WIARPT.WIASRD_ERROR_PKG.EDIT_CHECK;                      1291                   
+                                                                                
+       183 COMMON     01-27-10 05:07:03    01-01-00 00:00:00    Y             16
+edi_run_20080227.start_process;                        973439                   
+                                                                                
+       189 TITLEIII                        01-01-00 00:00:00    N               
+neg.cert_proc(:new.neg_id);                                 0                   
+                                                                                
+       303 GEMS       04-06-11 00:00:02    04-07-11 00:00:00    N              0
+begin load_manager_stats.manager_stats_data; end;      514952                   
+                                                                                
+       304 GEMS       04-06-11 00:00:02    04-07-11 00:00:00    N              0
+begin load_manager_stats.manager_stats_data('2006'     528967                   
+                                                                                
+       318 ISTOREWEB  07-12-10 09:00:03    01-01-00 00:00:00    Y              0
+istoreweb.p_insert_tablespace_size;                       677                   
+                                                                                
+       586 OGCM       12-04-06 00:00:04    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EXCEPTION_MISSMATCH"     402679                   
+                                                                                
+       587 OGCM       12-04-06 00:00:04    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EXCEPTION_LARGENEG"'     404369                   
+                                                                                
+       608 OGCM       06-03-10 00:00:03    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EXCEPTION_DELI1"');       89365                   
+                                                                                
+       643 OGCM       12-04-06 03:00:05    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EXCEPTION_DELI3"');       49791                   
+                                                                                
+      1063 OGCM       06-03-10 02:00:01    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EXCEPTION_DELI2"');      298524                   
+                                                                                
+      1088 OGCM       06-03-10 20:26:39    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EIMS_COST_STATUS0"')      24922                   
+                                                                                
+      1089 OGCM       06-03-10 20:26:44    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"OGCM"."EIMS_COST_STATUS1"')      20627                   
+                                                                                
+      1103 OGCM       06-03-10 03:00:04    01-01-00 00:00:00    Y             16
+exception_missed_qtr_pop;                              502901                   
+                                                                                
+      1425 SPARQ                           01-01-00 00:00:00    N               
+begin get_grantee.reset_org_owner; end;                     0                   
+                                                                                
+      5907 PRI        04-06-11 00:00:02    04-07-11 00:00:00    N              0
+set_exit_date;                                         152983                   
+                                                                                
+      6163 EGRANTS    12-06-06 14:42:31    01-01-00 00:00:00    Y             17
+INSERT_GKNO_CLOSE;                                          0                   
+                                                                                
+      9991 SPARQ      04-02-11 09:00:02    04-09-11 09:00:00    N              0
+begin GENERATE_ALL_QPRS(2010, 3); end;                  13159                   
+                                                                                
+      9999 SPARQ      11-19-10 23:26:34    01-01-00 00:00:00    Y             16
+begin GENERATE_ALL_QPRS(2010, 2); end;                      2                   
+                                                                                
+     18783 BENE_CHOIC 10-19-07 00:00:02    01-01-00 00:00:00    Y             16
+set_exit_date;                                              2                   
+                                                                                
+     21818 SYSTEM     08-10-06 21:23:43    01-01-00 00:00:00    Y             16
+dbms_stats.gather_schema_stats('PRI', degree=>4, c        242                   
+                                                                                
+     21820 PRI        03-11-11 00:00:04    04-10-11 00:00:00    N              0
+dbms_stats.gather_schema_stats('PRI', degree=>4, c      12174                   
+                                                                                
+     22978 WIARPT     10-21-08 00:30:04    01-01-00 00:00:00    Y              0
+wiasrd_night_job;                                      198560                   
+                                                                                
+     32600 WIARPT     10-17-08 07:00:01    01-01-00 00:00:00    Y              0
+wiasrd_send_emails;                                       444                   
+                                                                                
+     33178 COMMON     02-04-10 13:27:23    01-01-00 00:00:00    Y              0
+edi_run_morning.get_dolar_file;                        307438                   
+                                                                                
+     34599 COMMON     12-04-06 01:00:03    01-01-00 00:00:00    Y             16
+dbms_refresh.refresh('"COMMON"."MOD_DETAIL_EFFECTI        167                   
+                                                                                
+     35640 WTW        04-06-11 01:00:05    04-07-11 01:00:00    N              0
+dbms_refresh.refresh('"WTW"."CFR_DOC_DETAIL_MV"');      70611                   
+                                                                                
+     35701 SPARQ      04-06-11 07:00:01    04-07-11 07:00:00    N              0
+begin                                                   24588                   
+			transfer_data.PROCESS_TRANSFERS;                                             
+			trans                                                                        
+                                                                                
+     39886 EGRANTS    03-08-10 07:15:05    01-01-00 00:00:00    Y              0
+pkg_file.get_dolar_files;                               13592                   
+                                                                                
+     40202 EGRANTS    04-06-11 00:00:02    04-07-11 00:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."CFR_DOC_DETAIL_MV     129670                   
+                                                                                
+     51907 BIZFLOWUSE 02-24-08 18:01:58    01-01-00 00:00:00    Y             16
+UPDATE WITEM SET CHECKOUTUSR = null;                        1                   
+                                                                                
+     51948 EGRANTS    01-04-10 19:30:05    01-01-00 00:00:00    Y              0
+pkg_file.send_dolar_files;                               3445                   
+                                                                                
+     57547 GRANTSGEMS 02-03-11 00:00:01    01-01-00 00:00:00    Y             16
+begin load_manager_stats.manager_stats_data; end;     6552651                   
+                                                                                
+     57548 GRANTSGEMS 02-03-11 00:00:01    01-01-00 00:00:00    Y             16
+begin load_manager_stats.manager_stats_data('2008'    9596542                   
+                                                                                
+     78248 SPARQ      04-05-11 23:00:03    04-06-11 23:00:00    N              0
+begin sparq_data.background_process; end;             7759112                   
+                                                                                
+     78768 SPARQ      04-03-11 08:00:02    04-10-11 08:00:00    N              0
+begin org_cleanup; end;                                 17297                   
+                                                                                
+     79048 WIARPT                          01-01-00 00:00:00    Y               
+WIARPT.WIASRD_ERROR_PKG.EDIT_CHECK;                         0                   
+                                                                                
+     79049 WIARPT     09-25-08 00:00:03    01-01-00 00:00:00    Y              0
+wiasrd_error_summary;                                     823                   
+                                                                                
+     80908 TITLEII    01-01-11 13:23:29    12-27-11 00:00:00    N              0
+TITLEII.CopyLWIAtoNextYear;                                14                   
+                                                                                
+     84009 EGRANTS    04-06-11 12:58:11    04-06-11 13:58:11    N              0
+declare                                                559255                   
+     opp_cnt   pls_integer;                                                     
+                                                                                
+     cur                                                                        
+                                                                                
+     88950 WIARPT     11-19-07 08:30:01    01-01-00 00:00:00    Y              0
+report_generate;                                          142                   
+                                                                                
+     90389 WIARPT     10-16-07 14:30:03    01-01-00 00:00:00    Y              0
+report_generate;                                        41448                   
+                                                                                
+     95726 SPARQ      11-18-10 01:00:06    01-01-00 00:00:00    Y             16
+begin ALL_CV_DATA.CV_DATA_JOBS('Y');  ALL_CV_DATA.          2                   
+                                                                                
+    100189 JFAS       01-29-10 04:00:04    01-01-00 00:00:00    Y              0
+jfas_dolar.import;                                     183545                   
+                                                                                
+    102049 EGRANTS    04-05-11 21:00:02    04-06-11 21:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."CFR_WIA_DOC_MV"')     197644                   
+                                                                                
+    102051 EGRANTS    04-05-11 21:00:02    04-06-11 21:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."CFR_HARKIN_DOC_MV      50924                   
+                                                                                
+    124478 SPARQ      04-03-11 09:00:04    04-10-11 09:00:00    N              0
+begin get_grantee.reset_org_owner; end;                135827                   
+                                                                                
+    166735 BENE_CHOIC 04-06-11 00:00:02    04-07-11 00:00:00    N              0
+set_exit_date;                                         108303                   
+                                                                                
+    189926 WIARPT     03-31-09 10:06:42    01-01-00 00:00:00    Y              0
+WIASRD_NEW_YEAR;                                           26                   
+                                                                                
+    189933 WIARPT                          01-01-00 00:00:00    Y               
+WIASRD_NEW_YEAR;                                            0                   
+                                                                                
+    197234 WIARPT     10-21-08 06:03:45    01-01-00 00:00:00    Y              0
+wiasrd_error_summary;                                      39                   
+                                                                                
+    230496 WIARPT     10-21-08 00:30:04    01-01-00 00:00:00    Y              0
+wiasrd_night_job;                                         632                   
+                                                                                
+    238016 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_night_job;                                           0                   
+                                                                                
+    238017 WIARPT     10-31-08 15:22:38    01-01-00 00:00:00    Y              0
+wiasrd_error_summary;                                       3                   
+                                                                                
+    238019 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_night_job;                                           0                   
+                                                                                
+    238021 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_night_job;                                           0                   
+                                                                                
+    238022 WIARPT     10-31-08 15:22:38    01-01-00 00:00:00    Y              0
+wiasrd_error_summary;                                       2                   
+                                                                                
+    238023 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_error_summary;                                       0                   
+                                                                                
+    238024 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_error_summary;                                       0                   
+                                                                                
+    238025 WIARPT     11-05-08 11:52:40    01-01-00 00:00:00    Y              0
+wiasrd_night_job;                                       19688                   
+                                                                                
+    238027 WIARPT                          01-01-00 00:00:00    Y               
+wiasrd_night_job;                                           0                   
+                                                                                
+    238028 WIARPT     03-08-10 00:30:05    01-01-00 00:00:00    Y              0
+wiasrd_night_job;                                     1533583                   
+                                                                                
+    238329 WIARPT     03-07-10 00:30:05    01-01-00 00:00:00    Y              0
+wiasrd_error_summary;                                     255                   
+                                                                                
+    328825 GRANTSGEMS 04-06-11 02:00:02    04-07-11 02:00:00    N              0
+begin refresh_report_matrix; end;                       66932                   
+                                                                                
+    356756 GRANTSGEMS 07-15-09 06:00:05    01-01-00 00:00:00    Y              0
+insert into project_gk_bad                                  2                   
+(                                                                               
+PROJECT_GK_ID, GTS_GK                                                           
+                                                                                
+    471338 GRANTSGEMS 04-06-11 03:00:05    04-07-11 03:00:00    N              0
+UPDATE    project p                                      9982                   
+    SET   p.FPO_RGN_ID=(select                                                  
+                                                                                
+    531471 COMMON     04-06-11 06:00:03    04-07-11 06:00:00    N              0
+-- load eims_data_trans and eims_data tables           118539                   
+COMMO                                                                           
+                                                                                
+    534688 EGRANTS    04-06-11 06:00:03    04-07-11 06:00:00    N              0
+EGRANTS.INSERT_GKNO_CLOSE;                              26604                   
+                                                                                
+    542891 EGRANTS    04-06-11 06:00:03    04-07-11 06:00:00    N              0
+EGRANTS.PKG_EXPENDITURES.DAILY_LOG_JOB;                 26562                   
+                                                                                
+    549992 GRANTSGEMS 04-06-11 03:00:05    04-07-11 03:00:00    N              0
+begin pkg_utl.update_dr_status('DB'); end;              12191                   
+                                                                                
+    554627 WIARPT     03-31-10 10:21:25    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB;                               603404                   
+                                                                                
+    559607 WIARPT     04-07-10 10:23:43    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB;                               434859                   
+                                                                                
+    592647 SPOTLIGHT  04-06-11 12:36:32    04-07-11 00:36:32    N              0
+BEGIN /*Quest SOO PPCM job */  quest_ppcm_snapshot     363421                   
+                                                                                
+    596670 WIARPT     05-23-10 16:05:04    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB;                                58024                   
+                                                                                
+    599981 WIARPT     05-28-10 07:36:02    01-01-00 00:00:00    Y              1
+WIASRDQT_EDIT_CHECK_JOB;                                 4199                   
+                                                                                
+    599982 WIARPT     05-27-10 15:38:26    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB;                                 2973                   
+                                                                                
+    599983 WIARPT     05-28-10 07:30:33    01-01-00 00:00:00    Y              2
+WIASRDQT_EDIT_CHECK_JOB;                                 2966                   
+                                                                                
+    600439 WIARPT     05-29-10 23:22:39    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB;                                11883                   
+                                                                                
+    600459 WIARPT     05-30-10 07:27:41    01-01-00 00:00:00    Y              0
+WIASRDQT_EDIT_CHECK_JOB2;                               11987                   
+                                                                                
+    600879 WIARPT     06-01-10 14:14:52    01-01-00 00:00:00    Y              1
+WIASRDQT_EDIT_CHECK_JOB2;                              176154                   
+                                                                                
+    602095 WIARPT     06-11-10 17:03:36    06-06-21 00:00:00    N              0
+WIASRDQT_EDIT_CHECK_JOB2;                              320228                   
+                                                                                
+    602359 WIARPT     06-07-10 07:48:45    01-01-00 00:00:00    Y              2
+WIASRDQT_EDIT_CHECK_JOB;                                48031                   
+                                                                                
+    604919 WIARPT     06-11-10 17:01:01    06-06-21 00:00:00    N              0
+WIASRDQT_EDIT_CHECK_JOB2;                                 158                   
+                                                                                
+    604921 WIARPT     06-11-10 17:02:06    06-06-21 00:00:00    N              0
+WIASRDQT_EDIT_CHECK_JOB2;                               62467                   
+                                                                                
+    604959 WIARPT     06-12-10 05:46:08    06-07-21 00:00:00    N              0
+WIASRDQT_EDIT_CHECK_JOB;                               797244                   
+                                                                                
+    633748 EGRANTS    04-06-11 12:58:11    04-06-11 13:58:11    N              0
+declare                                                121544                   
+     m_cnt     pls_integer := 0;                                                
+     m_tr                                                                       
+                                                                                
+    644919 GRANTSGEMS 04-06-11 06:00:03    04-07-11 06:00:00    N              0
+begin chk_schedule_run; end;                              196                   
+                                                                                
+    653655 EGRANTS    04-06-11 12:22:59    04-06-11 14:22:59    N              0
+update  par  set  proc_id=null   where  (proc_id=9      83694                   
+                                                                                
+    685320 EGRANTS    04-06-11 05:02:12    04-07-11 05:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."NCFMS_CUM_DATA_LO      60516                   
+                                                                                
+    690641 SPARQ      04-06-11 01:00:06    04-07-11 01:00:00    N              0
+begin ALL_CV_DATA.CV_DATA_JOBS('Y');  ALL_CV_DATA.      32880                   
+                                                                                
+    692982 EGRANTS    04-06-11 01:00:06    04-07-11 01:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."CFR_DOC_DETAIL_MV      36411                   
+                                                                                
+    772296 EGRANTS    04-06-11 01:00:06    04-07-11 01:00:00    N              0
+dbms_refresh.refresh('"EGRANTS"."CFR_DOC_DETAIL_OT      24097                   
+                                                                                
+
+93 rows selected.
+
+SQL> spool off

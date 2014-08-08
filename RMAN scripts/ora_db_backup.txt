@@ -1,0 +1,356 @@
+#!/bin/ksh
+################################################################################
+#  Utility : ora_db_backup
+#  Modules:  ora_db_backup (drive)
+#            backup_env.ksh, backup_sid_env.ksh
+#            db_lib.ksh, backup_funcs.ksh
+#
+#  Usage :
+#
+#    SYNTAX for ora_db_backup:
+#
+#    ora_db_backup <-h|-e|?> [<instance>,<instance>...]
+#
+#     Here:
+#            -h )  hot backup
+#            -e )  logical backup (export)
+#            -? )  help
+#
+#    Multiple instances may be specified.
+#
+#    Order of arguments is not significant
+#
+#    All arguments should be space delimited.
+#
+#    Examples:
+#      ora_db_backup -h               (Hot backup all running databases)
+#      ora_db_backup -h dev           (Hot backup dev)
+#      ora_db_backup -h test test1    (Hot backup test and test1)
+#      ora_db_backup -?               (Get this help)
+#
+#  Date :  Oct, 2004
+#
+################################################################################
+
+PROC_DIR=$(dirname $0)
+. ${PROC_DIR}/backup_env.ksh
+. ${PROC_DIR}/db_lib.ksh
+. ${PROC_DIR}/backup_funcs.ksh
+
+#***************************************************************************
+# MAIN BACKUP PROCESSE STARTS HERE
+#***************************************************************************
+
+>${LOGFILE}
+print "${REPORT_HEAD}">>${LOGFILE}
+while getopts ":hem" opt; do
+case $opt in
+   h ) echo "INITIAL HOT BACKUP ... ">>${LOGFILE}
+       export BACKUP_MOD=${HOT_BACKUP}
+       if   ([[ ${BACKUP_MOD:=0} -eq ${EXP_BACKUP} ]] || \
+           [ ${BACKUP_MOD:=0} -eq ${MISC_BACKUP} ])
+       then
+          print "Cannot specify misc/export together with hot backup! " \
+                |tee -a ${LOGFILE}
+          exit
+        fi;;
+   e ) echo "INITIAL EXPORT ...">>${LOGFILE}
+       export BACKUP_MOD=${EXP_BACKUP}
+       if ([[ ${BACKUP_MOD:=0} -eq ${HOT_BACKUP} ]] || \
+           [ ${BACKUP_MOD:=0} -eq ${MISC_BACKUP} ])
+       then
+           print "Cannot specify hot/misc together with exp backup! " \
+                |tee -a ${LOGFILE}
+           exit
+       fi;;
+   m ) echo "INITIAL MISC BACKUP ... ">>${LOGFILE}
+       export BACKUP_MOD=${MISC_BACKUP}
+       if   ([[ ${BACKUP_MOD:=0} -eq ${EXP_BACKUP} ]] || \
+           [[ ${BACKUP_MOD:=0} -eq ${HOT_BACKUP} ]])
+       then
+          print "Cannot specify exp/hot backup together with misc backup! " \
+                |tee -a ${LOGFILE}
+          exit
+        fi;;
+   ? ) echo " "
+       do_help
+       return 1
+esac
+done;
+
+# process default
+shift $(($OPTIND - 1))
+if [[ ${BACKUP_MOD:=0} -eq $FALSE ]]
+then
+  ora_db_backup -?
+  exit 1
+fi
+
+#print "BACKUP_MOD ${BACKUP_MOD}; OSNAME ${OSNAME}"
+if [[ ${OSNAME} != "oracle" ]]
+then
+     print "You must be oracle to run this script.">> ${LOGFILE}
+     exit 1
+fi
+
+print $$ >${PIDFILE}
+typeset -l ALLARGS=$@
+if [[ $# -eq 0 ]]
+then
+     integer ALL_DBS=$TRUE
+     export ALL_DBS
+fi
+
+# make list of instances to operate on
+set -A SIDNAME
+set -A SIDHOME
+integer CNT=0
+
+exec 1>>${LOGFILE} 2>&1
+#populate SIDNAME and SIDHOME arrays
+if [[ ${ALL_DBS} = $TRUE ]]
+then
+   let CNT=0
+   for OSID in $(ps -ef|grep -v grep|grep ora_pmon|awk '{print $NF}'|awk -F_ '{print $3}')
+   do
+      SIDNAME[$CNT]=$OSID
+      if [[ -f $HOME/.profile_${OSID} ]] then
+        . $HOME/.profile_${OSID} #to get HOME
+        SIDHOME[$CNT]=${ORACLE_HOME}
+        let CNT=$CNT+1
+      else
+           print " $HOME/.profile_${OSID} does not exists. "
+      fi
+   done
+else
+   let CNT=0
+   for ARG in $ALLARGS
+   do
+      if [[ -f $HOME/.profile_${ARG} ]] then
+        . $HOME/.profile_${ARG} #to get SID and HOME
+        SIDNAME[$CNT]=${ORACLE_SID}
+        SIDHOME[$CNT]=${ORACLE_HOME}
+        let CNT=$CNT+1
+      else
+           print " $HOME/.profile_${ARG} does not exists. "
+      fi
+   done
+fi
+
+#Loop through all instances
+integer NUM=0
+while [[ ${NUM} -lt ${#SIDNAME[*]} ]]
+do
+   print " " >>${LOGFILE}
+   print "***************************************************" >>${LOGFILE}
+   print "*** Process ${SIDNAME[$NUM]} - ${SIDHOME[$NUM]} *** " >>${LOGFILE}
+   print "***************************************************" >>${LOGFILE}
+   SID=${SIDNAME[$NUM]}
+   ORA_HOME=${SIDHOME[$NUM]}
+
+   typeset -i PMON_PROCS=$(ps -ef|grep -v grep|grep -cw ora_pmon_${SID})
+   if [[ ${PMON_PROCS} -eq 0 ]] 2>/dev/null
+   then
+        print "***************************************************" >>${LOGFILE}
+        print "${SID} - Not Running - Backup Skipped." >>${LOGFILE}
+        print "***************************************************" >>${LOGFILE}
+        NUM=$NUM+1
+        continue
+   fi
+
+   # Some database like standby database may not need backup
+   for skip_sid in ${BACKUP_SKIP_LIST}
+   do
+     if [[ ${skip_sid} = $SID ]]
+     then
+        let BRK=$TRUE
+        break
+     fi
+   done
+   if [[ $BRK = $TRUE ]]
+   then
+        print "***************************************************" >>${LOGFILE}
+        print "${SID} - in skip list -- Backup Skipped." >>${LOGFILE}
+        print "***************************************************" >>${LOGFILE}
+        let BRK=$FALSE
+        NUM=$NUM+1
+        continue
+   fi
+
+   . $HOME/.profile_${SID} # to set environment
+
+   # Set environments that specific to the SID
+   SED="sed  -e '/^$/d' ${PROC_DIR}/backup_sid_env.ksh"
+   eval $SED|grep -v \#|awk -F= '{print $1, $2}'|while read VARNAME VALUE
+   do
+       eval  $VARNAME=${VALUE}
+   done
+
+   #******************************************************************
+   # Start Main Process
+   #******************************************************************
+
+   if [[ ${BACKUP_MOD} = ${HOT_BACKUP} ]]
+   then
+      check_arch_mode
+      if (( $? != ${ARCHIVE_MODE} ))
+      then
+          print "  $ORACLE_SID - NOT ARCHIVE MODE backup skipped. "
+          NUM=$NUM+1
+          continue
+      fi
+
+     if [[ $REMOTE = $TRUE ]] then
+      print "Create backup directories ${SID_RMT_TOP_DIR}."
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}
+      RET_STAT=$?
+      if (( ${RET_STAT} != ${STAT_OK} )) then
+         if (( ${RET_STAT} = 2 )) then
+           print "Directory ${SID_RMT_TOP_DIR} exists, backup of $SID skipped."
+         else
+           print "Failed to make directory ${SID_RMT_TOP_DIR}, \
+                backup of $SID skipped."
+         fi
+         NUM=$NUM+1
+         continue
+      fi
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}/dbf 2>/dev/null
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}/arch 2>/dev/null
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}/misc 2>/dev/null
+   else
+      print "Create backup directories ${SID_LOC_TOP_DIR}."
+      mkdir ${SID_LOC_TOP_DIR}
+      RET_STAT=$?
+      if (( ${RET_STAT} != ${STAT_OK} )) then
+         if (( ${RET_STAT} = 2 )) then
+           print "Directory ${SID_LOC_TOP_DIR} exists, backup of $SID skipped."
+         else
+           print "Failed to make directory ${SID_LOC_TOP_DIR}, \
+                backup of $SID skipped."
+         fi
+         NUM=$NUM+1
+         continue
+      fi
+       mkdir ${SID_LOC_TOP_DIR}/dbf 2>/dev/null
+       mkdir ${SID_LOC_TOP_DIR}/arch 2>/dev/null
+       mkdir ${SID_LOC_TOP_DIR}/misc 2>/dev/null
+   fi
+
+      do_hot_bkup_sid $SID
+      if (( $? != ${STAT_OK} ))
+      then
+
+       if [[ $REMOTE = $TRUE ]] then
+          ${REMOTE_ACT} rm -rf ${SID_RMT_TOP_DIR}  2>/dev/null
+       else
+          rm -rf ${SID_LOC_TOP_DIR}  2>/dev/null
+       fi
+          print "  **** Hot backup for $SID failed.**** "
+          print " "
+        print "  Check and fix if any tablespace of $SID is in backup status." \
+           >> ${LOGFILE}
+          ck_tablespaces_backup_stat ${LOGFILE}
+          if (( $? != ${STAT_OK} ))
+          then
+              print "  ck_tablespaces_backup_stat returns error. "
+          fi
+          NUM=$NUM+1
+          continue
+       fi
+       print " "
+    if [[ $REMOTE = $TRUE ]] then
+       print "  Remove ${DAYS_KEEP_BACKUPS} days older backups of ${SID} from REMOTE site ${REMOTE_DIR}/backup/${SID}.  "
+       rm_rmt_old_dir ${SID}
+    else
+       print "  Remove ${DAYS_KEEP_BACKUPS} days older backups of ${SID} from $ADMIN_DIR}/backup/${SID}.  "
+       rm_loc_old_dir ${SID}
+     fi
+
+   elif [[ ${BACKUP_MOD} = ${EXP_BACKUP} ]]
+   then
+      do_export_sid $SID
+      if (( $? != ${STAT_OK} ))
+      then
+         if [[ -f ${SID_EXP_BKUP_DMP} ]]
+         then
+           rm -f ${SID_EXP_BKUP_DMP}  2>/dev/null
+           rm -f ${PARFILE} 2>/dev/null
+           rm -f ${PIPENAME} 2>/dev/null
+         fi
+         print "  **** Export for $SID failed.**** "
+      fi
+   elif [[ ${BACKUP_MOD} = ${MISC_BACKUP} ]]
+   then
+   if [[ $REMOTE = $TRUE ]] then
+      print "Create backup misc directories ${SID_RMT_TOP_DIR}."
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}
+      RET_STAT=$?
+      if (( ${RET_STAT} != ${STAT_OK} )) then
+         if (( ${RET_STAT} = 2 )) then
+           print "Directory ${SID_RMT_TOP_DIR} exists, backup of $SID skipped."
+
+         else
+           print "Failed to make directory ${SID_RMT_TOP_DIR}, \
+               backup of $SID skipped."
+         fi
+         NUM=$NUM+1
+         continue
+      fi
+      ${REMOTE_ACT} mkdir ${SID_RMT_TOP_DIR}/misc 2>/dev/null
+   else
+     print "Create backup misc directories ${SID_LOC_TOP_DIR}."
+      mkdir ${SID_LOC_TOP_DIR}
+      RET_STAT=$?
+      if (( ${RET_STAT} != ${STAT_OK} )) then
+         if (( ${RET_STAT} = 2 )) then
+           print "Directory ${SID_LOC_TOP_DIR} exists, backup of $SID skipped."
+
+         else
+           print "Failed to make directory ${SID_LOC_TOP_DIR}, \
+               backup of $SID skipped."
+         fi
+         NUM=$NUM+1
+         continue
+      fi
+      mkdir ${SID_LOC_TOP_DIR}/misc 2>/dev/null
+   fi
+      do_misc_bkup_sid $SID
+   if (( $? != ${STAT_OK} ))
+   then
+         print "  **** Misc backup for $SID failed.**** "
+   fi
+   print " "
+   if [[ $REMOTE = $TRUE ]] thedo_misc_bkup_sidn
+   print "  Remove ${DAYS_KEEP_BACKUPS} days older backups of ${SID} from REMOTE site ${REMOTE_DIR}/backup/${SID}.  "
+        rm_rmt_old_dir ${SID}
+   else
+   print "  Remove ${DAYS_KEEP_BACKUPS} days older backups of ${SID} from $ADMIN_DIR}/backup/${SID}.  "
+        rm_loc_old_dir ${SID}
+   fi
+   else
+      print "  Not a valid action." >>${LOGFILE}
+      exit 1
+   fi
+   let NUM=${NUM}+1
+done #finished main loop
+
+rm -f ${PIDFILE}
+rm_old_files ${DAYS_KEEP_LOGS} $COMMLOG "ora_db_backup*.log"
+print " "
+print "BACKUP FOR ALL DATABASES ARE DONE - $(date)." >>${LOGFILE}
+
+if [[ ${BACKUP_MOD} = ${HOT_BACKUP} ]]
+then
+   mail_file "${MAIL_SUBJ_BKUP}" ${LOGFILE}
+elif [[ ${BACKUP_MOD} = ${MISC_BACKUP} ]]
+then
+   mail_file "${MAIL_SUBJ_MISC}" ${LOGFILE}
+elif [[ ${BACKUP_MOD} = ${EXP_BACKUP} ]]
+then
+   mail_file "${MAIL_SUBJ_EXP}" ${LOGFILE}
+fi
+
+#***************************************************************************
+# Program ora_db_backup ends here.
+#***************************************************************************
+(etadb5)prodora05:/usr/oracle/common/bin>

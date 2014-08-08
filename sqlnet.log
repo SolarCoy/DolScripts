@@ -1,0 +1,78 @@
+
+
+***********************************************************************
+Fatal NI connect error 12541, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=prodora08)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=dev.doleta.gov)(CID=(PROGRAM=rman)(HOST=prodora07)(USER=oracle))))
+
+  VERSION INFORMATION:
+	TNS for Solaris: Version 9.2.0.7.0 - Production
+	Oracle Bequeath NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+	TCP/IP NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+  Time: 16-OCT-2010 00:10:03
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 146
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal NI connect error 12541, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=prodora08)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=dev.doleta.gov)(CID=(PROGRAM=rman)(HOST=prodora07)(USER=oracle))))
+
+  VERSION INFORMATION:
+	TNS for Solaris: Version 9.2.0.7.0 - Production
+	Oracle Bequeath NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+	TCP/IP NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+  Time: 16-OCT-2010 00:10:05
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12541
+    TNS-12541: TNS:no listener
+    ns secondary err code: 12560
+    nt main err code: 511
+    TNS-00511: No listener
+    nt secondary err code: 146
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal NI connect error 12540, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=beq)(PROGRAM=/oraprod07/u01/app/oracle/product/9.2/bin/oracle)(ARGV0=oracleetadb3)(ARGS='(DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq)))')(DETACH=NO))(CONNECT_DATA=(CID=(PROGRAM=sqlplus)(HOST=prodora07)(USER=oracle))))
+
+  VERSION INFORMATION:
+	TNS for Solaris: Version 9.2.0.7.0 - Production
+	Oracle Bequeath NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+  Time: 27-FEB-2011 21:05:01
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12540
+    TNS-12540: TNS:internal limit restriction exceeded
+    ns secondary err code: 12560
+    nt main err code: 510
+    TNS-00510: Internal limit restriction exceeded
+    nt secondary err code: 12
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal NI connect error 12540, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=beq)(PROGRAM=/oraprod07/u01/app/oracle/product/9.2/bin/oracle)(ARGV0=oracleetadb4)(ARGS='(DESCRIPTION=(LOCAL=YES)(ADDRESS=(PROTOCOL=beq)))')(DETACH=NO))(CONNECT_DATA=(CID=(PROGRAM=sqlplus)(HOST=prodora07)(USER=oracle))))
+
+  VERSION INFORMATION:
+	TNS for Solaris: Version 9.2.0.7.0 - Production
+	Oracle Bequeath NT Protocol Adapter for Solaris: Version 9.2.0.7.0 - Production
+  Time: 27-FEB-2011 21:05:01
+  Tracing not turned on.
+  Tns error struct:
+    ns main err code: 12540
+    TNS-12540: TNS:internal limit restriction exceeded
+    ns secondary err code: 12560
+    nt main err code: 510
+    TNS-00510: Internal limit restriction exceeded
+    nt secondary err code: 12
+    nt OS err code: 0

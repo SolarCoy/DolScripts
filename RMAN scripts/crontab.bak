@@ -1,0 +1,31 @@
+(etadb5)prodora05:/usr/oracle> crontab -
+#30 1 * * * /usr/oracle/common/bin/ora_db_rman  > /dev/null 2>&1
+0 23 * * * /usr/oracle/common/bin/ora_db_backup -e  > /dev/null 2>&1
+10 0 * * * /usr/oracle/common/bin/ora_db_backup -h  > /dev/null 2>&1
+0 * * * * /usr/oracle/common/bin/ck_db_server.ksh > /dev/null 2>&1
+0 6 * * * /usr/oracle/common/bin/ck_filesys.ksh  > /dev/null 2>&1
+#0 9 * * 0 /usr/oracle/common/bin/rotate_log.sh >/dev/null 2>&1
+
+integer patterns that specify the following:
+
+     minute (0-59),
+     hour (0-23),
+     day of the month (1-31),
+     month of the year (1-12),
+     day of the week (0-6 with 0=Sunday).
+
+Each of these patterns may be either an  asterisk   (meaning
+     all legal values) or a list of elements separated by commas.
+     An element is either a number or two numbers separated by  a
+     minus  sign  (meaning  an  inclusive range). Notice that the
+     specification of days may be made by two fields (day of  the
+     month and day of the week). Both are adhered to if specified
+     as a list of elements. See EXAMPLES.
+
+
+
+
+PROC_DIR=$(dirname $0)
+. ${PROC_DIR}/rman_env.ksh
+. ${PROC_DIR}/db_lib.ksh
+. ${PROC_DIR}/rman_funcs.ksh

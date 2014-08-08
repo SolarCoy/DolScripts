@@ -1,0 +1,15 @@
+
+
+                    FILE SYSTEM FULL WARNING
+**************************************************************************
+
+     Server     : prodora07
+
+     Command    : /export/home/oracle/common/bin/ck_filesys.ksh 
+
+     Report Time: Wed May 11 11:00:00 EDT 2011
+
+     Warning Msg: File system is 85% full
+
+
+  File systems that are more than 85% full:

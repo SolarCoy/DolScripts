@@ -1,0 +1,253 @@
+SQL> /
+
+USERNAME           USER_ID PASSWORD             STATUS          LOCK_DATE       
+--------------- ---------- -------------------- --------------- ---------       
+EXPIRY_DA                                                                       
+---------                                                                       
+BRIOV8                 245 11FBF22E225DB553     LOCKED          15-JUL-10       
+                                                                                
+                                                                                
+WMSYS                   21 FD19E8CD5ACB063A     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+ORDSYS                  30 1C6C3F6E8C29C2CD     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+ORDPLUGINS              31 7C1CAB14E5F07F51     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+ANONYMOUS               36 anonymous            LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+ODM_MTR                 45 0704F4DD67C2E789     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+WKSYS                   39 801A9FB82EF13828     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+WKPROXY                 40 B1E6D95304E5466C     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+CTXSYS                  33 926B14EE38E8D877     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+ODM                     44 DB06DE746E5D2E65     LOCKED          21-APR-04       
+                                                                                
+                                                                                
+XDB                     35 E3A66C460DBF0946     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+BRIO                    97 FE4C7F34A7506017     LOCKED          15-JUL-10       
+                                                                                
+                                                                                
+MDSYS                   32 F3D198842E87E18F     LOCKED          27-FEB-04       
+                                                                                
+                                                                                
+CALMAS                 108 890AECA7333616CF     OPEN                            
+                                                                                
+                                                                                
+RAD                   2314 3284E5363E50820C     OPEN                            
+                                                                                
+                                                                                
+ETADBA                2306 30136CA7DB3D9412     OPEN                            
+                                                                                
+                                                                                
+TOAD                  2483 ACE73F47A6CCD343     OPEN                            
+                                                                                
+                                                                                
+CRIS                  1670 BEEB7574991AD6DF     OPEN                            
+                                                                                
+                                                                                
+HGCB                  1590 96F4DF13FA6E03D4     OPEN                            
+                                                                                
+                                                                                
+OWB_DW                1685 67201008079240AB     OPEN                            
+                                                                                
+                                                                                
+NEG5                  1308 E693B4372D90C3DB     OPEN                            
+                                                                                
+                                                                                
+YOUTHBUILD            1271 BCF9927DAD0ED758     OPEN                            
+                                                                                
+                                                                                
+BENE_CHOICE           1264 4124154458F21F9A     OPEN                            
+                                                                                
+                                                                                
+TITLEXII              1025 BDECD81CD7813812     OPEN                            
+                                                                                
+                                                                                
+CLOSEOUT               502 29C983CC563208CE     OPEN                            
+                                                                                
+                                                                                
+JFAS                   928 EDF1E4662FFCF5D6     OPEN                            
+                                                                                
+                                                                                
+GRANTSGEMS             759 6645A8E037991833     OPEN                            
+                                                                                
+                                                                                
+PERFSTAT              1677 2E1DCD88C17636C5     OPEN                            
+                                                                                
+                                                                                
+PAO                   1703 92FB664A8F8AD37E     OPEN                            
+                                                                                
+                                                                                
+EGRANTS_GEMS           735 67380498F0664BF3     OPEN                            
+                                                                                
+                                                                                
+WTW                     98 56EF8D53E7A0AF63     OPEN                            
+                                                                                
+                                                                                
+DBLINK                  93 19285F1F8E04A450     OPEN                            
+                                                                                
+                                                                                
+AURORA$ORB$UNAU        122  000001448416710     OPEN                            
+                                                                                
+                                                                                
+OSE$HTTP$ADMIN         121  000000323433267     OPEN                            
+                                                                                
+                                                                                
+AURORA$JIS$UTIL        120  000000207583548     OPEN                            
+                                                                                
+                                                                                
+DBSNMP                  19 C48BA914BD89F637     OPEN                            
+                                                                                
+                                                                                
+OUTLN                   11 343D6376CB50FE5D     OPEN                            
+                                                                                
+                                                                                
+SYSTEM                   5 0AC69D53F3CFDC6F     OPEN                            
+                                                                                
+                                                                                
+SPOTLIGHT             2227 31D61027957E6CE2     OPEN                            
+                                                                                
+                                                                                
+SYS                      0 71E618C9B1955445     OPEN                            
+                                                                                
+                                                                                
+OLAPSYS                 46 53E1313C88B30A98     OPEN                            
+                                                                                
+                                                                                
+ISTOREWEB              116 DFD693D75581A1D6     OPEN                            
+                                                                                
+                                                                                
+MIGRANT                102 0C4306C52418194A     OPEN                            
+                                                                                
+                                                                                
+OGCM                   105 30CACA302A111674     OPEN                            
+                                                                                
+                                                                                
+TMPERS                 753 46BFD86D2E294C03     OPEN                            
+                                                                                
+                                                                                
+PERS                   104 1EA3FBD66AA8DA58     OPEN                            
+                                                                                
+                                                                                
+REQ                    119 0F405405BE9C0371     OPEN                            
+                                                                                
+                                                                                
+SCSEP                  103 8DD3B65B436FE161     OPEN                            
+                                                                                
+                                                                                
+SESA                  2514 1D032FBB2424428B     OPEN                            
+                                                                                
+                                                                                
+TITLE3                 112 A84C91FC89D0BD1C     OPEN                            
+                                                                                
+                                                                                
+CBO                    111 5C7978E74360749A     OPEN                            
+                                                                                
+                                                                                
+COMMON                 115 952ABAA663EEE9DD     OPEN                            
+                                                                                
+                                                                                
+CONFIGMAN              113 4EF915D3996D02EC     OPEN                            
+                                                                                
+                                                                                
+GEMS                   123 5F6AF649D9EBECC6     OPEN                            
+                                                                                
+                                                                                
+GTS                    124 9CA9C3798BD5C84D     OPEN                            
+                                                                                
+                                                                                
+INDIAN                 101 D2485871FDF1D5E7     OPEN                            
+                                                                                
+                                                                                
+ACCOUNTS               133 1D9D710064BE14EB     OPEN                            
+                                                                                
+                                                                                
+INTRANET               100 542177F7A859CA63     OPEN                            
+                                                                                
+                                                                                
+TITLEIII               107 CD91ECE9002FCC17     OPEN                            
+                                                                                
+                                                                                
+KEYTITLEIII            319 1B9F9E0A5468D90E     OPEN                            
+                                                                                
+                                                                                
+TITLEII                 99 EA4AE11B12AFD2A8     OPEN                            
+                                                                                
+                                                                                
+WAIVERS                 95 172D9DA3BD6E1E87     OPEN                            
+                                                                                
+                                                                                
+WAIVERS_BETA           548 5B55E64ED91F0742     OPEN                            
+                                                                                
+                                                                                
+WIARPT                 110 96734D08D108B722     OPEN                            
+                                                                                
+                                                                                
+LWTA                  1983 4C24E17B070C0589     OPEN                            
+                                                                                
+                                                                                
+WIA                    106 9D51319D3A1CCBF2     OPEN                            
+                                                                                
+                                                                                
+JOBCORP                273 DBB62E18C0A84409     OPEN                            
+                                                                                
+                                                                                
+ODEP                   126 EC97B2B8CAB8EE15     OPEN                            
+                                                                                
+                                                                                
+ISTORE                 114 66C8609B4B58EE33     OPEN                            
+                                                                                
+                                                                                
+EGRANTS_BV_USER       2165 809434797274CA7E     OPEN                            
+                                                                                
+                                                                                
+EGRANT_BV_USER        2024 CD0A1DBECCE9A84E     OPEN                            
+                                                                                
+                                                                                
+SUPPORT               1208 B2553980306E329C     OPEN                            
+                                                                                
+                                                                                
+GRANTS                 132 31E377AB591C981B     OPEN                            
+                                                                                
+                                                                                
+DRVS                   134 C86477BC682EF560     OPEN                            
+                                                                                
+                                                                                
+SPARQ                  882 096446787F815865     OPEN                            
+                                                                                
+                                                                                
+EGRANTS                944 EA31A340CC007EAB     OPEN                            
+                                                                                
+                                                                                
+PAPILOT                722 53FE2E7D537D7B8A     OPEN                            
+                                                                                
+                                                                                
+TAA                    720 7561F09A55719F80     OPEN                            
+                                                                                
+                                                                                
+BIZFLOWUSERID         1432 83A8409F7E96986D     OPEN                            
+                                                                                
+                                                                                
+NEG3                   637 AC7665EF46CBA9F7     OPEN                            
+                                                                                
+                                                                                
+PRI                    589 005ECC0EAE1A950A     OPEN                            
+                                                                                
+                                                                                
+
+81 rows selected.
+
+SQL> spool off

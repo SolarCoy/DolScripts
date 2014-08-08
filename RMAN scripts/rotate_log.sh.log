@@ -1,0 +1,19 @@
+file /u01/app/oracle/admin/dev/bdump/alert_dev.log.2
+file /u01/app/oracle/admin/dev/bdump/alert_dev.log.1
+file /u01/app/oracle/admin/dev/bdump/alert_dev.log.0
+file /u01/app/oracle/admin/dev/bdump/dev_bdumptrc.tar.Z.0
+/u01/app/oracle/admin/dev/bdump/*.trc: No such file or directory
+file /u01/app/oracle/admin/dev/udump/dev_udumptrc.tar.Z.0
+/u01/app/oracle/admin/dev/udump/*.trc: No such file or directory
+rotate_log.sh[34]: /bin/ls: arg list too long
+file /u01/app/oracle/product/9.2/network/log/dbsnmp.log.0
+file /u01/app/oracle/product/9.2/network/log/listener.log.0
+file /u01/app/oracle/product/9.2/network/log/listener1.log.0
+file /u01/app/oracle/product/9.2/network/log/listener5.log.0
+file /u01/app/oracle/product/9.2/network/log/listenerpdb.log.0
+file /u01/app/oracle/product/9.2/network/log/nmiconf.log.0
+file /u01/app/oracle/product/9.2/network/log/sqlnet.log.0
+tar: /u01/app/oracle/product/9.2/network/trace/*.trc: No such file or directory
+stbdb4 - in skip list -- Action Skipped.
+stbpdb - in skip list -- Action Skipped.
+stbdb3 - in skip list -- Action Skipped.

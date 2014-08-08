@@ -1,0 +1,19 @@
+
+
+                    DATABASE Instance Down Alert 
+**************************************************************************
+
+     Server     : prodora08
+
+     Command    : /export/home/oracle/common/bin/ck_db_server.ksh 
+
+     Report Time: Wed Aug  4 10:40:00 EDT 2010
+
+     Warning Msg: Database Instance is Down 
+
+
+***************************************************
+Database Instance stbdb3 - is NOT Running !!! 
+***************************************************
+
+

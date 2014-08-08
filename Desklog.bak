@@ -1,0 +1,87 @@
+.log
+Coy's Desklog
+
+4/11/2011 9:00 Responding to email from Eric asking about the status of the databases, I am going through the databases in my TNSNAMES file, configuring preferred logon credentials, and verifying instance status as available.
+"	ACCS	open
+"	ASDEV	not responding
+"	ASEGRM 	not responding
+"	DEV	open
+"	DEV10	open
+"	DWDBD 	open
+"	DWDBP	 opoen
+"	DWDBT  	open
+"	DWMRP	open
+"	DWOWB	open
+"	EMPREP	open
+"	ETADB1		open
+"	ETADB2		open
+"	ETADB3		open
+"	ETADB4		open
+"	ETADB5		connect timeout
+"	MR102P	open
+"	PDB	open
+"	PDB1	invalid username/password
+"	PDB2	down
+"	STBDB1	no listener
+"	STBDB2	 no listener
+"	STBDB	immediate shutdown in progress
+"	STBPDB	invalid username/password
+"	TEST	open
+10:00 I spoke with Mike on the phone. His supposed to be off but he will come in shortly to review the status of the ASEGRM and ASDEV.  Neither is responding to TNSPING.
+
+Worked with Mike and Brad to bring up ASEGRM.  Listener was down.  Port was down and had to be plumbed.
+
+Spent some time working on Brad's documentation of the various systems here using Access.
+q
+4/12/11  7:50 AM   Checking status of all databases.  PDB2 is down.  STBDB1, STBDB2, STBDB4 have no listener response.   STBDB4, STBPDB returned invalid username/password.   Sent email to Brad and Faye.  Sent txt message to Brad's phone.
+Resolution PDB2 is always down. STBDB1,2 and 4 are Data Guard standby and use the ETADBx password.
+
+
+08:07 5/5/2011
+Checked on space issues.  prodora08 has a couple of mnt pts that are above 85%.
+
+/orabk_dev_test/rman/test
+-rw-r--r--   1 oracle   oinstall 327,605,493,760K Apr  3 03:50 TEST_dbf_t747447010_s8417
+-rw-r--r--   1 oracle   oinstall 49,867,931,648K Mar 27 04:25 TEST_dbf_t746855611_s8379
+
+/orabk_dev_test/backup >
+179217730       ./test/Dec0910/dbf
+-rw-r--r--   1 oracle   oinstall 8685,212,924K Dec  9 17:21 aims3_data.dbf.Z
+
+Additionally there are 300GB on /u02/oradata/dev. As it is in a development environment >perhaps< we could ask the developers if they could delete some records. The largest files are:
+-rw-r-----   1 oracle   oinstall 31,457,288,192 May  5 08:15 OWB_DATA.dbf
+-rw-r--r--   1 oracle   oinstall 29,506,936,832 May  5 08:15 wiarpt_data.dbf
+-rw-r--r--   1 oracle   oinstall 18,245,230,592 May  5 08:15 aims_data.dbf
+-rw-r-----   1 oracle   oinstall 12,118,401,024 May  5 08:15 RAPIDS_STAGING.dbf
+-rw-r-----   1 oracle   oinstall 11,020,541,952 May  5 08:15 RAPIDSDEV_DATA1.dbf
+-rw-r-----   1 oracle   oinstall 10,470,039,552 May  5 08:15 WIARPT_PROD_DATA.dbf
+
+reviewed crontab scripts that backup databases.
+
+analized historyical data I collected on space usage in the root directory of PRODORA08.  It showed dramatic swings and I made an Excell spreadsheet chart and showed it to Mike.  I proposed gathering data on the log and data directories and he agreed.  Next Tuesday is my last day so I'll set up the collection and terminate it Tuesday.  Perhaps I'll be extened and will be able to extend the study.
+
+Filed SRC requesting help with creating PMTEST database
+left early
+
+10:11 5/6/2011
+reviewed email and output logs and found no urgent issues
+continued review or crontab backup scripts
+determined statement that submits RMAN command
+submitted weekly status report.
+looking into prodora07 etadb4 errors for Mike.  I'm not able to make sence of it.  I can't find the trc files it says it is writing.
+Closed the Service Request.  Faying didn't persue it.  Instead she cloned and existing database and cleaned it out to use for this purpose.
+
+
+13:09 5/9/2011
+checked into PRODORA06, 07 and 08.  They weren't too bad and I didn't see any files to safely delete.  I left it for Mike and Fay to deal with.  OAStest02 is not responding to browsers.  I established the host was up but I don't have password access to the oracle user on that machine so I waited for Mike.  Turns out the server went down over the weekend and the webserver didn't come back up.
+
+Explored shell commands to find large files:  du .|sort -k1 -nr| head -n 5
+
+10:32 5/11/2011
+etadb3 threw errors from export.  snapshot too old.  instance up and generating arclogs like crazy
+
+
+11:39 5/11/2011
+exit
+
+14:49 5/11/2011

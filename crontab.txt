@@ -1,0 +1,20 @@
+$ crontab -l (prodora07)
+#0 23 * * * find /oraprod06/u07/oradata/etadb1/arch -mtime +2 -exec rm {} \;
+30 21 * * 1,3,5 /export/home/oracle/common/bin/ora_db_backup -e >/dev/null 2>&1
+30 19 * * * /export/home/oracle/common/bin/ora_db_backup -m >/dev/null 2>&1
+10 0 * * * /export/home/oracle/common/bin/ora_db_rman >/dev/null 2>&1
+#05 11 01 * * /export/home/oracle/fdong/exp_sparq >/dev/null 2>&1
+0 7 * * * /export/home/oracle/common/bin/ck_tablesps.ksh 85 >/dev/null 2>&1
+#5,20,35,50 * * * * /export/home/oracle/common/bin/ck_tablesps.ksh 90 >/tmp/tbl.log 2>&1
+5 * * * * /export/home/oracle/common/bin/ck_tablesps.ksh 90 >/tmp/tbl.log 2>&1
+0 * * * * /export/home/oracle/common/bin/ck_filesys.ksh >/dev/null 2>&1
+55 5 * * * /export/home/oracle/common/bin/ck_standby.ksh >/dev/null 2>&1
+0,20,40 * * * * /export/home/oracle/common/bin/ck_db_server.ksh >/dev/null 2>&1
+#0 23 1 * * su - oracle -c '/usr/oracle/common/bin/rotate_log.sh >/dev/null 2>&1
+#0 0,4,8,10,12,14,16,18,21 * * * /export/home/oracle/common/bin/statspack.sh etadb3 >/dev/null 2>&1
+0 0,2,4,6,8,9,10,11,12,14,16,17,18,19,21,22 * * * /export/home/oracle/common/bin/statspack.sh etadb3 >/dev/null 2>&1
+#0 23 * * * find /oraprod06/u07/oradata/etadb2/arch -mtime +2 -exec rm {} \;
+#0 23 * * * find /oraprod07/u07/oradata/etadb3/arch -mtime +1 -exec rm {} \;
+#0 23 * * * find /oraprod07/u07/oradata/etadb4/arch -mtime +1.5 -exec rm {} \;
+0 * * * * /bin/ls -ltr /oraprod07/u07/oradata/etadb3/arch |wc -l >>/export/home/oracle/fdong/archlogs.list
+0 4 * * 1 /oraprod07/u01/app/oracle/admin/etadb3/opa_dir/scripts/Spool_Grantee_Award_dataset.ksh

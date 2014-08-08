@@ -1,0 +1,20 @@
+
+
+                    DATABASE TABLESPACE SIZE WARNING 
+**************************************************************************
+
+     Server     : prodora07
+
+     Command    : /export/home/oracle/common/bin/ck_tablesps.ksh 90
+
+     Report Time: Wed May 11 11:05:01 EDT 2011
+
+     Warning Msg: Tablespaces more than 90% full
+
+
+Tablespaces in database (etadb3) that more than 90% full.
+
+TABLESPACE			  K_AVAIL     K_USED   PCT_USED     K_FREE
+------------------------------ ---------- ---------- ---------- ----------
+WAIVERS_DATA			   270336     263104	     97       7168
+

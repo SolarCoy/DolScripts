@@ -1,0 +1,154 @@
+#!/bin/ksh
+################################################################################
+#  Utility : ro_stb.sh 
+#
+#  Usage :    ro_stb.sh -r  #read only mode
+#             ro_stb.sh      #normal recovery mode
+#
+#  Author :  Faying Dong
+#
+#  Date  :   May 2005
+#
+################################################################################
+
+
+export STAT_OK=0
+export ST_FAIL=1
+export FALSE=0
+export TRUE=1
+READ_ONLY=$FALSE
+OSNAME=$(/usr/ucb/whoami)
+export  SEND_MAIL=$TRUE 
+#export  SEND_MAIL=$FALSE 
+#export MAIL_LIST="dong.faying@dol.gov black.michael@dol.gov Amerman.Shane@dol.gov Lay.Coy@dol.gov smith.bradford@dol.gov"
+export MAIL_LIST="dong.faying@dol.gov "
+TMP_DIR="/nastdb/data/stbpdb/u05/"
+
+
+function dba_handle {
+typeset -r SQL_CMD=$@
+RET_VAL=$(sqlplus -s /nolog <<EOF
+conn /as sysdba
+set serveroutput on size 100000
+set head off
+set feedback off
+set termout off
+${SQL_CMD}
+exit
+EOF)
+if (( $? != ${STAT_OK} ))
+then
+    print "  dba_handle returned an error."
+    return ${ST_FAIL}
+fi
+typeset -i rev=$(print ${RET_VAL} |grep -ic ORA-)
+if [[ $rev -ne 0 ]]
+then
+    echo "---  Error returned from DATABASE: ----"
+    echo "<== $RET_VAL ==>"
+    return ${ST_FAIL}
+fi
+return ${STAT_OK}
+}
+
+#***********************************************************************
+# Function mail_msg: If SAEND_MAIL="TRUE" message sent out via email
+# usage: mail_msg "$subject" "$message"
+#***********************************************************************
+function mail_msg {
+  if [[ $SEND_MAIL = $TRUE ]]
+  then
+     typeset SBJCT=$1
+     typeset MSG=$2
+    
+     set -A MAIL_ARRAY ${MAIL_LIST}
+     print "$MSG " | \
+        mailx -s "$SBJCT" ${MAIL_ARRAY[*]}
+     if (( $? != ${STAT_OK} ))
+     then
+           print "Warning: Mailing a message failed."
+     fi
+  fi
+  return $STAT_OK
+}
+
+#*************************************************************************
+# Main process starts
+#*************************************************************************
+while getopts ":r" opt; do
+case $opt in
+   r ) export READ_ONLY=$TRUE
+       ;;
+   ? ) print "Usage: $0 <r| > sid "
+       return 1
+esac
+
+done;
+if [[ ${OSNAME} != "oracle" ]]
+then
+     print "You must be oracle to run this script."
+     exit 1
+fi
+
+shift $(($OPTIND - 1))
+typeset -l ALLARGS=$@
+if [[ $# -ne 1 ]]
+then
+    print "Usage: $0 [r| ] <sid> "
+    exit;
+fi
+SID=$ALLARGS
+
+. $HOME/.profile_$SID;
+if [[ $READ_ONLY = $TRUE ]] then
+       ACTION="The standby database $SID will be opened for read only."
+       print $ACTION
+
+   DB_DOWN="shutdown immediate;"
+      dba_handle "$DB_DOWN"
+#      if (( $? != ${STAT_OK} ))
+#      then
+#          print "  Shutdown standby database failed."
+#          return ${ST_FAIL}
+#      fi
+   
+   sleep 15 
+   SQL_UP="startup nomount;
+           alter database mount standby database;
+           alter database open read only;"
+      dba_handle "$SQL_UP"
+      if (( $? != ${STAT_OK} ))
+      then
+          print "  Startup standby database for read only failed."
+          return ${ST_FAIL}
+      fi
+   E_MSG="Standby $SID opened for read only at (`date '+%X %x'`)."
+
+else  
+       ACTION="The standby database $SID will be resume to normal recovery mode."
+       print $ACTION
+   DB_DOWN2="shutdown immediate;"
+      dba_handle "$DB_DOWN2"
+#      if (( $? != ${STAT_OK} ))
+#      then
+#          print "  Shutdown read only standby database failed."
+#          return ${ST_FAIL}
+#      fi
+   
+   #sleep 15 
+   SQL_UP2="startup nomount;
+        alter database mount standby database;
+        alter database recover managed standby database parallel 12 disconnect from session;"
+
+      dba_handle "$SQL_UP2"
+      if (( $? != ${STAT_OK} ))
+      then
+          print "  Startup standby database for read only failed."
+          return ${ST_FAIL}
+      fi
+   E_MSG="Standby $SID returned to normal mode at (`date '+%X %x'`)."
+fi
+
+#print "$E_MSG"
+mail_msg "$E_MSG" "$message"
+exit 0

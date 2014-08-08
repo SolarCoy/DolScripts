@@ -1,0 +1,178 @@
+#!/bin/ksh
+###############################################################################
+# Usage rotate_log.sh [sid1] [sid2] ...   
+###############################################################################
+
+PROC_DIR=$(dirname $0)
+. ${PROC_DIR}/backup_env.ksh
+export OSNAME=$(/usr/ucb/whoami)
+integer MAXLOGS=7
+ZIP=compress
+ZIPEXT=Z
+#SKIP_LIST="stbpdb stbdb3 stbdb4"
+SKIP_LIST=""
+exec 1>$COMMLOG/rotate_log.log 2>&1
+
+function backup_logfile
+{
+#give a dir name as arg
+integer UPEXT=0
+integer BEXT=0
+integer EXT=$MAXLOGS-1
+typeset LOGDIR=$1
+
+while [[ EXT -ge 0 ]]
+do
+########################
+   UPEXT=$EXT+1
+   ls -1 ${LOGDIR}/*|egrep  ".(tar.(Z|gz|zip)|log)[.]*${EXT}$"|while read FILE
+   do
+   BNAME=$(basename $FILE)
+   SNAME=$(echo $BNAME|sed s/[.][0-9]*$//)
+   SSNAME=$(echo $SNAME|sed s/[.][a-zA-Z]*$//)
+   BEXT=$(echo ${BNAME}|awk -F\. '{print $NF}') 2>/dev/null
+   TYPE=$(echo ${BNAME}|awk -F\. '{print $(NF-1)}') 2>/dev/null
+   integer IDXCNT=$(ls -1 ${LOGDIR}/${SSNAME}*|egrep -c '.(tar.(Z|gz)|log)$')
+   if [ ${IDXCNT} -gt 0 ]
+   then
+       #echo "mv ${LOGDIR}/${SNAME}.$EXT ${LOGDIR}/${SNAME}.$UPEXT"
+       mv ${LOGDIR}/${SNAME}.$EXT ${LOGDIR}/${SNAME}.$UPEXT 2>/dev/null
+   fi
+   done
+        EXT=$EXT-1
+done
+
+ls -1 ${LOGDIR}/*|egrep '.(Z|gz|zip|log)$' |while read F
+do
+        if [[ ! -f ${F}.0 ]]
+        then
+        mv ${F} ${F}.0 2>/dev/null
+        fi
+done
+}
+
+function clean_one_db {
+typeset SID=$1
+for D in bdump udump cdump
+do
+  backup_logfile ${ORA_ADMIN}/${SID}/${D}
+  if ( [ ${D} = bdump ] || [ ${D} = udump ] )
+  then
+     FCNT=$(ls ${ORA_ADMIN}/${SID}/${D}/*.trc|wc -l)
+     if [[ $FCNT -gt 0 ]]
+     then
+        tar cf - ${ORA_ADMIN}/${SID}/${D}/*.trc|${ZIP}>${ORA_ADMIN}/${SID}/${D}/${SID}_${D}trc.tar.${ZIPEXT} 2>/dev/null
+         rm ${ORA_ADMIN}/${SID}/${D}/*.trc 2>/dev/null
+     fi
+   elif [[ ${D} = cdump ]]
+   then
+        FCNT=$(ls ${ORA_ADMIN}/${SID}/${D}/core_*|wc -l)
+        if [ $FCNT -gt 0 ]
+        then
+             tar cf - ${ORA_ADMIN}/${SID}/${D}/core_*|${ZIP}>${ORA_ADMIN}/${SID}/${D}/${SID}_${D}.tar.${ZIPEXT} 2>/dev/null
+             rm -rf ${ORA_ADMIN}/${SID}/${D}/core_* 2>/dev/null
+         fi
+   fi
+done 
+
+if [[  -d ${ORA_HOME}/rdbms/audit ]]
+  then
+ backup_logfile "${ORA_HOME}/rdbms/audit"
+     FCNT=$(ls ${ORA_HOME}/rdbms/audit/*.aud|wc -l)
+     if [[ $FCNT -gt 0 ]]
+     then
+        tar cf - ${ORA_HOME}/rdbms/audit/*.aud|${ZIP}>${ORA_HOME}/rdbms/audit/${SID}_${D}aud.tar.${ZIPEXT} 2>/dev/null
+        rm ${ORA_HOME}/rdbms/audit/*.aud 2>/dev/null
+     fi
+fi
+if [[ -d ${ORA_HOME}/network/log ]]
+then
+      backup_logfile ${ORA_HOME}/network/log
+fi
+
+typeset TNS_TRACE=${ORA_HOME}/network/trace
+if [[ -d ${TNS_TRACE} ]]
+then
+      tar cf - ${TNS_TRACE}/*.trc|${ZIP}>${TNS_TRACE}/sqlnet_trc_${TIMESTAMP}.tar.${ZIPEXT} 2>/dev/null
+fi
+}
+
+if [[ ${OSNAME} != "oracle" ]]
+then
+     print "You must be oracle to run this script."
+     exit 1
+fi
+
+typeset -l ALLARGS=$@
+if [[ $# -eq 0 ]]
+then
+     integer ALL_DBS=$TRUE
+     export ALL_DBS
+fi
+
+# Make a list of instances to operate on
+set -A SIDNAME
+set -A SIDHOME
+set -A SIDADMIN
+integer CNT=0
+
+if [[ ${ALL_DBS} = $TRUE ]]
+then
+   let CNT=0
+for OSID in $(ps -ef|grep -v grep|grep ora_pmon|awk '{print $NF}'|awk -F_ '{print $3}')
+do
+   SIDNAME[$CNT]=$OSID
+   if [[ -f $HOME/.profile_${OSID} ]] then
+      . $HOME/.profile_${OSID} #to get HOME
+      SIDHOME[$CNT]=${ORACLE_HOME}
+      SIDADMIN[$CNT]=${ORACLE_BASE}/admin
+      let CNT=$CNT+1
+   else
+      print " $HOME/.profile_${OSID} does not exists. "
+   fi
+done
+else
+   let CNT=0
+   for ARG in $ALLARGS
+   do
+      if [[ -f $HOME/.profile_${ARG} ]] then
+        . $HOME/.profile_${ARG} #to get SID and HOME
+        SIDNAME[$CNT]=${ORACLE_SID}
+        SIDHOME[$CNT]=${ORACLE_HOME}
+        SIDADMIN[$CNT]=${ORACLE_BASE}/admin
+        let CNT=$CNT+1
+      else
+           print " $HOME/.profile_${ARG} does not exists. "
+      fi
+   done
+fi
+
+#Loop through all instances
+integer NUM=0
+while [[ ${NUM} -lt ${#SIDNAME[*]} ]]
+do
+   SID=${SIDNAME[$NUM]}
+   ORA_HOME=${SIDHOME[$NUM]}
+   ORA_ADMIN=${SIDADMIN[$NUM]}
+   # Some database like standby database may not need backup
+   for skip_sid in ${SKIP_LIST}
+   do
+     if [[ ${skip_sid} = $SID ]]
+     then
+        let BRK=$TRUE
+        break
+     fi
+   done
+
+   if [[ $BRK = $TRUE ]]
+   then
+      print "${SID} - in skip list -- Action Skipped." |tee -a ${MSG_FILE}
+      let BRK=$FALSE
+      NUM=$NUM+1
+      continue
+   fi
+   . $HOME/.profile_${SID} # to set environment
+   clean_one_db "$SID"
+   let NUM=${NUM}+1
+done
+exit 0;

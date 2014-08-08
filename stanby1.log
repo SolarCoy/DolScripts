@@ -1,0 +1,192 @@
+
+Recovery Manager: Release 9.2.0.7.0 - 64bit Production
+
+Copyright (c) 1995, 2002, Oracle Corporation.  All rights reserved.
+
+connected to target database: ETADB4 (DBID=424732408)
+connected to recovery catalog database
+connected to auxiliary database: etadb4 (not mounted)
+
+RMAN> 
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-00558: error encountered while parsing input commands
+RMAN-01006: error signalled during parse
+RMAN-02001: unrecognized punctuation symbol ">"
+
+RMAN> 
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-00558: error encountered while parsing input commands
+RMAN-01005: syntax error: found "identifier": expecting one of: "for"
+RMAN-01008: the bad identifier was: ch1
+RMAN-01007: at line 1 column 18 file: standard input
+
+RMAN> 
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-00558: error encountered while parsing input commands
+RMAN-01005: syntax error: found "auxiliary": expecting one of: "channel"
+RMAN-01007: at line 1 column 10 file: standard input
+
+RMAN> 2> 
+Starting Duplicate Db at 02-AUG-10
+allocated channel: ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: sid=13 devtype=DISK
+allocated channel: ORA_AUX_DISK_2
+channel ORA_AUX_DISK_2: sid=14 devtype=DISK
+allocated channel: ORA_AUX_DISK_3
+channel ORA_AUX_DISK_3: sid=15 devtype=DISK
+allocated channel: ORA_AUX_DISK_4
+channel ORA_AUX_DISK_4: sid=16 devtype=DISK
+
+printing stored script: Memory Script
+{
+   restore clone standby controlfile to clone_cf;
+   replicate clone controlfile from clone_cf;
+   sql clone 'alter database mount standby database';
+}
+executing script: Memory Script
+
+Starting restore at 02-AUG-10
+
+using channel ORA_AUX_DISK_1
+using channel ORA_AUX_DISK_2
+using channel ORA_AUX_DISK_3
+using channel ORA_AUX_DISK_4
+channel ORA_AUX_DISK_1: starting datafile backupset restore
+channel ORA_AUX_DISK_1: restoring controlfile
+output filename=/orastb/log/stbdb4/control01.ctl
+channel ORA_AUX_DISK_1: restored backup piece 1
+piece handle=/oraprod07/u01/app/oracle/product/9.2/dbs/33lkblpb_1_1 tag=TAG20100802T175555 params=NULL
+channel ORA_AUX_DISK_1: restore complete
+Finished restore at 02-AUG-10
+
+replicating controlfile
+input filename=/orastb/log/stbdb4/control01.ctl
+
+sql statement: alter database mount standby database
+
+printing stored script: Memory Script
+{
+   set until scn  1991373696;
+   set newname for datafile  1 to 
+ "/orastb/data/stbdb4/u02/system01.dbf";
+   set newname for datafile  2 to 
+ "/orastb/data/stbdb4/u04/undotbs01.dbf";
+   set newname for datafile  3 to 
+ "/orastb/data/stbdb4/u02/cwmlite01.dbf";
+   set newname for datafile  4 to 
+ "/orastb/data/stbdb4/u02/drsys01.dbf";
+   set newname for datafile  5 to 
+ "/orastb/data/stbdb4/u02/odm01.dbf";
+   set newname for datafile  6 to 
+ "/orastb/data/stbdb4/u02/xdb01.dbf";
+   set newname for datafile  7 to 
+ "/orastb/data/stbdb4/u02/TOOLS01.dbf";
+   set newname for datafile  8 to 
+ "/orastb/data/stbdb4/u02/permpdx_data.dbf";
+   set newname for datafile  9 to 
+ "/orastb/data/stbdb4/u02/usinfo_data.dbf";
+   set newname for datafile  10 to 
+ "/orastb/data/stbdb4/u03/permpdx_index.dbf";
+   set newname for datafile  11 to 
+ "/orastb/data/stbdb4/u03/usinfo_index.dbf";
+   set newname for datafile  12 to 
+ "/orastb/data/stbdb4/u02/LETTER_DATA.dbf";
+   set newname for datafile  13 to 
+ "/orastb/data/stbdb4/u02/LETTER_DATA02.dbf";
+   set newname for datafile  14 to 
+ "/orastb/data/stbdb4/u02/ETADBA_DATA1.dbf";
+   set newname for datafile  15 to 
+ "/orastb/data/stbdb4/u02/aud_data.dbf";
+   set newname for datafile  16 to 
+ "/orastb/data/stbdb4/u03/aud_index.dbf";
+   set newname for datafile  17 to 
+ "/orastb/data/stbdb4/u02/LETTER_DATA03.dbf";
+   set newname for datafile  18 to 
+ "/orastb/data/stbdb4/u02/letter_data04.dbf";
+   set newname for datafile  19 to 
+ "/orastb/data/stbdb4/u02/JFAS_DATA.dbf";
+   set newname for datafile  20 to 
+ "/orastb/data/stbdb4/u02/perfstat_data.dbf";
+   restore
+   check readonly
+   clone database
+   ;
+}
+executing script: Memory Script
+
+executing command: SET until clause
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+Starting restore at 02-AUG-10
+
+using channel ORA_AUX_DISK_1
+using channel ORA_AUX_DISK_2
+using channel ORA_AUX_DISK_3
+using channel ORA_AUX_DISK_4
+channel ORA_AUX_DISK_1: starting datafile backupset restore
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+restoring datafile 00001 to /orastb/data/stbdb4/u02/system01.dbf
+restoring datafile 00002 to /orastb/data/stbdb4/u04/undotbs01.dbf
+restoring datafile 00003 to /orastb/data/stbdb4/u02/cwmlite01.dbf
+restoring datafile 00004 to /orastb/data/stbdb4/u02/drsys01.dbf
+restoring datafile 00005 to /orastb/data/stbdb4/u02/odm01.dbf
+restoring datafile 00006 to /orastb/data/stbdb4/u02/xdb01.dbf
+restoring datafile 00007 to /orastb/data/stbdb4/u02/TOOLS01.dbf
+restoring datafile 00008 to /orastb/data/stbdb4/u02/permpdx_data.dbf
+restoring datafile 00009 to /orastb/data/stbdb4/u02/usinfo_data.dbf
+restoring datafile 00010 to /orastb/data/stbdb4/u03/permpdx_index.dbf
+restoring datafile 00011 to /orastb/data/stbdb4/u03/usinfo_index.dbf
+restoring datafile 00012 to /orastb/data/stbdb4/u02/LETTER_DATA.dbf
+restoring datafile 00013 to /orastb/data/stbdb4/u02/LETTER_DATA02.dbf
+restoring datafile 00014 to /orastb/data/stbdb4/u02/ETADBA_DATA1.dbf
+restoring datafile 00015 to /orastb/data/stbdb4/u02/aud_data.dbf
+restoring datafile 00016 to /orastb/data/stbdb4/u03/aud_index.dbf
+restoring datafile 00017 to /orastb/data/stbdb4/u02/LETTER_DATA03.dbf
+restoring datafile 00018 to /orastb/data/stbdb4/u02/letter_data04.dbf
+restoring datafile 00019 to /orastb/data/stbdb4/u02/JFAS_DATA.dbf
+restoring datafile 00020 to /orastb/data/stbdb4/u02/perfstat_data.dbf

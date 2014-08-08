@@ -1,0 +1,2238 @@
+
+STATSPACK report for
+
+DB Name         DB Id    Instance     Inst Num Release     Cluster Host
+------------ ----------- ------------ -------- ----------- ------- ------------
+ETADB3         375311867 etadb3              1 9.2.0.7.0   NO      prodora07
+
+              Snap Id     Snap Time      Sessions Curs/Sess Comment
+            --------- ------------------ -------- --------- -------------------
+Begin Snap:     48869 16-Dec-10 12:00:06      137     470.6
+  End Snap:     48889 16-Dec-10 16:00:03      167     414.0
+   Elapsed:              239.95 (mins)
+
+Cache Sizes (end)
+~~~~~~~~~~~~~~~~~
+               Buffer Cache:     1,104M      Std Block Size:          8K
+           Shared Pool Size:       288M          Log Buffer:        514K
+
+Load Profile
+~~~~~~~~~~~~                            Per Second       Per Transaction
+                                   ---------------       ---------------
+                  Redo size:            240,765.18             33,668.40
+              Logical reads:             53,584.19              7,493.17
+              Block changes:              2,112.25                295.38
+             Physical reads:             11,296.57              1,579.70
+            Physical writes:                 96.48                 13.49
+                 User calls:                264.68                 37.01
+                     Parses:                594.52                 83.14
+                Hard parses:                  8.16                  1.14
+                      Sorts:                120.39                 16.84
+                     Logons:                  0.78                  0.11
+                   Executes:              2,809.81                392.92
+               Transactions:                  7.15
+
+  % Blocks changed per Read:    3.94    Recursive Call %:     93.70
+ Rollback per transaction %:    0.05       Rows per Sort:    231.15
+
+Instance Efficiency Percentages (Target 100%)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            Buffer Nowait %:   99.89       Redo NoWait %:     99.97
+            Buffer  Hit   %:   79.83    In-memory Sort %:     99.98
+            Library Hit   %:   99.66        Soft Parse %:     98.63
+         Execute to Parse %:   78.84         Latch Hit %:     99.36
+Parse CPU to Parse Elapsd %:   82.96     % Non-Parse CPU:     91.11
+
+ Shared Pool Statistics        Begin   End
+                               ------  ------
+             Memory Usage %:   93.41   95.70
+    % SQL with executions>1:   71.25   55.47
+  % Memory for SQL w/exec>1:   66.43   50.41
+
+Top 5 Timed Events
+~~~~~~~~~~~~~~~~~~                                                     % Total
+Event                                               Waits    Time (s) Ela Time
+-------------------------------------------- ------------ ----------- --------
+SQL*Net message from client                     3,776,482   1,282,700    81.45
+rdbms ipc message                                 160,692     150,286     9.54
+CPU time                                                       63,525     4.03
+pmon timer                                          4,789      14,038      .89
+smon timer                                            665      13,827      .88
+          -------------------------------------------------------------
+Wait Events for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> s  - second
+-> cs - centisecond -     100th of a second
+-> ms - millisecond -    1000th of a second
+-> us - microsecond - 1000000th of a second
+-> ordered by wait time desc, waits desc (idle events last)
+
+                                                                   Avg
+                                                     Total Wait   wait    Waits
+Event                               Waits   Timeouts   Time (s)   (ms)     /txn
+---------------------------- ------------ ---------- ---------- ------ --------
+SQL*Net message from client     3,776,482          0  1,282,700    340     36.7
+wakeup time manager                   469        468     13,538  28865      0.0
+jobq slave wait                     2,805      2,739      8,161   2909      0.0
+SQL*Net more data to client    25,407,089          0      7,704      0    246.8
+db file scattered read         22,327,956          0      5,711      0    216.9
+direct path read (lob)          6,019,663          0      5,532      1     58.5
+db file sequential read        13,939,773          0      4,206      0    135.4
+log file switch completion          3,555      1,335      1,474    415      0.0
+latch free                        192,601     66,359      1,425      7      1.9
+db file parallel write              9,521          0        533     56      0.1
+buffer busy waits                 875,025         73        529      1      8.5
+enqueue                               307        120        369   1203      0.0
+log file parallel write           317,601          0        349      1      3.1
+async disk IO                       2,286          0        161     70      0.0
+log file sync                      57,524          1        159      3      0.6
+direct path read                  363,187          0        103      0      3.5
+row cache lock                         93         18         68    730      0.0
+log buffer space                      524          2         68    129      0.0
+LGWR-LNS wait on channel            3,861      3,192         66     17      0.0
+direct path write                  31,873          0         61      2      0.3
+control file sequential read      432,057          0         37      0      4.2
+log file sequential read            5,530          0         35      6      0.1
+control file parallel write        17,784          0         28      2      0.2
+library cache pin                   2,060          0         28     13      0.0
+local write wait                      757          1         12     15      0.0
+process startup                       195          0         11     58      0.0
+SQL*Net more data from clien       17,256          0         10      1      0.2
+SQL*Net message to client       3,776,520          0          8      0     36.7
+SQL*Net break/reset to clien        2,618          0          3      1      0.0
+direct path write (lob)               848          0          2      3      0.0
+log file single write               1,383          0          1      1      0.0
+LGWR wait for redo copy             5,921         38          1      0      0.1
+control file single write              69          0          1     13      0.0
+LGWR wait on LNS                      128         25          1      6      0.0
+LNS wait on ATTACH                     22          0          1     33      0.0
+library cache load lock                39          0          1     15      0.0
+library cache lock                     30          0          1     18      0.0
+db file parallel read                  21          0          0     21      0.0
+wait list latch free                   14          0          0     20      0.0
+SQL*Net message from dblink            32          0          0      8      0.0
+SQL*Net more data from dblin           19          0          0     11      0.0
+single-task message                     2          0          0     69      0.0
+ARCH wait on ATTACH                    21          0          0      3      0.0
+multiple dbwriter suspend/re            2          2          0     15      0.0
+db file single write                   31          0          0      1      0.0
+kksfbc child completion                 1          1          0     11      0.0
+undo segment extension              3,968      3,954          0      0      0.0
+LNS wait on LGWR                       44          0          0      0      0.0
+SQL*Net message to dblink              32          0          0      0      0.0
+Wait Events for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> s  - second
+-> cs - centisecond -     100th of a second
+-> ms - millisecond -    1000th of a second
+-> us - microsecond - 1000000th of a second
+-> ordered by wait time desc, waits desc (idle events last)
+
+                                                                   Avg
+                                                     Total Wait   wait    Waits
+Event                               Waits   Timeouts   Time (s)   (ms)     /txn
+---------------------------- ------------ ---------- ---------- ------ --------
+buffer deadlock                        42         42          0      0      0.0
+LNS wait on DETACH                     22          0          0      0      0.0
+          -------------------------------------------------------------
+Background Wait Events for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> ordered by wait time desc, waits desc (idle events last)
+
+                                                                   Avg
+                                                     Total Wait   wait    Waits
+Event                               Waits   Timeouts   Time (s)   (ms)     /txn
+---------------------------- ------------ ---------- ---------- ------ --------
+rdbms ipc message                 157,257     18,787    135,731    863      1.5
+pmon timer                          4,789      4,779     14,038   2931      0.0
+smon timer                            665          4     13,827  20792      0.0
+db file parallel write              9,522          0        533     56      0.1
+log file parallel write           317,595          0        349      1      3.1
+async disk IO                       2,074          0        160     77      0.0
+LGWR-LNS wait on channel            3,861      3,192         66     17      0.0
+log file sequential read            5,529          0         35      6      0.1
+control file parallel write        17,746          0         28      2      0.2
+buffer busy waits                      52         10         12    225      0.0
+direct path read                   31,404          0          9      0      0.3
+enqueue                                75          1          8    112      0.0
+direct path write                  16,922          0          8      0      0.2
+log file switch completion             14          7          7    507      0.0
+log buffer space                       57          0          5     90      0.0
+db file sequential read             2,324          0          4      2      0.0
+control file sequential read       33,779          0          3      0      0.3
+process startup                        71          0          3     37      0.0
+db file scattered read                765          0          3      3      0.0
+log file single write               1,382          0          1      1      0.0
+LGWR wait for redo copy             5,921         38          1      0      0.1
+LGWR wait on LNS                      128         25          1      6      0.0
+latch free                            299         36          1      2      0.0
+rdbms ipc reply                       127          0          0      1      0.0
+ARCH wait on ATTACH                    21          0          0      3      0.0
+multiple dbwriter suspend/re            2          2          0     15      0.0
+db file single write                   30          0          0      1      0.0
+          -------------------------------------------------------------
+SQL ordered by Gets for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Buffer Gets Threshold:     10000
+-> Note that resources reported for PL/SQL includes the resources used by
+   all SQL statements called within the PL/SQL code.  As individual SQL
+   statements are also reported, it is possible and valid for the summed
+   total % to exceed 100
+
+                                                     CPU      Elapsd
+  Buffer Gets    Executions  Gets per Exec  %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+    116,403,550       33,635        3,460.8   15.1  8550.19   8691.31  702212416
+Module: JDBC Connect Client
+select data from CGLOBAL where cfid = :v0
+
+     94,599,846       27,285        3,467.1   12.3  6931.70   7597.59  551161745
+Module: JDBC Connect Client
+update CGLOBAL set data =:v0,lvisit =:v1 where cfid =:v2
+
+     65,181,090   21,745,840            3.0    8.4  2891.67   3441.64 3574766763
+Module: JDBC Connect Client
+SELECT sys_context(:b2,:b1) from sys.dual
+
+     40,048,860    3,400,792           11.8    5.2  5479.32   6244.01 3417387418
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_ASSIGNMENT_S(:sn, :on);                    :v1 := subs
+tr(p,1,4000); :v2 := substr(p,4001,4000);                    :v3
+ := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+         :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4000
+
+     31,368,923    3,485,700            9.0    4.1   693.99    673.60 3005237463
+Module: JDBC Connect Client
+SELECT VAL   FROM DOTENC  WHERE ID =  (SELECT LINE   FROM DOTAPP
+  WHERE EXTINT = :b1 )
+
+     22,440,273    1,805,859           12.4    2.9  2942.71   3346.27 1513425523
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPATION_S(:sn, :on);                    :v1 := s
+ubstr(p,1,4000); :v2 := substr(p,4001,4000);
+:v3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+            :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4
+
+     18,221,655           14    1,301,546.8    2.4   747.82    774.04 3585247007
+Module: JDBC Connect Client
+BEGIN qpr_package.getallqprdata ( :V1,  :V2,  :V3,  :V4,  :V5,
+:V6,  :V7); END;
+
+      8,040,945          142       56,626.4    1.0   405.46    414.87 3680450757
+Module: JDBC Connect Client
+BEGIN grantee_login.prc_UpdateLastLogin ( :V1); END;
+
+      8,040,803          142       56,625.4    1.0   405.26    414.66  239451377
+Module: JDBC Connect Client
+UPDATE COMMON.WHO_ARE_YOU SET DATE_LAST = SYSDATE WHERE W2W_PASS
+WORD=COMMON.ENC_EXT(:B1 ) AND SEQ_NO = 1
+
+      7,241,427      438,025           16.5    0.9   140.10    137.95 1896917275
+Module: JDBC Connect Client
+SELECT COUNT (GK_MOD_DETAILS.MOD_TYPE_ID), MAX (GTS_GK_MOD.MOD_N
+SQL ordered by Gets for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Buffer Gets Threshold:     10000
+-> Note that resources reported for PL/SQL includes the resources used by
+   all SQL statements called within the PL/SQL code.  As individual SQL
+   statements are also reported, it is possible and valid for the summed
+   total % to exceed 100
+
+                                                     CPU      Elapsd
+  Buffer Gets    Executions  Gets per Exec  %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+O) FROM GTS_GK_MOD, GK_MOD_DETAILS WHERE GK_MOD_DETAILS.MOD_TYPE
+_ID = 3 AND GK_MOD_DETAILS.GTS_GK_MOD_ID = GTS_GK_MOD.GTS_GK_MOD
+_ID AND GTS_GK_MOD.GTS_GK_CNTL_NO = :B1
+
+      6,681,838            3    2,227,279.3    0.9   617.80    641.17 1667243799
+DECLARE job BINARY_INTEGER := :job; next_date DATE := :mydate;
+broken BOOLEAN := FALSE; BEGIN SPARQ_JOBS_API.BACKGROUND_QPR_JOB
+( job ); :mydate := next_date; IF broken THEN :b := 1; ELSE :b :
+= 0; END IF; END;
+
+      5,117,389          928        5,514.4    0.7   633.90    751.02  476829181
+Module: JDBC Connect Client
+BEGIN callqvp ( :V1,  :V2,  :V3,  :V4,  :V5,  :V6,  :V7,  :V8,
+:V9,  :V10,  :V11); END;
+
+      5,009,374      193,239           25.9    0.6    82.74     85.34  990281133
+Module: JDBC Connect Client
+SELECT END_DATE FROM GK_MOD_DETAILS A, GTS_GK_MOD B WHERE A.GTS_
+GK_MOD_ID = B.GTS_GK_MOD_ID AND A.GK_MOD_DETAIL_ID = (SELECT MAX
+(GMD.GK_MOD_DETAIL_ID) FROM GK_MOD_DETAILS GMD, GTS_GK_MOD GGM W
+HERE GMD.GTS_GK_MOD_ID = GGM.GTS_GK_MOD_ID AND END_DATE IS NOT N
+ULL AND GGM.GTS_GK_CNTL_NO = :B1 )
+
+      4,916,081        1,536        3,200.6    0.6   290.83    291.02 3772664040
+Module: JDBC Connect Client
+select * from                              (                se
+lect * from                              (select    d.desk_revi
+ew_id, d.proj_id, d.dr_version, q.quarter_end_date,
+             case                          when d.status != 'C'
+ and add_months(q.quarter_end_date+1,3) < sysdate /*expired*/
+
+      3,967,182       23,195          171.0    0.5   267.63    264.15 2982532396
+Module: JDBC Connect Client
+SELECT R.ROLE_NAME AS ROLE_STRING     FROM USER_ROLE_REF UR, RO
+LE_REF R     WHERE UR.USER_ID = :v0     AND UR.ROLE_ID = R.ROL
+E_ID     AND R.ROLE_NAME NOT IN ('GRANTEE','GRANTEE ADMINISTRAT
+OR','VALIDATOR',      'SUBGRANTEE','SUBGRANTEE ADMINISTRATOR','
+DATABASE')     UNION     SELECT R.ROLE_NAME || ', ' || G.GRANT
+
+      3,935,887       15,741          250.0    0.5   518.41    527.23 2306136655
+Module: JDBC Connect Client
+SELECT MAX(PROGRAM_YEAR || DECODE(QTR, 5, 4, QTR)) MAX_QTR FROM
+QPR      WHERE GRANTEE_ID = :v0      AND QPR_TYPE_IND = 'Q'
+
+      2,764,898      233,149           11.9    0.4    53.05     52.52 3048356335
+Module: JDBC Connect Client
+SELECT MAX (GK_MOD_DETAILS.END_DATE) FROM GTS_GK_MOD, GK_MOD_DET
+AILS WHERE GK_MOD_DETAILS.GTS_GK_MOD_ID = GTS_GK_MOD.GTS_GK_MOD_
+ID AND GTS_GK_MOD.GTS_GK_CNTL_NO = :B1
+
+SQL ordered by Gets for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Buffer Gets Threshold:     10000
+-> Note that resources reported for PL/SQL includes the resources used by
+   all SQL statements called within the PL/SQL code.  As individual SQL
+   statements are also reported, it is possible and valid for the summed
+   total % to exceed 100
+
+                                                     CPU      Elapsd
+  Buffer Gets    Executions  Gets per Exec  %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+      2,624,394           43       61,032.4    0.3   250.38    276.04  148939869
+Module: JDBC Connect Client
+SELECT DISTINCT TO_CHAR(ADD_MONTHS(B.QTR_END_DATE, +1),'yyyy') A
+S FY, B.QTR_END_DATE AS REPORT_PERIOD, DECODE( TO_CHAR(B.QTR_END
+_DATE + 45,'D'), 7, B.QTR_END_DATE + 47, 1, B.QTR_END_DATE + 46,
+ B.QTR_END_DATE + 45 ) AS REPORT_DUE_DATE, (SELECT S.STATUS FROM
+ TAPR_EDITCHECK_STATUS S INNER JOIN TAA_REPORT TR ON S.STATUS_ID
+
+      2,550,703        1,594        1,600.2    0.3   166.96    181.31 3165414976
+Module: JDBC Connect Client
+select *  from                              (                s
+elect  * from                              (select d.desk_revie
+w_id, d.proj_id, d.dr_version, q.quarter_end_date,
+            case                          when d.status != 'C'
+and add_months(q.quarter_end_date+1,3) < sysdate /*expired*/
+
+      1,987,561       99,803           19.9    0.3    38.91     38.18 2503900204
+Module: JDBC Connect Client
+SELECT SUM(NVL(GMD.MOD_AMT,0)) FROM GTS_GK_MOD GGM, GK_MOD_DETAI
+LS GMD WHERE GGM.GTS_GK_CNTL_NO = :B1 AND GGM.GTS_GK_MOD_ID = GM
+D.GTS_GK_MOD_ID
+
+      1,765,719      588,617            3.0    0.2   561.04    692.22 1760038998
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+
+          -------------------------------------------------------------
+SQL ordered by Reads for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Disk Reads Threshold:      1000
+
+                                                     CPU      Elapsd
+ Physical Reads  Executions  Reads per Exec %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+     66,915,392       33,635        1,989.5   41.1  8550.19   8691.31  702212416
+Module: JDBC Connect Client
+select data from CGLOBAL where cfid = :v0
+
+     54,084,389       27,285        1,982.2   33.3  6931.70   7597.59  551161745
+Module: JDBC Connect Client
+update CGLOBAL set data =:v0,lvisit =:v1 where cfid =:v2
+
+      2,414,710           43       56,156.0    1.5   250.38    276.04  148939869
+Module: JDBC Connect Client
+SELECT DISTINCT TO_CHAR(ADD_MONTHS(B.QTR_END_DATE, +1),'yyyy') A
+S FY, B.QTR_END_DATE AS REPORT_PERIOD, DECODE( TO_CHAR(B.QTR_END
+_DATE + 45,'D'), 7, B.QTR_END_DATE + 47, 1, B.QTR_END_DATE + 46,
+ B.QTR_END_DATE + 45 ) AS REPORT_DUE_DATE, (SELECT S.STATUS FROM
+ TAPR_EDITCHECK_STATUS S INNER JOIN TAA_REPORT TR ON S.STATUS_ID
+
+        657,085          238        2,760.9    0.4    98.28    101.61  371399283
+Module: hworaexe.exe
+UPDATE PROCS SET STATE = 'V' WHERE STATE = 'R' AND DEADLINEDTIME
+ <= :B2 AND DEADLINEDTIME > :B1
+
+        632,584          238        2,657.9    0.4   117.32    120.62  705410901
+Module: hworaexe.exe
+UPDATE ACT SET STATE = 'V' WHERE STATE = 'R' AND PROCID IN (SELE
+CT PROCID FROM PROCS P WHERE P.STATE IN ('R', 'E', 'V', 'S') AND
+ P.DEADLINEDTIME <= :B2 AND P.DEADLINEDTIME > :B1 )
+
+        616,070          238        2,588.5    0.4   117.05    120.85  123614371
+Module: hworaexe.exe
+UPDATE WITEM SET STATE = 'V' WHERE STATE IN ('I','R', 'P') AND P
+ROCID IN (SELECT PROCID FROM PROCS P WHERE P.STATE IN ('R', 'E',
+ 'V', 'S') AND P.DEADLINEDTIME <= :B2 AND P.DEADLINEDTIME > :B1
+)
+
+        291,146           47        6,194.6    0.2   333.36    337.44 4236211952
+Module: JDBC Connect Client
+SELECT B.GK_NO,B.PROJ_TITLE, SUM(B.MOD_AMT) GRANT_TTL FROM GTS_G
+K_MOD M, NCFMS_DOC_AMT B WHERE B.GTS_GK_CNTL_NO=M.GTS_GK_CNTL_NO
+ AND M.GTS_GK_MOD_ID=:B1 GROUP BY B.GK_NO,B.PROJ_TITLE
+
+        280,319           47        5,964.2    0.2   331.53    334.98 1983238334
+Module: JDBC Connect Client
+SELECT A.* FROM NCFMS_DOC_AMT A, GTS_GK_MOD M WHERE A.GTS_GK_CNT
+L_NO=M.GTS_GK_CNTL_NO AND M.GTS_GK_MOD_ID=:B1 AND A.MOD_AMT <> 0
+ ORDER BY A.ACCTLINENUM
+
+        235,231           87        2,703.8    0.1    36.82     37.56 3010864421
+Module: hworaexe.exe
+begin sp_set_proc_overdue(:i_presvrdtime,:i_svrdtime); end;
+
+        225,919           87        2,596.8    0.1    43.15     42.78  907054503
+Module: hworaexe.exe
+begin sp_set_act_overdue(:i_presvrdtime,:i_svrdtime); end;
+
+SQL ordered by Reads for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Disk Reads Threshold:      1000
+
+                                                     CPU      Elapsd
+ Physical Reads  Executions  Reads per Exec %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+        218,275           87        2,508.9    0.1    43.07     43.65  819879856
+Module: hworaexe.exe
+begin sp_set_witem_overdue(:i_presvrdtime,:i_svrdtime); end;
+
+        150,180            3       50,060.0    0.1   617.80    641.17 1667243799
+DECLARE job BINARY_INTEGER := :job; next_date DATE := :mydate;
+broken BOOLEAN := FALSE; BEGIN SPARQ_JOBS_API.BACKGROUND_QPR_JOB
+( job ); :mydate := next_date; IF broken THEN :b := 1; ELSE :b :
+= 0; END IF; END;
+
+        147,378            6       24,563.0    0.1    20.72     20.61 2598136901
+DELETE FROM QPR_LIST WHERE QPR_ID = :B1
+
+        131,391           36        3,649.8    0.1    45.56     51.46 2231511753
+Module: JDBC Connect Client
+BEGIN cfr_pkg.array_proc ( :V1,  :V2,  :V3,  :V4); END;
+
+        105,737           24        4,405.7    0.1   159.05    161.73  116470997
+Module: JDBC Connect Client
+SELECT * FROM NCFMS_DOC_AMT WHERE DOC_NO=:B1 AND ROWNUM=1
+
+         77,575           25        3,103.0    0.0    10.69     10.46 1226292288
+Module: JDBC Connect Client
+SELECT DISTINCT 0 as preType, LOG.LOG_ID, ACTION_TYPE_REF.ACTION
+_TYPE_TITLE as ACTION_TYPE,    LOG.TARGET_DATE DUE_DATE, LOG.SC
+HEDULED_DATE ,LOG.PROJ_ID         ,STATE_REF.STATE_ABBRV ,PROJE
+CT.PROJ_TITLE,PROJECT.NICKNAME,PROJECT.ORG_ID      ,PROJECT_NAM
+E_REF.PROJECT_NAME,TO_CHAR(LOG.SCHEDULED_DATE, 'DD') ACTIVITYDAY
+
+         73,852           19        3,886.9    0.0     9.32      9.12 3899452315
+Module: JDBC Connect Client
+SELECT DISTINCT 0 as preType, LOG.LOG_ID, ACTION_TYPE_REF.ACTION
+_TYPE_TITLE as ACTION_TYPE,    LOG.TARGET_DATE DUE_DATE, LOG.SC
+HEDULED_DATE ,LOG.PROJ_ID         ,STATE_REF.STATE_ABBRV ,PROJE
+CT.PROJ_TITLE,PROJECT.NICKNAME,PROJECT.ORG_ID      ,PROJECT_NAM
+E_REF.PROJECT_NAME,TO_CHAR(LOG.SCHEDULED_DATE, 'DD') ACTIVITYDAY
+
+         71,627           99          723.5    0.0    20.94     28.41 2156222273
+Module: JDBC Connect Client
+BEGIN sparq_qpr.qpr_report_query ( :V1,  :V2,  :V3,  :V4,  :V5,
+ :V6,  :V7,  :V8,  :V9,  :V10,  :V11,  :V12); END;
+
+         46,377        1,594           29.1    0.0   166.96    181.31 3165414976
+Module: JDBC Connect Client
+select *  from                              (                s
+elect  * from                              (select d.desk_revie
+w_id, d.proj_id, d.dr_version, q.quarter_end_date,
+            case                          when d.status != 'C'
+and add_months(q.quarter_end_date+1,3) < sysdate /*expired*/
+
+         30,120           17        1,771.8    0.0    15.14     16.15  152468355
+Module: JDBC Connect Client
+BEGIN cfr_pkg.array_proc_all ( :V1,  :V2,  :V3,  :V4); END;
+
+SQL ordered by Reads for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Disk Reads Threshold:      1000
+
+                                                     CPU      Elapsd
+ Physical Reads  Executions  Reads per Exec %Total Time (s)  Time (s) Hash Value
+--------------- ------------ -------------- ------ -------- --------- ----------
+         28,723           11        2,611.2    0.0    12.86     17.10   51015315
+Module: JDBC Connect Client
+BEGIN cfr2_pkg.array_wia ( :V1,  :V2,  :V3,  :V4,  :V5); END;
+
+         25,684           14        1,834.6    0.0     5.06      5.57 3045700789
+Module: JDBC Connect Client
+SELECT ADD_MONTHS(MAX(TOPERIOD),3) FROM CFR_FINANCIAL_9130 WHERE
+ RCIP_NO=:B2 AND SUBSTR(GRANT_NO,1,2)= :B1 AND STATUS IN (1,2,3)
+
+
+         24,540            3        8,180.0    0.0     5.69     11.80 1693471783
+Module: JDBC Connect Client
+select ROUND(SUM(QTR_V)/SUM(DECODE(grantee_id, NULL, 0, 1)), 1)
+ N_QTR_V, ROUND(SUM(L9Q_V)/SUM(DECODE(grantee_id, NULL, 0, 1)),
+1) N_L9Q_V, SUM(DECODE(grantee_id, NULL, 0, 1)) tot_gid     fro
+m (     select q.grantee_id,      SUM(avg_proj_duration_qtr) Q
+TR_N, SUM(avg_proj_duration_qtr_denom) QTR_D     ,DECODE(SUM(av
+
+         21,902           18        1,216.8    0.0     3.42      6.35 3868980709
+Module: JDBC Connect Client
+delete FROM CGLOBAL WHERE CGLOBAL.lvisit < :v0
+
+         20,304            3        6,768.0    0.0     3.99      4.07 3793877970
+Module: JDBC Connect Client
+select sum(CARRIED_OVER_FIRST_QTR) as CARRIED_OVER_FIRST_QTR 
+      from  qpr q, grantee g        where q.grantee_id = g.gran
+tee_id        and q.program_year = :v0        and q.qtr = :v1
+        and q.qpr_type_ind = :v2        and g.PARENT_RECOVERY_I
+
+          -------------------------------------------------------------
+SQL ordered by Executions for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Executions Threshold:       100
+
+                                                CPU per    Elap per
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+  21,745,840      21,734,646              1.0       0.00        0.00 3574766763
+Module: JDBC Connect Client
+SELECT sys_context(:b2,:b1) from sys.dual
+
+   3,485,700       3,485,518              1.0       0.00        0.00 3005237463
+Module: JDBC Connect Client
+SELECT VAL   FROM DOTENC  WHERE ID =  (SELECT LINE   FROM DOTAPP
+  WHERE EXTINT = :b1 )
+
+   3,400,792       3,400,593              1.0       0.00        0.00 3417387418
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_ASSIGNMENT_S(:sn, :on);                    :v1 := subs
+tr(p,1,4000); :v2 := substr(p,4001,4000);                    :v3
+ := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+         :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4000
+
+   1,805,859       1,805,799              1.0       0.00        0.00 1513425523
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPATION_S(:sn, :on);                    :v1 := s
+ubstr(p,1,4000); :v2 := substr(p,4001,4000);
+:v3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+            :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4
+
+     588,617         588,601              1.0       0.00        0.00 1760038998
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPANT_S(:sn, :on);                    :v1 := sub
+str(p,1,4000); :v2 := substr(p,4001,4000);                    :v
+3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+          :v5 := substr(p,16001,4000); :v6 := substr(p,20001,400
+
+     438,025         438,020              1.0       0.00        0.00 1896917275
+Module: JDBC Connect Client
+SELECT COUNT (GK_MOD_DETAILS.MOD_TYPE_ID), MAX (GTS_GK_MOD.MOD_N
+O) FROM GTS_GK_MOD, GK_MOD_DETAILS WHERE GK_MOD_DETAILS.MOD_TYPE
+_ID = 3 AND GK_MOD_DETAILS.GTS_GK_MOD_ID = GTS_GK_MOD.GTS_GK_MOD
+_ID AND GTS_GK_MOD.GTS_GK_CNTL_NO = :B1
+
+     431,004         132,978              0.3       0.00        0.00 1107121059
+Module: JDBC Connect Client
+SELECT JOB_NAME FROM JOB_REF WHERE JOB_ID = :B1
+
+     233,149         233,147              1.0       0.00        0.00 3048356335
+Module: JDBC Connect Client
+SELECT MAX (GK_MOD_DETAILS.END_DATE) FROM GTS_GK_MOD, GK_MOD_DET
+AILS WHERE GK_MOD_DETAILS.GTS_GK_MOD_ID = GTS_GK_MOD.GTS_GK_MOD_
+ID AND GTS_GK_MOD.GTS_GK_CNTL_NO = :B1
+
+     204,891         204,891              1.0       0.00        0.00  332554399
+Module: JDBC Connect Client
+SELECT GTS_GK_MOD.MOD_END_DATE FROM GTS_GK_MOD WHERE GTS_GK_MOD.
+GTS_GK_CNTL_NO = :B2 AND GTS_GK_MOD.MOD_NO = :B1
+SQL ordered by Executions for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Executions Threshold:       100
+
+                                                CPU per    Elap per
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+
+     193,239         191,775              1.0       0.00        0.00  990281133
+Module: JDBC Connect Client
+SELECT END_DATE FROM GK_MOD_DETAILS A, GTS_GK_MOD B WHERE A.GTS_
+GK_MOD_ID = B.GTS_GK_MOD_ID AND A.GK_MOD_DETAIL_ID = (SELECT MAX
+(GMD.GK_MOD_DETAIL_ID) FROM GK_MOD_DETAILS GMD, GTS_GK_MOD GGM W
+HERE GMD.GTS_GK_MOD_ID = GGM.GTS_GK_MOD_ID AND END_DATE IS NOT N
+ULL AND GGM.GTS_GK_CNTL_NO = :B1 )
+
+     143,668         142,731              1.0       0.00        0.00 3831344093
+Module: JDBC Connect Client
+SELECT COUNTY FROM STATE_COUNTY_REF SR WHERE SR.STATE_COUNTY_ID
+= :B1
+
+      99,803          99,802              1.0       0.00        0.00 2503900204
+Module: JDBC Connect Client
+SELECT SUM(NVL(GMD.MOD_AMT,0)) FROM GTS_GK_MOD GGM, GK_MOD_DETAI
+LS GMD WHERE GGM.GTS_GK_CNTL_NO = :B1 AND GGM.GTS_GK_MOD_ID = GM
+D.GTS_GK_MOD_ID
+
+      94,149               0              0.0       0.00        0.00 1064601204
+Module: JDBC Connect Client
+alter session set isolation_level = read committed
+
+      89,304          89,304              1.0       0.00        0.00 1539424110
+Module: JDBC Connect Client
+SELECT :b1 + :b2 * DECODE(:b3,'A',10,'B',11,'C',12,'D',13,'E',14
+,'F',15,:b3)     FROM DUAL
+
+      84,575          84,573              1.0       0.00        0.00 3937390025
+Module: JDBC Connect Client
+begin dbms_utility.name_resolve(:v1,:v2,:v3,:v4,:v5,:v6,:v7,:v8)
+;end;
+
+      73,335           1,151              0.0       0.00        0.00  496257481
+Module: JDBC Connect Client
+SELECT EXCLUSION_NAME FROM EXCLUSION_REF WHERE EXCLUSION_ID = :B
+1
+
+      56,560          51,787              0.9       0.00        0.00 4274598960
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, tim
+estamp#, sample_size, minimum, maximum, distcnt, lowval, hival,
+density, col#, spare1, spare2, avgcln from hist_head$ where obj#
+=:1 and intcol#=:2
+
+      54,634          77,636              1.4       0.00        0.00 1546043265
+Module: JDBC Connect Client
+SELECT B.MOD_TYPE_DSCR FROM GK_MOD_DETAILS A, MOD_TYPE_REF B WHE
+RE A.GTS_GK_MOD_ID=:B1 AND A.MOD_TYPE_ID=B.MOD_TYPE_ID
+
+      50,610           4,831              0.1       0.00        0.00   22494291
+Module: JDBC Connect Client
+select * from participant_tab_exit       where participant_id =
+ :v0
+SQL ordered by Executions for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> End Executions Threshold:       100
+
+                                                CPU per    Elap per
+ Executions   Rows Processed   Rows per Exec    Exec (s)   Exec (s)  Hash Value
+------------ --------------- ---------------- ----------- ---------- ----------
+
+      45,442          45,442              1.0       0.00        0.00 3024547012
+Module: JDBC Connect Client
+SELECT COUNT(*) FROM GRANTEE WHERE PARENT_GRANTEE_ID = (SELECT G
+RANTEE_ID FROM GRANTEE WHERE GRANTEE_CODE = :B1 )
+
+      44,383          50,491              1.1       0.00        0.00 1433558559
+select intcol#,nvl(pos#,0),col# from ccol$ where con#=:1
+
+      41,730          41,730              1.0       0.00        0.00 1306370158
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPANT_U(:sn, :on);                    :v1 := sub
+str(p,1,4000); :v2 := substr(p,4001,4000);                    :v
+3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+          :v5 := substr(p,16001,4000); :v6 := substr(p,20001,400
+
+      37,317          37,317              1.0       0.00        0.00  813290331
+Module: JDBC Connect Client
+SELECT DISTINCT SYS_CONTEXT(NAMESPACE, 'ROLE_NAME') ROLE_NAME ,S
+YS_CONTEXT(NAMESPACE, 'PERMISSION_ID') PERMISSION_ID ,SYS_CONTEX
+T(NAMESPACE, 'GRANTEE_ID') GRANTEE_ID ,SYS_CONTEXT(NAMESPACE, 'S
+
+          -------------------------------------------------------------
+SQL ordered by Parse Calls for DB: ETADB3  Instance: etadb3  Snaps: 48869  -4888
+-> End Parse Calls Threshold:      1000
+
+                           % Total
+ Parse Calls  Executions   Parses  Hash Value
+------------ ------------ -------- ----------
+   3,400,820    3,400,792    39.73 3417387418
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_ASSIGNMENT_S(:sn, :on);                    :v1 := subs
+tr(p,1,4000); :v2 := substr(p,4001,4000);                    :v3
+ := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+         :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4000
+
+   1,805,880    1,805,859    21.10 1513425523
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPATION_S(:sn, :on);                    :v1 := s
+ubstr(p,1,4000); :v2 := substr(p,4001,4000);
+:v3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+            :v5 := substr(p,16001,4000); :v6 := substr(p,20001,4
+
+     588,617      588,617     6.88 1760038998
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPANT_S(:sn, :on);                    :v1 := sub
+str(p,1,4000); :v2 := substr(p,4001,4000);                    :v
+3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+          :v5 := substr(p,16001,4000); :v6 := substr(p,20001,400
+
+      94,148       94,149     1.10 1064601204
+Module: JDBC Connect Client
+alter session set isolation_level = read committed
+
+      84,576       84,575     0.99 3937390025
+Module: JDBC Connect Client
+begin dbms_utility.name_resolve(:v1,:v2,:v3,:v4,:v5,:v6,:v7,:v8)
+;end;
+
+      43,238       45,442     0.51 3024547012
+Module: JDBC Connect Client
+SELECT COUNT(*) FROM GRANTEE WHERE PARENT_GRANTEE_ID = (SELECT G
+RANTEE_ID FROM GRANTEE WHERE GRANTEE_CODE = :B1 )
+
+      41,730       41,730     0.49 1306370158
+Module: JDBC Connect Client
+declare p varchar2(32767);                    begin  p := SPARQ_
+POLICY.SP_PARTICIPANT_U(:sn, :on);                    :v1 := sub
+str(p,1,4000); :v2 := substr(p,4001,4000);                    :v
+3 := substr(p,8001,4000); :v4 := substr(p,12001,4000);
+          :v5 := substr(p,16001,4000); :v6 := substr(p,20001,400
+
+      33,791       33,791     0.39 3716207873
+update seq$ set increment$=:2,minvalue=:3,maxvalue=:4,cycle#=:5,
+order$=:6,cache=:7,highwater=:8,audit$=:9,flags=:10 where obj#=:
+1
+
+      22,326       89,304     0.26 1539424110
+Module: JDBC Connect Client
+SELECT :b1 + :b2 * DECODE(:b3,'A',10,'B',11,'C',12,'D',13,'E',14
+SQL ordered by Parse Calls for DB: ETADB3  Instance: etadb3  Snaps: 48869  -4888
+-> End Parse Calls Threshold:      1000
+
+                           % Total
+ Parse Calls  Executions   Parses  Hash Value
+------------ ------------ -------- ----------
+,'F',15,:b3)     FROM DUAL
+
+      21,522       22,642     0.25 3024911072
+Module: JDBC Connect Client
+SELECT COUNT(*) FROM STATE_COUNTY_REF WHERE STATE = :B2 AND UPPE
+R(COUNTY) = UPPER(:B1 )
+
+      17,096       17,096     0.20 2756631851
+Module: JDBC Connect Client
+select STATE stato , STATE_NAME from STATE_REF where STATE_NAM
+E !='Unknown' ORDER BY UPPER(STATE_NAME)
+
+      15,759       37,317     0.18  813290331
+Module: JDBC Connect Client
+SELECT DISTINCT SYS_CONTEXT(NAMESPACE, 'ROLE_NAME') ROLE_NAME ,S
+YS_CONTEXT(NAMESPACE, 'PERMISSION_ID') PERMISSION_ID ,SYS_CONTEX
+T(NAMESPACE, 'GRANTEE_ID') GRANTEE_ID ,SYS_CONTEXT(NAMESPACE, 'S
+UB_GRANTEE_ID') SUB_GRANTEE_ID ,SYS_CONTEXT(NAMESPACE, 'DATABASE
+_ID') DATABASE_ID FROM SESSION_CONTEXT
+
+      14,968       14,968     0.17 1313134921
+select distinct obj#,containerobj#,pflags,xpflags,mflags  from s
+um$, suminline$  where sumobj#=obj#  and inline#=:1
+
+      14,318       14,318     0.17 3016482150
+select sumobj#, inline#, textspos, textlen, instance# from sumin
+line$  where hashval=:1 order by inline#
+
+      12,768       12,768     0.15 1790310686
+Module: JDBC Connect Client
+SELECT UNIQUE POSITION, DATA_TYPE, IN_OUT FROM SYS.ALL_ARGUMENTS
+ WHERE OBJECT_ID = 923164 AND OBJECT_NAME = 'QRYRESULTS2' AND DA
+TA_LEVEL=0 ORDER BY POSITION DESC
+
+      12,768       12,768     0.15 2386371841
+Module: JDBC Connect Client
+BEGIN qryResults2 ( :V1,  :V2,  :V3,  :V4,  :V5,  :V6,  :V7); EN
+D;
+
+      11,196   21,745,840     0.13 3574766763
+Module: JDBC Connect Client
+SELECT sys_context(:b2,:b1) from sys.dual
+
+      11,181       11,181     0.13 3468666020
+select text from view$ where rowid=:1
+
+      11,162       11,162     0.13  324211010
+Module: JDBC Connect Client
+BEGIN  logon_proc; END;
+
+      11,119       11,119     0.13   30208155
+Module: JDBC Connect Client
+BEGIN  logoff_proc(lt.getSid); END;
+
+SQL ordered by Parse Calls for DB: ETADB3  Instance: etadb3  Snaps: 48869  -4888
+-> End Parse Calls Threshold:      1000
+
+                           % Total
+ Parse Calls  Executions   Parses  Hash Value
+------------ ------------ -------- ----------
+      11,119       11,119     0.13 2757253574
+Module: JDBC Connect Client
+UPDATE WMSYS.WM$WORKSPACES_TABLE SET FREEZE_STATUS='UNLOCKED',FR
+EEZE_MODE= NULL ,FREEZE_WRITER= NULL ,FREEZE_OWNER= NULL ,SESSIO
+N_DURATION=0 WHERE FREEZE_OWNER = :b1 || ','  || :b2   AND SESSI
+ON_DURATION = 1
+
+      11,086       11,340     0.13  461321563
+Module: oracle@prodora08 (TNS V1-V3)
+insert into sys.aud$( sessionid,entryid,statement,timestamp#, us
+erid,userhost,terminal,action#,returncode, obj$creator,obj$name,
+auth$privileges,auth$grantee, new$owner,new$name,ses$actions,ses
+$tid,logoff$pread, logoff$lwrite,logoff$dead,comment$text,spare1
+,spare2,  priv$used,clientid, sessioncpu) values(:1,:2,:3,SYSDAT
+
+      11,046       11,046     0.13 3984001735
+update sys.aud$ set action#=:2, returncode=:3, logoff$time=sysda
+te, logoff$pread=:4, logoff$lread=:5, logoff$lwrite=:6, logoff$d
+ead=:7, sessioncpu=:8 where sessionid=:1 and entryid=1 and actio
+
+          -------------------------------------------------------------
+SQL ordered by Sharable Memory for DB: ETADB3  Instance: etadb3  Snaps: 48869  -
+-> End Sharable Memory Threshold:   1048576
+
+Sharable Mem (b)  Executions  % Total  Hash Value
+---------------- ------------ ------- ------------
+       2,577,366            1     0.7    231545435
+Module: JDBC Connect Client
+select r.rcip_no,r.rcip_name,r.rcip_office_id,r.ein,r.addr1,r.ad
+dr2,r.city,r.state_id,r.zip,   g.gts_gk_cntl_no,g.gk_no,g.proj_
+title,g.prg_id,g.cfda,g.fy,g.act grant_act,   m.gts_gk_mod_id,m
+.mod_no,m.execution_date,m.effective_date,m.gk_officer_id,m.fed_
+rep_id,m.mod_begin_date,m.specialist_id,   m.mod_end_date,m.pro
+
+       1,600,788            2     0.4    304787184
+Module: JDBC Connect Client
+select g.gts_gk_cntl_no,g.gk_no,g.rcip_office_id,g.proj_title,g.
+instrmnt_type_id,g.fy ,g.prg_id,g.rgn_id,g.project_type_id,g.all
+otment_id,  g.solicitation_id,g.cmmnt,g.prpsd_closeout,g.accept
+_closeout,g.cfda,g.proj_cong_district,g.act,  g.prfmc_state_id,
+g.prfmc_city,g.prfmc_county_cd,g.prfmc_city_cd,g.prfmc_county,g.
+
+       1,595,550            1     0.4    485213380
+Module: JDBC Connect Client
+select /*+rule*/ distinct l_name,      f_name, p.participant_id
+,      replace(address_1||' '||address_2,',') address, replace(
+city,',')||' '||state city, nvl(zip, ' ') zip,   nvl(phone1, '
+') phone,    case   when (select count(distinct pa.participant
+_id)            from participants pa     where pa.participant_
+
+       1,517,612            1     0.4   2679010073
+Module: JDBC Connect Client
+select g.gts_gk_cntl_no,g.gk_no,g.rcip_office_id,g.proj_title,g.
+instrmnt_type_id,g.fy ,g.prg_id,g.rgn_id,g.project_type_id,g.all
+otment_id,  g.solicitation_id,g.cmmnt,g.prpsd_closeout,g.accept
+_closeout,g.cfda,g.proj_cong_district,g.act,  g.prfmc_state_id,
+g.prfmc_city,g.prfmc_county_cd,g.prfmc_city_cd,g.prfmc_county,g.
+
+       1,067,984            1     0.3   2090480879
+Module: JDBC Connect Client
+select mod_no as modNumber,    neg_grant_mod.neg_application_id
+ as applicationID,    case     when gts_mod_no <> -1 then modV
+iew.awardDate     else neg_grant_mod.award_date    end as awar
+dDate,    neg_application.project_type_code as projectTypeCode,
+    neg_application.status_id as statusID,    NEG_LU_STATUS.st
+
+          -------------------------------------------------------------
+Instance Activity Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+CPU used by this session                   6,352,531          441.2         61.7
+CPU used when call started                 5,031,986          349.5         48.9
+CR blocks created                             35,555            2.5          0.4
+Cached Commit SCN referenced                  67,867            4.7          0.7
+Commit SCN cached                                142            0.0          0.0
+DBWR buffers scanned                       1,174,534           81.6         11.4
+DBWR checkpoint buffers written              426,646           29.6          4.1
+DBWR checkpoints                                 693            0.1          0.0
+DBWR free buffers found                    1,140,502           79.2         11.1
+DBWR lru scans                                   749            0.1          0.0
+DBWR make free requests                          761            0.1          0.0
+DBWR revisited being-written buff                  9            0.0          0.0
+DBWR summed scan depth                     1,174,534           81.6         11.4
+DBWR transaction table writes                  6,154            0.4          0.1
+DBWR undo block writes                       192,173           13.4          1.9
+SQL*Net roundtrips to/from client          3,743,268          260.0         36.4
+SQL*Net roundtrips to/from dblink                 32            0.0          0.0
+active txn count during cleanout              30,431            2.1          0.3
+background checkpoints completed                 691            0.1          0.0
+background checkpoints started                   692            0.1          0.0
+background timeouts                           22,365            1.6          0.2
+branch node splits                                 4            0.0          0.0
+buffer is not pinned count               613,005,337       42,578.7      5,954.2
+buffer is pinned count                   190,792,619       13,252.3      1,853.2
+bytes received via SQL*Net from c        386,656,861       26,856.8      3,755.6
+bytes received via SQL*Net from d             60,163            4.2          0.6
+bytes sent via SQL*Net to client       4,362,729,626      303,030.5     42,375.5
+bytes sent via SQL*Net to dblink               8,781            0.6          0.1
+calls to get snapshot scn: kcmgss         97,148,346        6,747.8        943.6
+calls to kcmgas                              459,665           31.9          4.5
+calls to kcmgcs                               12,071            0.8          0.1
+change write time                             24,709            1.7          0.2
+cleanout - number of ktugct calls             34,696            2.4          0.3
+cleanouts and rollbacks - consist             22,823            1.6          0.2
+cleanouts only - consistent read               4,320            0.3          0.0
+cluster key scan block gets                  925,240           64.3          9.0
+cluster key scans                            498,619           34.6          4.8
+commit cleanout failures: block l                  0            0.0          0.0
+commit cleanout failures: buffer                 848            0.1          0.0
+commit cleanout failures: callbac             13,813            1.0          0.1
+commit cleanout failures: cannot                  95            0.0          0.0
+commit cleanouts                             439,592           30.5          4.3
+commit cleanouts successfully com            424,836           29.5          4.1
+commit txn count during cleanout              22,610            1.6          0.2
+consistent changes                         6,997,640          486.1         68.0
+consistent gets                          744,318,639       51,699.6      7,229.6
+consistent gets - examination            173,567,820       12,055.8      1,685.9
+current blocks converted for CR                    2            0.0          0.0
+cursor authentications                        46,810            3.3          0.5
+data blocks consistent reads - un             72,718            5.1          0.7
+db block changes                          30,410,109        2,112.3        295.4
+db block gets                             33,344,860        2,316.1        323.9
+deferred (CURRENT) block cleanout          4,677,246          324.9         45.4
+dirty buffers inspected                        1,007            0.1          0.0
+enqueue conversions                          218,899           15.2          2.1
+enqueue deadlocks                                  0            0.0          0.0
+Instance Activity Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+enqueue releases                             907,444           63.0          8.8
+enqueue requests                             907,608           63.0          8.8
+enqueue timeouts                                 164            0.0          0.0
+enqueue waits                                    153            0.0          0.0
+exchange deadlocks                                42            0.0          0.0
+execute count                             40,452,770        2,809.8        392.9
+free buffer inspected                        174,848           12.1          1.7
+free buffer requested                    157,603,822       10,947.0      1,530.8
+hot buffers moved to head of LRU             799,557           55.5          7.8
+immediate (CR) block cleanout app             27,143            1.9          0.3
+immediate (CURRENT) block cleanou             22,332            1.6          0.2
+index fast full scans (full)                  28,537            2.0          0.3
+index fetch by key                        88,439,502        6,142.9        859.0
+index scans kdiixs1                       29,085,390        2,020.2        282.5
+leaf node 90-10 splits                           412            0.0          0.0
+leaf node splits                                 888            0.1          0.0
+logons cumulative                             11,299            0.8          0.1
+messages received                            176,282           12.2          1.7
+messages sent                                176,284           12.2          1.7
+no buffer to keep pinned count                    12            0.0          0.0
+no work - consistent read gets           478,155,709       33,212.2      4,644.4
+opened cursors cumulative                  8,160,694          566.8         79.3
+parse count (failures)                           342            0.0          0.0
+parse count (hard)                           117,481            8.2          1.1
+parse count (total)                        8,559,288          594.5         83.1
+parse time cpu                               564,478           39.2          5.5
+parse time elapsed                           680,406           47.3          6.6
+physical reads                           162,636,718       11,296.6      1,579.7
+physical reads direct                        848,415           58.9          8.2
+physical reads direct (lob)                6,210,724          431.4         60.3
+physical writes                            1,389,026           96.5         13.5
+physical writes direct                       923,447           64.1          9.0
+physical writes direct (lob)                   3,035            0.2          0.0
+physical writes non checkpoint             1,206,978           83.8         11.7
+pinned buffers inspected                      86,363            6.0          0.8
+prefetched blocks                        119,317,440        8,287.7      1,158.9
+prefetched blocks aged out before              4,816            0.3          0.1
+process last non-idle time                    14,402            1.0          0.1
+recursive calls                           56,674,288        3,936.5        550.5
+recursive cpu usage                        2,572,016          178.7         25.0
+redo blocks written                        7,076,213          491.5         68.7
+redo buffer allocation retries                 2,543            0.2          0.0
+redo entries                              11,762,315          817.0        114.3
+redo log space requests                        3,866            0.3          0.0
+redo log space wait time                     151,011           10.5          1.5
+redo ordering marks                                5            0.0          0.0
+redo size                              3,466,296,276      240,765.2     33,668.4
+redo synch time                               16,442            1.1          0.2
+redo synch writes                             66,770            4.6          0.7
+redo wastage                              43,607,896        3,029.0        423.6
+redo write time                               35,882            2.5          0.4
+redo writer latching time                        154            0.0          0.0
+redo writes                                  158,800           11.0          1.5
+rollback changes - undo records a              1,174            0.1          0.0
+rollbacks only - consistent read              12,120            0.8          0.1
+rows fetched via callback                 64,446,135        4,476.4        626.0
+Instance Activity Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+Statistic                                      Total     per Second    per Trans
+--------------------------------- ------------------ -------------- ------------
+session connect time                               0            0.0          0.0
+session logical reads                    771,451,565       53,584.2      7,493.2
+session pga memory                       201,273,400       13,980.2      1,955.0
+session pga memory max                 3,688,743,192      256,216.1     35,829.0
+session uga memory                   270,760,359,624   18,806,720.8  2,629,915.9
+session uga memory max                 7,101,262,736      493,246.0     68,975.1
+shared hash latch upgrades - no w         29,507,034        2,049.5        286.6
+shared hash latch upgrades - wait              2,219            0.2          0.0
+sorts (disk)                                     339            0.0          0.0
+sorts (memory)                             1,732,898          120.4         16.8
+sorts (rows)                             400,632,266       27,827.5      3,891.4
+summed dirty queue length                     48,192            3.4          0.5
+switch current to new buffer                 221,207           15.4          2.2
+table fetch by rowid                     141,115,575        9,801.7      1,370.7
+table fetch continued row                  2,258,325          156.9         21.9
+table scan blocks gotten                 422,084,953       29,317.6      4,099.7
+table scan rows gotten                 8,872,109,286      616,247.1     86,175.5
+table scans (direct read)                          4            0.0          0.0
+table scans (long tables)                     67,324            4.7          0.7
+table scans (short tables)                26,704,656        1,854.9        259.4
+transaction rollbacks                            950            0.1          0.0
+transaction tables consistent rea                 28            0.0          0.0
+transaction tables consistent rea            104,199            7.2          1.0
+user calls                                 3,810,651          264.7         37.0
+user commits                                 102,904            7.2          1.0
+user rollbacks                                    50            0.0          0.0
+workarea executions - multipass                    5            0.0          0.0
+workarea executions - onepass                    679            0.1          0.0
+workarea executions - optimal              2,092,594          145.4         20.3
+write clones created in backgroun                 25            0.0          0.0
+write clones created in foregroun              2,377            0.2          0.0
+          -------------------------------------------------------------
+Tablespace IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by IOs (Reads + Writes) desc
+
+Tablespace
+------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+COMMON_DATA
+    29,278,310   2,034    0.1     4.1       10,924        1    845,380    0.4
+EGRANTS_DATA
+     6,530,891     454    4.8     1.1        4,882        0      1,759    1.9
+GRANTSGEMS_DATA
+     2,978,562     207    0.2     4.4        1,704        0      4,800    0.3
+WIA_DATA
+     1,438,946     100    0.6     8.7          758        0          2  130.0
+WORKFLOW
+       625,300      43    0.3     4.7      191,610       13          5  510.0
+SPARQ_DATA
+       762,411      53    2.5     4.4       27,027        2      4,657    5.6
+TEMP02
+       337,711      23    0.7     2.4       45,263        3          0    0.0
+UNDOTBS02
+         6,851       0    5.0     1.0      198,737       14        227   84.3
+PRI_DATA
+       178,275      12    2.9     1.5        2,111        0      8,087    2.5
+HGCB_DATA
+       157,638      11    0.7     1.2          289        0     10,122    2.7
+YOUTHB_DATA
+       100,561       7    2.9     3.7          962        0         11   13.6
+NEG3_DATA
+        71,745       5    0.7     2.3          373        0         49   10.6
+SPARQ_INDEX
+        38,209       3   12.9     1.1        8,220        1        108   33.3
+SYSTEM
+        41,700       3    6.7     1.6        2,559        0         19  213.7
+WAIVERS_DATA
+        12,766       1    1.5     2.5          182        0          0    0.0
+PAO_DATA
+         5,884       0    4.9     1.1        5,881        0          0    0.0
+PAO_INDEX
+         3,208       0    8.8     1.0        4,968        0          0    0.0
+RAD_DATA
+         6,046       0    6.1     1.8          666        0         52   16.9
+NEG5_DATA
+         4,275       0    8.8     2.8          324        0          7    0.0
+NEG3_INDEX
+         4,331       0    0.9     1.4          184        0          1   30.0
+WIARPT_DATA
+         3,637       0    9.6     4.0          381        0          0    0.0
+EGRANTS_INDEX
+         3,383       0    5.5     1.9          273        0         49   24.7
+BENE_CHOICE_DATA
+         3,374       0    9.9     2.1          223        0        674   15.3
+PERFSTAT_DATA
+         2,183       0   14.5     1.0        1,043        0          0    0.0
+XDB
+         3,017       0    2.2     1.0          182        0          0    0.0
+JFAS_DATA
+         2,680       0    4.0     3.7          199        0          0    0.0
+Tablespace IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by IOs (Reads + Writes) desc
+
+Tablespace
+------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+TITLEIII_DATA
+         2,276       0    6.2     1.9          182        0          5   84.0
+GRANTSGEMS_INDEX
+         2,157       0    3.6     1.6          262        0         11    8.2
+AUD_DATA
+           718       0    3.1     1.0        1,438        0         89 ######
+INDIAN_DATA
+         1,578       0    1.3     2.9          201        0         11    2.7
+USERS
+         1,375       0    5.6     1.0          183        0          0    0.0
+COMMON_INDEX
+         1,087       0   10.1     1.2          245        0          0    0.0
+CWMLITE
+         1,141       0    3.0     1.0          182        0          0    0.0
+AUD_INDEX
+           543       0    3.5     1.0          754        0          3   13.3
+OGCM_DATA
+         1,092       0    8.2     1.0          182        0          0    0.0
+DRSYS
+           960       0    5.8     1.1          247        0          0    0.0
+BRIOV8_DATA
+           997       0    6.2     1.0          182        0          0    0.0
+TAA_DATA
+           650       0    4.5     1.2          454        0          0    0.0
+PERS_DATA
+           904       0    9.4     1.1          184        0          0    0.0
+RAD_INDEX
+           512       0    6.7     1.0          361        0          0    0.0
+CALMAS_DATA
+           653       0    1.5     1.9          182        0          0    0.0
+DRVS_DATA
+           597       0    1.8     1.0          182        0          0    0.0
+ODM
+           580       0    2.8     1.0          182        0          0    0.0
+WIA_INDEX
+           518       0    2.7     1.0          236        0          0    0.0
+OGCM_INDEX
+           563       0    2.6     1.0          183        0          0    0.0
+PAPILOT_DATA
+           564       0    1.6     1.0          182        0          0    0.0
+WAIVERS_INDEX
+           544       0    2.2     1.4          183        0          0    0.0
+OWB_DW_DATA
+           509       0    0.1     1.0          182        0          0    0.0
+DRVS_INDEX
+           501       0    0.7     1.0          182        0          0    0.0
+NEG5_INDEX
+           497       0    0.4     1.0          182        0          0    0.0
+TITLE3_INDEX
+           467       0    1.6     1.0          183        0          0    0.0
+MIGRANT_DATA
+           465       0    3.5     1.8          182        0          3    0.0
+Tablespace IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by IOs (Reads + Writes) desc
+
+Tablespace
+------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+TAA_INDEX
+           457       0    1.1     1.0          190        0          0    0.0
+TITLEXII_DATA
+           461       0    0.2     1.0          182        0          0    0.0
+PRI_TEMP
+           454       0    0.2     1.0          182        0          0    0.0
+CBO_INDEX
+           451       0    1.8     1.0          183        0          0    0.0
+ISTOREWEB_INDEX
+           451       0    3.9     1.0          183        0          0    0.0
+OWB_DATAPROFILE
+           448       0    0.0     1.0          182        0          0    0.0
+CRIS_DATA
+           447       0    0.2     1.0          182        0          0    0.0
+LOGMNRTS
+           446       0    1.3     1.0          182        0          0    0.0
+TITLEIII_INDEX
+           445       0    2.7     1.0          183        0          0    0.0
+BRIOV8_INDEX
+           445       0    0.3     1.0          182        0          0    0.0
+WTW_DATA
+           443       0    5.0     1.0          183        0          0    0.0
+ISTOREWEB_DATA
+           440       0    6.5     1.0          182        0          0    0.0
+TITLEII_INDEX
+           429       0    2.5     1.1          183        0          0    0.0
+WTW_INDEX
+           430       0    1.3     1.0          182        0          0    0.0
+PERS_INDEX
+           423       0    4.4     1.0          183        0          0    0.0
+WIARPT_INDEX
+           399       0    1.8     1.0          183        0          0    0.0
+INDIAN_INDEX
+           387       0    2.6     1.1          183        0          0    0.0
+TOOLS
+           386       0    2.8     1.2          183        0          0    0.0
+TITLEII_DATA
+           370       0    4.9     1.2          182        0          0    0.0
+MIGRANT_INDEX
+           364       0    2.2     1.0          183        0          0    0.0
+BRIO_INDEX
+           359       0    1.3     1.0          183        0          0    0.0
+SCSEP_DATA
+           357       0    5.7     1.5          182        0          0    0.0
+SCSEP_INDEX
+           346       0    1.2     1.0          183        0          0    0.0
+CALMAS_INDEX
+           344       0    0.9     1.0          183        0          0    0.0
+REQ_DATA
+           341       0    6.2     1.0          182        0          0    0.0
+GRANTS_DATA
+           339       0    4.4     1.0          182        0          0    0.0
+Tablespace IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by IOs (Reads + Writes) desc
+
+Tablespace
+------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+CONFIGMAN_INDEX
+           336       0    0.8     1.0          183        0          0    0.0
+INTRANET_DATA
+           335       0    1.5     1.1          182        0          1    0.0
+SESA_INDEX
+           334       0    0.7     1.0          183        0          0    0.0
+REQ_INDEX
+           332       0    0.7     1.0          183        0          0    0.0
+INTRANET_INDEX
+           331       0    0.8     1.0          183        0          0    0.0
+GTS_INDEX
+           478       0    7.3     1.0            0        0          0    0.0
+BRIO_DATA
+           284       0    9.5     1.0          182        0          0    0.0
+TITLE3_DATA
+           279       0    3.2     1.0          182        0          0    0.0
+CBO_DATA
+           245       0    2.1     1.0          182        0          0    0.0
+CONFIGMAN_DATA
+           241       0    2.9     1.0          182        0          0    0.0
+GEMS_DATA
+           416       0    9.4     1.1            0        0          0    0.0
+GTS_DATA
+           414       0   16.5     1.0            0        0          0    0.0
+ETADBA_DATA
+           188       0    1.8     1.0          182        0          0    0.0
+SESA_DATA
+           188       0    1.4     1.0          182        0          0    0.0
+GRANTS_INDEX
+            47       0    4.3     1.0            0        0          0    0.0
+GEMS_INDEX
+            34       0   10.3     1.0            0        0          0    0.0
+CLOSEOUT_DATA
+             6       0    6.7     1.0            0        0          0    0.0
+          -------------------------------------------------------------
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+AUD_DATA                 /oraprod07/u02/oradata/etadb3/aud_data01.dbf
+           718       0    3.1     1.0        1,438        0         89 ######
+
+AUD_INDEX                /oraprod07/u03/oradata/etadb3/aud_index01.dbf
+           543       0    3.5     1.0          754        0          3   13.3
+
+BENE_CHOICE_DATA         /oraprod07/u02/oradata/etadb3/bene_choice_data01.dbf
+         3,374       0    9.9     2.1          223        0        674   15.3
+
+BRIOV8_DATA              /oraprod07/u02/oradata/etadb3/briov8_data.dbf
+           997       0    6.2     1.0          182        0          0
+
+BRIOV8_INDEX             /oraprod07/u03/oradata/etadb3/briov8_index.dbf
+           445       0    0.3     1.0          182        0          0
+
+BRIO_DATA                /oraprod07/u02/oradata/etadb3/BRIO_data01.dbf
+           284       0    9.5     1.0          182        0          0
+
+BRIO_INDEX               /oraprod07/u03/oradata/etadb3/BRIO_index01.dbf
+           359       0    1.3     1.0          183        0          0
+
+CALMAS_DATA              /oraprod07/u02/oradata/etadb3/CALMAS_data01.dbf
+           653       0    1.5     1.9          182        0          0
+
+CALMAS_INDEX             /oraprod07/u03/oradata/etadb3/CALMAS_index01.dbf
+           344       0    0.9     1.0          183        0          0
+
+CBO_DATA                 /oraprod07/u02/oradata/etadb3/CBO_data01.dbf
+           245       0    2.1     1.0          182        0          0
+
+CBO_INDEX                /oraprod07/u03/oradata/etadb3/CBO_index01.dbf
+           451       0    1.8     1.0          183        0          0
+
+CLOSEOUT_DATA            /oraprod07/u02/oradata/etadb3/CLOSEOUT_DATA.dbf
+             6       0    6.7     1.0            0        0          0
+
+COMMON_DATA              /oraprod07/u02/oradata/etadb3/COMMON_data01.dbf
+    29,278,310   2,034    0.1     4.1       10,924        1    845,380    0.4
+
+COMMON_INDEX             /oraprod07/u03/oradata/etadb3/COMMON_index01.dbf
+         1,087       0   10.1     1.2          245        0          0
+
+CONFIGMAN_DATA           /oraprod07/u02/oradata/etadb3/CONFIGMAN_data01.dbf
+           241       0    2.9     1.0          182        0          0
+
+CONFIGMAN_INDEX          /oraprod07/u03/oradata/etadb3/CONFIGMAN_index01.dbf
+           336       0    0.8     1.0          183        0          0
+
+CRIS_DATA                /oraprod07/u02/oradata/etadb3/CRIS_DATA.dbf
+           447       0    0.2     1.0          182        0          0
+
+CWMLITE                  /oraprod07/u02/oradata/etadb3/cwmlite01.dbf
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+         1,141       0    3.0     1.0          182        0          0
+
+DRSYS                    /oraprod07/u02/oradata/etadb3/drsys01.dbf
+           960       0    5.8     1.1          247        0          0
+
+DRVS_DATA                /oraprod07/u02/oradata/etadb3/drvs_data.dbf
+           597       0    1.8     1.0          182        0          0
+
+DRVS_INDEX               /oraprod07/u03/oradata/etadb3/drvs_index.dbf
+           501       0    0.7     1.0          182        0          0
+
+EGRANTS_DATA             /oraprod07/u02/oradata/etadb3/EGRANTS_DATA.dbf
+     1,954,610     136    4.3     1.2          598        0        491    2.9
+                         /oraprod07/u02/oradata/etadb3/egrants_data02.dbf
+     1,054,642      73    5.3     1.2          411        0        346    0.4
+                         /oraprod07/u02/oradata/etadb3/egrants_data03.dbf
+     1,678,658     117    4.9     1.1          339        0        422    1.7
+                         /oraprod07/u02/oradata/etadb3/egrants_data04.dbf
+     1,341,033      93    4.9     1.1        1,908        0        500    2.1
+                         /oraprod07/u02/oradata/etadb3/egrants_data05.dbf
+       501,948      35    5.8     1.0        1,626        0          0
+
+EGRANTS_INDEX            /oraprod07/u02/oradata/etadb3/EGRANTS_INDEX.dbf
+         3,383       0    5.5     1.9          273        0         49   24.7
+
+ETADBA_DATA              /oraprod07/u02/oradata/etadb3/ETADBA_DATA1.dbf
+           188       0    1.8     1.0          182        0          0
+
+GEMS_DATA                /oraprod07/u02/oradata/etadb3/GEMS_data01.dbf
+           416       0    9.4     1.1            0        0          0
+
+GEMS_INDEX               /oraprod07/u03/oradata/etadb3/GEMS_index01.dbf
+            34       0   10.3     1.0            0        0          0
+
+GRANTSGEMS_DATA          /oraprod07/u02/oradata/etadb3/GRANTSGEMS_DATA.dbf
+     2,978,562     207    0.2     4.4        1,704        0      4,800    0.3
+
+GRANTSGEMS_INDEX         /oraprod07/u03/oradata/etadb3/GRANTSGEMS_INDEX.dbf
+         2,157       0    3.6     1.6          262        0         11    8.2
+
+GRANTS_DATA              /oraprod07/u02/oradata/etadb3/grants_data.dbf
+           339       0    4.4     1.0          182        0          0
+
+GRANTS_INDEX             /oraprod07/u03/oradata/etadb3/grants_index.dbf
+            47       0    4.3     1.0            0        0          0
+
+GTS_DATA                 /oraprod07/u02/oradata/etadb3/GTS_data01.dbf
+           414       0   16.5     1.0            0        0          0
+
+GTS_INDEX                /oraprod07/u03/oradata/etadb3/GTS_index01.dbf
+           478       0    7.3     1.0            0        0          0
+
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+HGCB_DATA                /oraprod07/u03/oradata/etadb3/HGCB_DATA.dbf
+       157,638      11    0.7     1.2          289        0     10,122    2.7
+
+INDIAN_DATA              /oraprod07/u02/oradata/etadb3/INDIAN_data01.dbf
+         1,578       0    1.3     2.9          201        0         11    2.7
+
+INDIAN_INDEX             /oraprod07/u03/oradata/etadb3/INDIAN_index01.dbf
+           387       0    2.6     1.1          183        0          0
+
+INTRANET_DATA            /oraprod07/u02/oradata/etadb3/INTRANET_data01.dbf
+           335       0    1.5     1.1          182        0          1    0.0
+
+INTRANET_INDEX           /oraprod07/u03/oradata/etadb3/INTRANET_index01.dbf
+           331       0    0.8     1.0          183        0          0
+
+ISTOREWEB_DATA           /oraprod07/u02/oradata/etadb3/ISTOREWEB_data01.dbf
+           440       0    6.5     1.0          182        0          0
+
+ISTOREWEB_INDEX          /oraprod07/u03/oradata/etadb3/ISTOREWEB_index01.dbf
+           451       0    3.9     1.0          183        0          0
+
+JFAS_DATA                /oraprod07/u02/oradata/etadb3/JFAS_DATA.dbf
+         2,680       0    4.0     3.7          199        0          0
+
+LOGMNRTS                 /oraprod07/u01/app/oracle/product/9.2/dbs/logmnrts_E
+           446       0    1.3     1.0          182        0          0
+
+MIGRANT_DATA             /oraprod07/u02/oradata/etadb3/MIGRANT_data01.dbf
+           465       0    3.5     1.8          182        0          3    0.0
+
+MIGRANT_INDEX            /oraprod07/u03/oradata/etadb3/MIGRANT_index01.dbf
+           364       0    2.2     1.0          183        0          0
+
+NEG3_DATA                /oraprod07/u02/oradata/etadb3/NEG3_DATA.dbf
+        71,745       5    0.7     2.3          373        0         49   10.6
+
+NEG3_INDEX               /oraprod07/u03/oradata/etadb3/NEG3_INDEX.dbf
+         4,331       0    0.9     1.4          184        0          1   30.0
+
+NEG5_DATA                /oraprod07/u02/oradata/etadb3/NEG5_DATA.dbf
+         4,275       0    8.8     2.8          324        0          7    0.0
+
+NEG5_INDEX               /oraprod07/u02/oradata/etadb3/NEG5_INDEX.dbf
+           497       0    0.4     1.0          182        0          0
+
+ODM                      /oraprod07/u02/oradata/etadb3/odm01.dbf
+           580       0    2.8     1.0          182        0          0
+
+OGCM_DATA                /oraprod07/u02/oradata/etadb3/OGCM_data01.dbf
+         1,092       0    8.2     1.0          182        0          0
+
+OGCM_INDEX               /oraprod07/u03/oradata/etadb3/OGCM_index01.dbf
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+           563       0    2.6     1.0          183        0          0
+
+OWB_DATAPROFILE          /oraprod07/u02/oradata/etadb3/OWB_DATAPROFILE.dbf
+           448       0    0.0     1.0          182        0          0
+
+OWB_DW_DATA              /oraprod07/u02/oradata/etadb3/OWB_DW_DATA.dbf
+           509       0    0.1     1.0          182        0          0
+
+PAO_DATA                 /oraprod07/u02/oradata/etadb3/PAO_DATA.dbf
+         5,884       0    4.9     1.1        5,881        0          0
+
+PAO_INDEX                /oraprod07/u02/oradata/etadb3/PAO_INDEX.dbf
+         3,208       0    8.8     1.0        4,968        0          0
+
+PAPILOT_DATA             /oraprod07/u02/oradata/etadb3/PAPILOT_DATA.dbf
+           564       0    1.6     1.0          182        0          0
+
+PERFSTAT_DATA            /oraprod07/u02/oradata/etadb3/PERFSTAT_DATA.dbf
+         2,183       0   14.5     1.0        1,043        0          0
+
+PERS_DATA                /oraprod07/u02/oradata/etadb3/PERS_data01.dbf
+           904       0    9.4     1.1          184        0          0
+
+PERS_INDEX               /oraprod07/u03/oradata/etadb3/PERS_index01.dbf
+           423       0    4.4     1.0          183        0          0
+
+PRI_DATA                 /oraprod07/u02/oradata/etadb3/PRI_DATA01.dbf
+       178,275      12    2.9     1.5        2,111        0      8,087    2.5
+
+PRI_TEMP                 /oraprod07/u02/oradata/etadb3/PRI_TEMP.dbf
+           454       0    0.2     1.0          182        0          0
+
+RAD_DATA                 /oraprod07/u02/oradata/etadb3/RAD_DATA.dbf
+         6,046       0    6.1     1.8          666        0         52   16.9
+
+RAD_INDEX                /oraprod07/u03/oradata/etadb3/RAD_INDEX.dbf
+           512       0    6.7     1.0          361        0          0
+
+REQ_DATA                 /oraprod07/u02/oradata/etadb3/REQ_data01.dbf
+           341       0    6.2     1.0          182        0          0
+
+REQ_INDEX                /oraprod07/u03/oradata/etadb3/REQ_index01.dbf
+           332       0    0.7     1.0          183        0          0
+
+SCSEP_DATA               /oraprod07/u02/oradata/etadb3/SCSEP_data01.dbf
+           357       0    5.7     1.5          182        0          0
+
+SCSEP_INDEX              /oraprod07/u03/oradata/etadb3/SCSEP_index01.dbf
+           346       0    1.2     1.0          183        0          0
+
+SESA_DATA                /oraprod07/u02/oradata/etadb3/SESA_data01.dbf
+           188       0    1.4     1.0          182        0          0
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+
+SESA_INDEX               /oraprod07/u03/oradata/etadb3/SESA_index01.dbf
+           334       0    0.7     1.0          183        0          0
+
+SPARQ_DATA               /oraprod07/u02/oradata/etadb3/sparq_data.dbf
+       762,411      53    2.5     4.4       27,027        2      4,657    5.6
+
+SPARQ_INDEX              /oraprod07/u03/oradata/etadb3/sparq_index.dbf
+        38,209       3   12.9     1.1        8,220        1        108   33.3
+
+SYSTEM                   /oraprod07/u02/oradata/etadb3/system01.dbf
+        41,700       3    6.7     1.6        2,559        0         19  213.7
+
+TAA_DATA                 /oraprod07/u02/oradata/etadb3/taa_data.dbf
+           650       0    4.5     1.2          454        0          0
+
+TAA_INDEX                /oraprod07/u03/oradata/etadb3/taa_index.dbf
+           457       0    1.1     1.0          190        0          0
+
+TEMP02                   /oraprod07/u02/oradata/etadb3/TEMP02.dbf
+       337,711      23    0.7     2.4       45,263        3          0
+
+TITLE3_DATA              /oraprod07/u02/oradata/etadb3/TITLE3_data01.dbf
+           279       0    3.2     1.0          182        0          0
+
+TITLE3_INDEX             /oraprod07/u03/oradata/etadb3/TITLE3_index01.dbf
+           467       0    1.6     1.0          183        0          0
+
+TITLEIII_DATA            /oraprod07/u02/oradata/etadb3/TITLEIII_data01.dbf
+         2,276       0    6.2     1.9          182        0          5   84.0
+
+TITLEIII_INDEX           /oraprod07/u03/oradata/etadb3/TITLEIII_index01.dbf
+           445       0    2.7     1.0          183        0          0
+
+TITLEII_DATA             /oraprod07/u02/oradata/etadb3/TITLEII_data01.dbf
+           370       0    4.9     1.2          182        0          0
+
+TITLEII_INDEX            /oraprod07/u03/oradata/etadb3/TITLEII_index01.dbf
+           429       0    2.5     1.1          183        0          0
+
+TITLEXII_DATA            /oraprod07/u02/oradata/etadb3/TITLEXII_DATA.dbf
+           461       0    0.2     1.0          182        0          0
+
+TOOLS                    /oraprod07/u02/oradata/etadb3/TOOLS01.dbf
+           386       0    2.8     1.2          183        0          0
+
+UNDOTBS02                /oraprod07/u05/oradata/etadb3/undotbs02.dbf
+         6,851       0    5.0     1.0      198,737       14        227   84.3
+
+USERS                    /oraprod07/u02/oradata/etadb3/USERS01.dbf
+         1,375       0    5.6     1.0          183        0          0
+
+File IO Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->ordered by Tablespace, File
+
+Tablespace               Filename
+------------------------ ----------------------------------------------------
+                 Av      Av     Av                    Av        Buffer Av Buf
+         Reads Reads/s Rd(ms) Blks/Rd       Writes Writes/s      Waits Wt(ms)
+-------------- ------- ------ ------- ------------ -------- ---------- ------
+WAIVERS_DATA             /oraprod07/u02/oradata/etadb3/WAIVERS_data01.dbf
+        12,766       1    1.5     2.5          182        0          0
+
+WAIVERS_INDEX            /oraprod07/u03/oradata/etadb3/WAIVERS_index01.dbf
+           544       0    2.2     1.4          183        0          0
+
+WIARPT_DATA              /oraprod07/u02/oradata/etadb3/WIARPT_data01.dbf
+         3,096       0    9.6     4.5          187        0          0
+                         /oraprod07/u02/oradata/etadb3/wiarpt_data02.dbf
+           541       0    9.2     1.1          194        0          0
+
+WIARPT_INDEX             /oraprod07/u03/oradata/etadb3/WIARPT_index01.dbf
+           399       0    1.8     1.0          183        0          0
+
+WIA_DATA                 /oraprod07/u02/oradata/etadb3/WIA_data01.dbf
+     1,438,946     100    0.6     8.7          758        0          2  130.0
+
+WIA_INDEX                /oraprod07/u03/oradata/etadb3/WIA_index01.dbf
+           518       0    2.7     1.0          236        0          0
+
+WORKFLOW                 /oraprod07/u02/oradata/etadb3/workflow.DBF
+       625,300      43    0.3     4.7      191,610       13          5  510.0
+
+WTW_DATA                 /oraprod07/u02/oradata/etadb3/WTW_data01.dbf
+           443       0    5.0     1.0          183        0          0
+
+WTW_INDEX                /oraprod07/u03/oradata/etadb3/WTW_index01.dbf
+           430       0    1.3     1.0          182        0          0
+
+XDB                      /oraprod07/u02/oradata/etadb3/xdb01.dbf
+         3,017       0    2.2     1.0          182        0          0
+
+YOUTHB_DATA              /oraprod07/u02/oradata/etadb3/youthb_data01.dbf
+       100,561       7    2.9     3.7          962        0         11   13.6
+
+          -------------------------------------------------------------
+Buffer Pool Statistics for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> Standard block size Pools  D: default,  K: keep,  R: recycle
+-> Default Pools for other block sizes: 2k, 4k, 8k, 16k, 32k
+
+                                                           Free    Write  Buffer
+     Number of Cache      Buffer    Physical   Physical  Buffer Complete    Busy
+P      Buffers Hit %        Gets       Reads     Writes   Waits    Waits   Waits
+--- ---------- ----- ----------- ----------- ---------- ------- --------  ------
+D      136,965  79.8 769,377,010 155,490,181    462,511       0        0 875,798
+          -------------------------------------------------------------
+
+Instance Recovery Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> B: Begin snapshot,  E: End snapshot
+
+  Targt Estd                                    Log File   Log Ckpt   Log Ckpt
+  MTTR  MTTR   Recovery    Actual     Target      Size     Timeout    Interval
+   (s)   (s)   Estd IOs  Redo Blks  Redo Blks  Redo Blks  Redo Blks  Redo Blks
+- ----- ----- ---------- ---------- ---------- ---------- ---------- ----------
+B   176    22       1153      21373       9216       9216      20475
+E   176    21        647      23661       9216       9216      23661
+          -------------------------------------------------------------
+
+Buffer Pool Advisory for DB: ETADB3  Instance: etadb3  End Snap: 48889
+-> Only rows with estimated physical reads >0 are displayed
+-> ordered by Block Size, Buffers For Estimate (default block size first)
+
+        Size for  Size      Buffers for  Est Physical          Estimated
+P   Estimate (M) Factr         Estimate   Read Factor     Physical Reads
+--- ------------ ----- ---------------- ------------- ------------------
+D            112    .1           13,895         13.80     17,643,005,409
+D            224    .2           27,790          7.20      9,206,115,183
+D            336    .3           41,685          4.93      6,295,773,193
+D            448    .4           55,580          3.61      4,607,600,932
+D            560    .5           69,475          2.78      3,551,455,320
+D            672    .6           83,370          2.24      2,860,594,614
+D            784    .7           97,265          1.84      2,352,237,980
+D            896    .8          111,160          1.48      1,888,107,462
+D          1,008    .9          125,055          1.19      1,521,291,331
+D          1,104   1.0          136,965          1.00      1,278,090,454
+D          1,120   1.0          138,950          0.97      1,243,149,005
+D          1,232   1.1          152,845          0.80      1,027,910,808
+D          1,344   1.2          166,740          0.68        875,154,651
+D          1,456   1.3          180,635          0.60        769,140,707
+D          1,568   1.4          194,530          0.54        686,190,361
+D          1,680   1.5          208,425          0.48        617,151,217
+D          1,792   1.6          222,320          0.44        565,794,263
+D          1,904   1.7          236,215          0.41        526,610,874
+D          2,016   1.8          250,110          0.39        495,092,464
+D          2,128   1.9          264,005          0.37        467,674,876
+D          2,240   2.0          277,900          0.35        442,108,239
+          -------------------------------------------------------------
+
+
+Buffer wait Statistics for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> ordered by wait time desc, waits desc
+
+                                 Tot Wait    Avg
+Class                    Waits   Time (s) Time (ms)
+------------------ ----------- ---------- ---------
+data block             874,606        538         1
+undo header                213         19        88
+undo block                  14          0        34
+segment header              14          0         3
+1st level bmb                1          0         0
+          -------------------------------------------------------------
+PGA Aggr Target Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> B: Begin snap   E: End snap (rows dentified with B or E contain data
+   which is absolute i.e. not diffed over the interval)
+-> PGA cache hit % - percentage of W/A (WorkArea) data processed only in-memory
+-> Auto PGA Target - actual workarea memory target
+-> W/A PGA Used    - amount of memory used for all Workareas (manual + auto)
+-> %PGA W/A Mem    - percentage of PGA memory allocated to workareas
+-> %Auto W/A Mem   - percentage of workarea memory controlled by Auto Mem Mgmt
+-> %Man W/A Mem    - percentage of workarea memory under manual control
+
+PGA Cache Hit % W/A MB Processed Extra W/A MB Read/Written
+--------------- ---------------- -------------------------
+           93.7          113,157                     7,662
+
+Warning:  pga_aggregate_target was set too low for current workload, as this
+          value was exceeded during this interval.  Use the PGA Advisory view
+          to help identify a different value for pga_aggregate_target.
+
+                                             %PGA  %Auto   %Man
+  PGA Aggr  Auto PGA   PGA Mem    W/A PGA    W/A    W/A    W/A   Global Mem
+  Target(M) Target(M)  Alloc(M)   Used(M)    Mem    Mem    Mem    Bound(K)
+- --------- --------- ---------- ---------- ------ ------ ------ ----------
+B       240        82      278.8       16.6    6.0  100.0     .0     12,288
+E       240        60      302.4       10.2    3.4  100.0     .0     12,288
+          -------------------------------------------------------------
+
+PGA Aggr Target Histogram for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> Optimal Executions are purely in-memory operations
+
+    Low    High
+Optimal Optimal    Total Execs Optimal Execs 1-Pass Execs M-Pass Execs
+------- ------- -------------- ------------- ------------ ------------
+     8K     16K      1,956,986     1,956,986            0            0
+    16K     32K         24,675        24,675            0            0
+    32K     64K          3,932         3,932            0            0
+    64K    128K         10,616        10,616            0            0
+   128K    256K         19,295        19,295            0            0
+   256K    512K            256           256            0            0
+   512K   1024K         46,678        46,678            0            0
+     1M      2M         28,334        28,318           16            0
+     2M      4M          1,190         1,167           21            2
+     4M      8M            805           782           23            0
+     8M     16M            864           247          615            2
+    16M     32M              3             0            3            0
+    32M     64M              2             0            1            1
+          -------------------------------------------------------------
+
+PGA Memory Advisory for DB: ETADB3  Instance: etadb3  End Snap: 48889
+-> When using Auto Memory Mgmt, minimally choose a pga_aggregate_target value
+   where Estd PGA Overalloc Count is 0
+
+                                       Estd Extra    Estd PGA   Estd PGA
+PGA Target    Size           W/A MB   W/A MB Read/      Cache  Overalloc
+  Est (MB)   Factr        Processed Written to Disk     Hit %      Count
+---------- ------- ---------------- ---------------- -------- ----------
+        30     0.1      1,113,045.4        322,885.6     78.0     16,756
+        60     0.3      1,113,045.4        322,402.3     78.0     16,717
+       120     0.5      1,113,045.4        252,144.1     82.0     11,592
+       180     0.8      1,113,045.4         60,102.0     95.0      1,514
+       240     1.0      1,113,045.4         17,055.8     98.0      1,145
+       288     1.2      1,113,045.4          2,120.6    100.0      1,144
+       336     1.4      1,113,045.4          1,922.6    100.0      1,143
+       384     1.6      1,113,045.4          1,650.7    100.0      1,140
+       432     1.8      1,113,045.4          1,548.3    100.0      1,139
+       480     2.0      1,113,045.4          1,391.9    100.0      1,138
+       720     3.0      1,113,045.4            786.7    100.0          0
+       960     4.0      1,113,045.4            252.5    100.0          0
+     1,440     6.0      1,113,045.4            252.5    100.0          0
+     1,920     8.0      1,113,045.4              8.7    100.0          0
+          -------------------------------------------------------------
+Enqueue activity for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> Enqueue stats gathered prior to 9i should not be compared with 9i data
+-> ordered by Wait Time desc, Waits desc
+
+                                                        Avg Wt         Wait
+Eq     Requests    Succ Gets Failed Gets       Waits   Time (ms)     Time (s)
+-- ------------ ------------ ----------- ----------- ------------- ------------
+TS           92           92           0           1    356,363.00          356
+CF       15,314       15,231          83          44        196.25            9
+SQ        1,785        1,785           0          16        451.56            7
+TX      172,332      172,333           0          46        105.41            5
+US       46,629       46,629           0          43         26.60            1
+CU      129,976      129,976           0           2          4.50            0
+TC            5            5           0           1          4.00            0
+          -------------------------------------------------------------
+Rollback Segment Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->A high value for "Pct Waits" suggests more rollback segments may be required
+->RBS stats may not be accurate between begin and end snaps when using Auto Undo
+  managment, as RBS may be dynamically created and dropped as needed
+
+        Trans Table       Pct   Undo Bytes
+RBS No      Gets        Waits     Written        Wraps  Shrinks  Extends
+------ -------------- ------- --------------- -------- -------- --------
+     0        1,068.0    0.00           7,448        0        0        0
+     1       32,198.0    0.02      92,041,170        2        1        0
+     2       25,057.0    0.08      75,665,636        9        3        7
+     3       16,436.0    0.02      38,231,034        8        2        0
+     4       17,334.0    0.03      32,707,760        4        1        2
+     5       24,698.0    0.06      89,969,080       11        1        7
+     6       11,617.0    0.00       3,837,662        1        0        0
+     7       20,300.0    0.12      62,164,556       14        3       11
+     8       16,890.0    0.00      34,292,752        4        2        3
+     9       16,413.0    0.01      32,586,616        4        0        3
+    10       23,178.0    0.03      89,824,940       11        2        9
+    11       28,776.0    0.00     118,708,272       16        0        3
+    12       33,064.0    0.05      93,107,500       16        2       14
+    13       29,582.0    0.03      64,438,460        8        1        7
+    14       36,985.0    0.03     102,269,078       18        2       15
+          -------------------------------------------------------------
+Rollback Segment Storage for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->Optimal Size should be larger than Avg Active
+
+RBS No    Segment Size      Avg Active    Optimal Size    Maximum Size
+------ --------------- --------------- --------------- ---------------
+     0         385,024          11,632                         385,024
+     1     956,424,192      48,635,669                   2,621,562,880
+     2     511,827,968      21,675,414                   1,212,276,736
+     3     465,690,624      13,541,208                     658,628,608
+     4     542,236,672      17,324,597                     657,580,032
+     5     628,219,904      17,856,640                     698,474,496
+     6     422,699,008      17,670,186                     765,583,360
+     7     786,554,880      10,262,109                     865,198,080
+     8     597,811,200      18,358,331                     708,960,256
+     9     475,127,808      14,219,522                     663,871,488
+    10     622,977,024      19,470,102                     763,486,208
+    11     388,096,000      16,238,269                     388,096,000
+    12     549,576,704      13,225,392                     583,131,136
+    13     600,956,928      12,401,336                     634,511,360
+    14     655,482,880      14,590,175                     655,482,880
+          -------------------------------------------------------------
+Undo Segment Summary for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> Undo segment block stats:
+-> uS - unexpired Stolen,   uR - unexpired Released,   uU - unexpired reUsed
+-> eS - expired   Stolen,   eR - expired   Released,   eU - expired   reUsed
+
+Undo           Undo        Num  Max Qry     Max Tx Snapshot Out of uS/uR/uU/
+ TS#         Blocks      Trans  Len (s)   Concurcy  Too Old  Space eS/eR/eU
+---- -------------- ---------- -------- ---------- -------- ------ -------------
+ 111        196,646 ##########   22,564          4        0      0 0/0/0/0/0/0
+          -------------------------------------------------------------
+
+
+Undo Segment Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> ordered by Time desc
+
+                     Undo      Num Max Qry   Max Tx  Snap   Out of uS/uR/uU/
+End Time           Blocks    Trans Len (s)    Concy Too Old  Space eS/eR/eU
+------------ ------------ -------- ------- -------- ------- ------ -------------
+16-Dec 16:06        7,893 ########   2,492        2       0      0 0/0/0/0/0/0
+16-Dec 15:56        7,672 ########   1,888        2       0      0 0/0/0/0/0/0
+16-Dec 15:46        7,945 ########   1,292        3       0      0 0/0/0/0/0/0
+16-Dec 15:36        8,220 ########     690        4       0      0 0/0/0/0/0/0
+16-Dec 15:26        8,140 ########  22,564        2       0      0 0/0/0/0/0/0
+16-Dec 15:16        7,829 ########   8,003        2       0      0 0/0/0/0/0/0
+16-Dec 15:06        7,589 ########   7,394        1       0      0 0/0/0/0/0/0
+16-Dec 14:56        7,670 ########   6,798        1       0      0 0/0/0/0/0/0
+16-Dec 14:46        7,829 ########   6,203        2       0      0 0/0/0/0/0/0
+16-Dec 14:36        7,790 ########   5,592        2       0      0 0/0/0/0/0/0
+16-Dec 14:26        7,564 ########   5,003        4       0      0 0/0/0/0/0/0
+16-Dec 14:16        7,844 ########   4,400        2       0      0 0/0/0/0/0/0
+16-Dec 14:06        7,689 ########   3,802        1       0      0 0/0/0/0/0/0
+16-Dec 13:56        7,611 ########   3,203        4       0      0 0/0/0/0/0/0
+16-Dec 13:46        7,419 ########   2,602        1       0      0 0/0/0/0/0/0
+16-Dec 13:36        7,620 ########   2,003        1       0      0 0/0/0/0/0/0
+16-Dec 13:26        7,381 ########   1,403        1       0      0 0/0/0/0/0/0
+16-Dec 13:16        7,467 ########     803        1       0      0 0/0/0/0/0/0
+16-Dec 13:06        8,713 ########  14,053        1       0      0 0/0/0/0/0/0
+16-Dec 12:56        8,860 ########  13,218        1       0      0 0/0/0/0/0/0
+16-Dec 12:46        8,287 ########  12,617        3       0      0 0/0/0/0/0/0
+16-Dec 12:36       12,062 ########  12,018        1       0      0 0/0/0/0/0/0
+16-Dec 12:26        4,085 ########  11,418        2       0      0 0/0/0/0/0/0
+16-Dec 12:16        7,557 ########  10,817        1       0      0 0/0/0/0/0/0
+16-Dec 12:06        7,910 ########  10,217        1       0      0 0/0/0/0/0/0
+          -------------------------------------------------------------
+Latch Activity for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+Consistent RBA                  159,528    0.0    0.0      0            0
+FAL request queue                   433    0.0             0            0
+FIB s.o chain latch               5,564    0.0             0            0
+FOB s.o list latch               35,786    0.0             0            0
+SQL memory manager latch            152    0.0             0        4,774    0.0
+SQL memory manager worka        928,725    0.0    0.0      0            0
+X$KSFQP                               7    0.0             0            0
+active checkpoint queue          27,591    1.4    0.0      0            0
+alert log latch                   2,888    0.0             0            0
+archive control                   3,442    0.0             0            0
+archive process latch             3,296    0.1    0.0      0            0
+begin backup scn array            3,029    0.0             0            0
+cache buffer handles            739,915    0.0    0.0      0            0
+cache buffers chains      1,585,481,301    0.4    0.0    700  307,523,813    0.0
+cache buffers lru chain       4,418,470    0.8    0.0      3  424,012,742    2.0
+channel handle pool latc         23,344    0.0             0            0
+channel operations paren         49,736    0.0    0.0      0            0
+checkpoint queue latch        4,534,728    0.0    0.0      0      457,798    0.0
+child cursor hash table         969,878    0.0    0.0      0            0
+commit callback allocati             74    0.0             0            0
+dictionary lookup                    71    0.0             0            0
+dml lock allocation             698,520    0.0    0.0      0            0
+dummy allocation                 22,570    0.0             0            0
+enqueue hash chains           2,034,346    0.0    0.1      0            0
+enqueues                      1,778,465    0.0    0.0      0            0
+event group latch                11,237    0.0             0            0
+file number translation               2    0.0             0            0
+global ctx hash table la        559,800    0.0             0            0
+global tx hash mapping          150,736    0.0             0            0
+hash table column usage           7,743    0.0             0   18,592,430    0.0
+hash table modification              63    0.0             0            0
+job workq parent latch                0                    0          127    2.4
+job_queue_processes para            294    0.0             0            0
+ktm global data                     701    0.0             0            0
+kwqit: protect wakeup ti            469    0.0             0            0
+lgwr LWN SCN                    159,362    0.0    0.0      0            0
+library cache               220,453,835    1.8    0.0    426      416,173    5.3
+library cache load lock         135,700    0.0    0.0      0            0
+library cache pin           160,214,549    0.6    0.0     78            0
+library cache pin alloca     47,090,791    0.2    0.0     14            0
+list of block allocation         40,414    0.0             0            0
+loader state object free        193,822    0.0    0.0      0            0
+longop free list parent              55    0.0             0           55    0.0
+message pool operations           1,504    0.0             0            0
+messages                        565,257    0.1    0.0      0            0
+mostly latch-free SCN           163,325    0.8    0.0      0            0
+multiblock read objects      70,725,631    1.2    0.0      2            0
+multiple dbwriter suspen              6    0.0             0            0
+ncodef allocation latch             231    0.0             0            0
+object stats modificatio         70,161    0.0             0            0
+Latch Activity for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->"Get Requests", "Pct Get Miss" and "Avg Slps/Miss" are statistics for
+  willing-to-wait latch get requests
+->"NoWait Requests", "Pct NoWait Miss" are for no-wait latch get requests
+->"Pct Misses" for both should be very close to 0.0
+
+                                           Pct    Avg   Wait                 Pct
+                              Get          Get   Slps   Time       NoWait NoWait
+Latch                       Requests      Miss  /Miss    (s)     Requests   Miss
+------------------------ -------------- ------ ------ ------ ------------ ------
+post/wait queue                  92,734    0.0    0.0      0       61,650    0.0
+process allocation               22,444    0.0             0       11,237    0.0
+process group creation           22,444    0.0             0            0
+redo allocation              12,095,984    0.1    0.0      1            0
+redo copy                            48    0.0             0   11,775,984    0.1
+redo writing                    514,575    0.0    0.0      0            0
+resumable state object               17    0.0             0            0
+row cache enqueue latch     115,943,178    0.4    0.0      1            0
+row cache objects           120,952,976    0.9    0.0     56       44,820    0.1
+sequence cache                  176,200    0.0    0.3      0            0
+session allocation           56,918,232    2.7    0.0    121            0
+session idle bit              8,620,095    0.0    0.0      0            0
+session switching                   240    0.0             0            0
+session timer                     4,785    0.0             0            0
+shared pool                 102,648,299    1.2    0.0     55            0
+sim partition latch                   0                    0       22,116    0.0
+simulator hash latch         48,350,386    0.0    0.0      0            0
+simulator lru latch           3,622,937    0.1    0.0      0    9,859,548    0.0
+sort extent pool                 11,342    0.0    0.0      0            0
+spilled msgs queues list            468    0.0             0            0
+temp lob duration state             328    0.0             0            0
+transaction allocation          861,403    0.0    0.0      0            0
+transaction branch alloc        150,964    0.0             0            0
+undo global data                656,235    0.0    0.0      0            5    0.0
+user lock                        52,310    0.0    0.0      0            0
+          -------------------------------------------------------------
+Latch Sleep breakdown for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> ordered by misses desc
+
+                                      Get                            Spin &
+Latch Name                       Requests      Misses      Sleeps Sleeps 1->4
+-------------------------- -------------- ----------- ----------- ------------
+cache buffers chains        1,585,481,301   6,339,798      67,677 6299321/1465
+                                                                  8/24675/1154
+                                                                  /0
+library cache                 220,453,835   3,878,733      59,226 3821880/5460
+                                                                  7/2130/116/0
+session allocation             56,918,232   1,513,675       8,887 1504893/8677
+                                                                  /105/0/0
+shared pool                   102,648,299   1,183,504      44,306 1141152/4045
+                                                                  1/1849/52/0
+row cache objects             120,952,976   1,043,553       3,764 1039818/3706
+                                                                  /29/0/0
+library cache pin             160,214,549     946,377       6,340 940062/6290/
+                                                                  25/0/0
+multiblock read objects        70,725,631     845,761         775 844999/749/1
+                                                                  3/0/0
+row cache enqueue latch       115,943,178     484,068         367 483702/365/1
+                                                                  /0/0
+library cache pin allocati     47,090,791      77,090         867 76229/855/6/
+                                                                  0/0
+cache buffers lru chain         4,418,470      33,430         286 33146/282/2/
+                                                                  0/0
+redo allocation                12,095,984      12,105          47 12058/47/0/0
+                                                                  /0
+simulator lru latch             3,622,937       3,037          33 3006/29/2/0/
+                                                                  0
+enqueues                        1,778,465         518           1 517/1/0/0/0
+simulator hash latch           48,350,386         497           1 496/1/0/0/0
+messages                          565,257         290           1 289/1/0/0/0
+session idle bit                8,620,095         277          12 270/2/5/0/0
+dml lock allocation               698,520         243           3 240/3/0/0/0
+enqueue hash chains             2,034,346         129           7 122/7/0/0/0
+cache buffer handles              739,915          93           1 92/1/0/0/0
+sequence cache                    176,200           6           2 4/2/0/0/0
+          -------------------------------------------------------------
+Latch Miss Sources for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> only latches with sleeps are shown
+-> ordered by name, sleeps desc
+
+                                                     NoWait              Waiter
+Latch Name               Where                       Misses     Sleeps   Sleeps
+------------------------ -------------------------- ------- ---------- --------
+cache buffer handles     kcbzfs                           0          1        1
+cache buffers chains     kcbgtcr: kslbegin excl           0     43,100   52,871
+cache buffers chains     kcbrls: kslbegin                 0     19,107   11,706
+cache buffers chains     kcbgtcr: fast path               0      1,218    1,476
+cache buffers chains     kcbzib: multi-block read:        0      1,188        0
+cache buffers chains     kcbzgb: scan from tail. no       0        944        0
+cache buffers chains     kcbzwb                           0        631      289
+cache buffers chains     kcbzib: finish free bufs         0        318      663
+cache buffers chains     kcbibr                           0        234       57
+cache buffers chains     kcbchg: kslbegin: bufs not       0        215      108
+cache buffers chains     kcbgcur: kslbegin                0        202      147
+cache buffers chains     kcbnew                           0        101      123
+cache buffers chains     kcbchg: kslbegin: call CR        0         83       67
+cache buffers chains     kcbxbh                           0         38        3
+cache buffers chains     kcbgtcr: kslbegin shared         0         35       14
+cache buffers chains     kcbgtcr                          0         19        0
+cache buffers chains     kcbget: pin buffer               0         11       13
+cache buffers chains     kcbnlc                           0          9        9
+cache buffers chains     kcbget: exchange rls             0          7        1
+cache buffers chains     kcbbic2                          0          5        3
+cache buffers chains     kcbnew_1                         0          5        3
+cache buffers chains     kcbbxsv                          0          4       12
+cache buffers chains     kcbget: exchange                 0          3        0
+cache buffers chains     kcbbic1                          0          2       20
+cache buffers lru chain  kcbzgb: multiple sets nowa #######        157        0
+cache buffers lru chain  kcbzar: KSLNBEGIN          #######         76        0
+cache buffers lru chain  kcbzgm                     #######         21        0
+cache buffers lru chain  kcbbiop: lru scan            2,363         19        0
+cache buffers lru chain  kcbibr                       8,860         11      221
+cache buffers lru chain  kcbbxsv: move to being wri      81          1        4
+cache buffers lru chain  kcbzgb: posted for free bu   7,975          1       49
+dml lock allocation      ktaiam                           0          2        3
+dml lock allocation      ktaidm                           0          1        0
+enqueue hash chains      ksqrcl                           0          4        3
+enqueue hash chains      ksqgtl3                          0          3        3
+enqueues                 ksqgel: create enqueue           0          1        0
+library cache            kglupc: child                    0     10,144    9,679
+library cache            kglpndl: child: before pro       0      8,382    9,421
+library cache            kglpnc: child                    0      7,848   12,982
+library cache            kglpnp: child                    0      5,771   12,665
+library cache            kgllkdl: child: cleanup          0      5,355    1,385
+library cache            kglpin: child: heap proces       0      2,732      306
+library cache            kglhdgn: child:                  0      1,597    7,521
+library cache            kglpndl: child: after proc       0      1,015      890
+library cache            kglhdgc: child:                  0        652      923
+library cache            kglget: child: KGLDSBRD          0        347    1,576
+library cache            kglobpn: child:                  0        303      219
+library cache            kgldte: child 0                  0        246      568
+library cache            kglic                            0        140       28
+library cache            kgldti: 2child                   0        128       72
+library cache            kglpin                           0        108      188
+library cache            kglhdiv: child                   0         52        0
+library cache            kglobld                          0         18       52
+Latch Miss Sources for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+-> only latches with sleeps are shown
+-> ordered by name, sleeps desc
+
+                                                     NoWait              Waiter
+Latch Name               Where                       Misses     Sleeps   Sleeps
+------------------------ -------------------------- ------- ---------- --------
+library cache            kglupd: child                    0         17        0
+library cache            kglpur: child                    0          7        2
+library cache            kglhfr: child                    0          6        6
+library cache            kgldtld: 2child                  0          4       12
+library cache            kglidp: child                    0          4        0
+library cache            kglati                           0          3        0
+library cache            kglget: child: KGLDSBYD          0          3      117
+library cache            kglini: child                    0          1        0
+library cache            kglrtl                           0          1        2
+library cache pin        kglpnc: child                    0      1,789    1,296
+library cache pin        kglpndl                          0      1,599    1,116
+library cache pin        kglupc                           0      1,587    2,101
+library cache pin        kglpnp: child                    0      1,065    1,331
+library cache pin        kglpnal: child: alloc spac       0        298      496
+library cache pin        kgldnp: child                    0          2        0
+library cache pin alloca kglpnal                          0        482      419
+library cache pin alloca kgllkdl                          0        385      448
+messages                 ksaamb: after wakeup             0          1        0
+multiblock read objects  kcbzib: normal mbr free          0        411      418
+multiblock read objects  kcbzib: mbr get                  0        364      357
+redo allocation          kcrfwr                           0         44       24
+redo allocation          kcrfwi: before write             0          2        4
+redo allocation          kcrfwi: more space               0          1       19
+row cache enqueue latch  kqreqd                           0        317       59
+row cache enqueue latch  kqreqa                           0         50      308
+row cache objects        kqrpfl: not dirty                0      3,464       82
+row cache objects        kqrpre: find obj                 0        262    3,665
+row cache objects        kqrso                            0         37       17
+sequence cache           kdnssd                           0          2        0
+session allocation       ksuprc                           0      5,000    4,062
+session allocation       ksudlc                           0      3,596    4,527
+session allocation       ksucri                           0        112      242
+session allocation       ksuxds: not user session         0        110       50
+session allocation       ksufap: active sessions          0         60        0
+session allocation       ksucrp                           0          3        0
+session allocation       ksuxds: KSUSFCLC not set         0          3        2
+session allocation       ksudlp                           0          3        4
+session idle bit         ksupuc: clear busy               0         11        2
+session idle bit         ksuxds                           0          1        3
+shared pool              kghalo                           0     18,758    2,384
+shared pool              kghupr1                          0     12,388   41,663
+shared pool              kghfrunp: alloc: wait            0     10,758       18
+shared pool              kghfrunp: clatch: nowait         0      7,661        0
+shared pool              kghfrunp: clatch: wait           0      6,682      612
+shared pool              kghalp                           0      2,327      162
+shared pool              kghfen: not perm alloc cla       0         42       62
+shared pool              kghfre                           0         31       14
+shared pool              kghfru                           0          2        3
+simulator hash latch     kcbsacc: lookup dba              0          1        1
+simulator lru latch      kcbs_simulate: simulate se       0         33       33
+          -------------------------------------------------------------
+Dictionary Cache Stats for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->"Pct Misses"  should be very low (< 2% in most cases)
+->"Cache Usage" is the number of cache entries being used
+->"Pct SGA"     is the ratio of usage to allocated size for that cache
+
+                                   Get    Pct    Scan   Pct      Mod      Final
+Cache                         Requests   Miss    Reqs  Miss     Reqs      Usage
+------------------------- ------------ ------ ------- ----- -------- ----------
+dc_constraints                      26   53.8       0             26          1
+dc_database_links                   40   10.0       0              0          4
+dc_files                         6,336   26.6       0              0         99
+dc_global_oids                   6,792    7.1       0              0         30
+dc_histogram_data               23,414    7.1       0              0        205
+dc_histogram_data_values        20,599    3.0       0              0         86
+dc_histogram_defs            1,273,675    4.4       0              0      4,838
+dc_object_ids                9,393,802    0.1       0             19      1,329
+dc_objects                     451,934    2.1       0            230      1,219
+dc_profiles                     11,129    0.0       0              0          1
+dc_rollback_segments            94,650    0.0       0             28         72
+dc_segments                  1,079,799    0.8       0            138      1,260
+dc_sequences                    33,788    1.0       0         33,788         23
+dc_table_scns                      477    8.8       0              1          2
+dc_tablespace_quotas               120   10.0       0             30          2
+dc_tablespaces              11,752,800    0.0       0              1         14
+dc_user_grants               4,657,522    0.0       0              0         32
+dc_usernames                 6,833,905    0.0       0              0         33
+dc_users                    27,109,859    0.0       0              0         65
+          -------------------------------------------------------------
+
+
+Library Cache Activity for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+->"Pct Misses"  should be very low
+
+                         Get  Pct        Pin        Pct               Invali-
+Namespace           Requests  Miss     Requests     Miss     Reloads  dations
+--------------- ------------ ------ -------------- ------ ---------- --------
+BODY                  69,429    0.5         69,632    1.1        350        0
+CLUSTER                6,864    1.4          6,648    2.8          0        0
+INDEX                  1,510    1.5          1,508    2.1          0        0
+SQL AREA           7,000,619    1.4     59,779,825    0.3     18,552    1,564
+TABLE/PROCEDURE    6,442,502    0.1     16,909,395    0.4     26,262        0
+TRIGGER               50,788    0.8         50,763    2.1        628        0
+          -------------------------------------------------------------
+Shared Pool Advisory for DB: ETADB3  Instance: etadb3  End Snap: 48889
+-> Note there is often a 1:Many correlation between a single logical object
+   in the Library Cache, and the physical number of memory objects associated
+   with it.  Therefore comparing the number of Lib Cache objects (e.g. in
+   v$librarycache), with the number of Lib Cache Memory Objects is invalid
+
+                                                          Estd
+Shared Pool    SP       Estd         Estd     Estd Lib LC Time
+   Size for  Size  Lib Cache    Lib Cache   Cache Time   Saved  Estd Lib Cache
+  Estim (M) Factr   Size (M)      Mem Obj    Saved (s)   Factr    Mem Obj Hits
+----------- ----- ---------- ------------ ------------ ------- ---------------
+        160    .6        171        8,278    1,429,298     1.0     358,419,292
+        192    .7        202        9,710    1,431,010     1.0     358,647,333
+        224    .8        236       11,886    1,432,229     1.0     358,863,208
+        256    .9        267       13,516    1,433,115     1.0     359,039,385
+        288   1.0        298       15,136    1,433,797     1.0     359,179,062
+        320   1.1        333       16,802    1,434,330     1.0     359,289,809
+        352   1.2        363       18,218    1,434,773     1.0     359,391,410
+        384   1.3        392       19,704    1,435,160     1.0     359,489,862
+        416   1.4        423       21,001    1,435,469     1.0     359,571,703
+        448   1.6        454       22,127    1,435,753     1.0     359,644,340
+        480   1.7        485       23,909    1,436,005     1.0     359,707,472
+        512   1.8        516       25,312    1,436,227     1.0     359,766,966
+        544   1.9        545       26,470    1,436,407     1.0     359,812,188
+        576   2.0        632       30,499    1,436,577     1.0     359,843,254
+          -------------------------------------------------------------
+SGA Memory Summary for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+SGA regions                       Size in Bytes
+------------------------------ ----------------
+Database Buffers                  1,157,627,904
+Fixed Size                              733,304
+Redo Buffers                            811,008
+Variable Size                       889,192,448
+                               ----------------
+sum                               2,048,364,664
+          -------------------------------------------------------------
+
+
+SGA breakdown difference for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+Pool   Name                                Begin value        End value  % Diff
+------ ------------------------------ ---------------- ---------------- -------
+java   free memory                         162,738,176      162,738,176    0.00
+java   memory in use                         5,033,984        5,033,984    0.00
+large  free memory                          67,108,864       67,108,864    0.00
+shared 1M buffer                             1,049,088        1,049,088    0.00
+shared Checkpoint queue                      3,079,680        3,079,680    0.00
+shared FileOpenBlock                         7,517,528        7,517,528    0.00
+shared KGK heap                                  7,000            7,000    0.00
+shared KGLS heap                             6,615,960        5,047,472  -23.71
+shared KQR L PO                              2,237,592        2,628,688   17.48
+shared KQR L SO                                 80,944          118,912   46.91
+shared KQR M PO                              2,795,304        3,446,712   23.30
+shared KQR M SO                                 75,368          134,216   78.08
+shared KQR S SO                                 14,352           14,352    0.00
+shared KQR X PO                                 15,456           25,760   66.67
+shared KSXR pending messages que               853,952          853,952    0.00
+shared MTTR advisory                           183,352          183,352    0.00
+shared PL/SQL DIANA                          2,606,840        2,086,840  -19.95
+shared PL/SQL MPCODE                         3,208,048        3,522,472    9.80
+shared PL/SQL PPCODE                           199,240          230,648   15.76
+shared PLS non-lib hp                            2,088            2,088    0.00
+shared XDB Schema Cac                        7,143,136        5,514,760  -22.80
+shared db_block_hash_buckets                 4,989,264        4,989,264    0.00
+shared dictionary cache                      4,274,432        4,274,432    0.00
+shared enqueue                               2,046,312        2,046,312    0.00
+shared errors                                  275,256          365,960   32.95
+shared event statistics per sess            12,535,120       12,535,120    0.00
+shared fixed allocation callback                 1,024            1,024    0.00
+shared free memory                          24,316,568       15,860,608  -34.77
+shared joxlod: in ehe                          287,312          287,312    0.00
+shared joxs heap init                            4,240            4,240    0.00
+shared ktlbk state objects                     651,240          651,240    0.00
+shared library cache                        43,951,384       47,462,384    7.99
+shared miscellaneous                        50,827,216       51,642,912    1.60
+shared parameters                              105,272          107,208    1.84
+shared sessions                              1,495,312        1,495,312    0.00
+shared sim memory hea                          579,880          579,880    0.00
+shared sql area                            183,859,264      190,001,984    3.34
+shared subheap                                  58,384           58,384    0.00
+shared table definiti                           22,512           20,528   -8.81
+shared transaction                           1,080,864        1,080,864    0.00
+shared trigger defini                           34,168           22,208  -35.00
+shared trigger inform                            3,056            1,952  -36.13
+shared trigger source                              592              592    0.00
+shared type object de                           15,152          138,552  814.41
+       buffer_cache                      1,157,627,904    1,157,627,904    0.00
+       fixed_sga                               733,304          733,304    0.00
+       log_buffer                              789,504          789,504    0.00
+          -------------------------------------------------------------
+init.ora Parameters for DB: ETADB3  Instance: etadb3  Snaps: 48869  -48889
+
+                                                                  End value
+Parameter Name                Begin value                       (if different)
+----------------------------- --------------------------------- --------------
+aq_tm_processes               1
+audit_file_dest               /oraprod07/u02/audit/etadb3
+audit_sys_operations          TRUE
+audit_trail                   DB
+background_dump_dest          /oraprod07/u01/app/oracle/admin/e
+compatible                    9.2.0.4
+control_files                 /oraprod07/u06/oradata/etadb3/con
+core_dump_dest                /oraprod07/u01/app/oracle/admin/e
+cursor_sharing                EXACT
+db_block_size                 8192
+db_cache_advice               ON
+db_cache_size                 1157627904
+db_domain                     doleta.gov
+db_file_multiblock_read_count 16
+db_file_name_convert          /orastb/data/stbdb3/u02/, /orapro
+db_name                       etadb3
+fal_client                    etadb3
+fal_server                    stbdb3
+fast_start_mttr_target        300
+global_names                  TRUE
+hash_join_enabled             TRUE
+instance_name                 etadb3
+java_pool_size                167772160
+job_queue_processes           30
+large_pool_size               67108864
+log_archive_dest_1            LOCATION=/oraprod07/u07/oradata/e
+log_archive_dest_2            service=stbdb3 LGWR ASYNC NOAFFIR
+log_archive_dest_state_2      ENABLE
+log_archive_format            arch_%t_%s.arc
+log_archive_max_processes     5
+log_archive_start             TRUE
+log_buffer                    526336
+log_checkpoint_timeout        18000
+log_file_name_convert         /orastb/log/stbdb3/redo/, /orapro
+max_enabled_roles             100
+open_cursors                  2000
+pga_aggregate_target          251658240
+processes                     1000
+query_rewrite_enabled         TRUE
+remote_archive_enable         true
+remote_login_passwordfile     EXCLUSIVE
+sga_max_size                  2048364664
+shared_pool_size              301989888
+sql92_security                TRUE
+standby_archive_dest          /oraprod07/u07/oradata/etadb3/arc
+standby_file_management       auto
+star_transformation_enabled   FALSE
+timed_statistics              TRUE
+undo_management               AUTO
+undo_retention                86400
+undo_tablespace               UNDOTBS02
+user_dump_dest                /oraprod07/u01/app/oracle/admin/e
+utl_file_dir                  /oraprod07/u02/oradata/etadb3/eim
+          -------------------------------------------------------------
+
+End of Report
+
